@@ -1,34 +1,42 @@
-@import './base.css';
+@import '../assets/fonts/font.css';
 
-#app {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 12px;
-  font-weight: normal;
+:root {
+  --color-white: #ffffff;
+  --color-white-soft: #f8f8f8;
+  --color-white-mute: #f2f2f2;
+
+  --color-black: #181818;
+  --color-black-soft: #222222;
+  --color-black-mute: #282828;
+
+  --color-background: var(--color-white-mute);
+  --color-text: var(--color-black-soft);
+  --color-text-hovered: #0000007c;
+
+  --main-font: 'Roboto', sans-serif;
 }
 
-a,
-.green {
-  text-decoration: none;
-  color: hsla(160, 100%, 37%, 1);
-  transition: 0.4s;
-}
-
-@media (hover: hover) {
-  a:hover {
-    background-color: hsla(160, 96%, 80%, 0.2);
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-background: var(--color-black-mute);
+    --color-text: var(--color-white-soft);
   }
 }
 
-@media (min-width: 1024px) {
-  body {
-    display: flex;
-    place-items: center;
-  }
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
 
-  #app {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    padding: 0 2rem;
-  }
+body {
+  min-height: 100vh;
+  color: var(--color-text);
+  background: var(--color-background);
+  transition: color 400ms, background-color 400ms;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }

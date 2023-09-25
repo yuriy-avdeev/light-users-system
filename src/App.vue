@@ -1,36 +1,28 @@
 <script setup lang="ts">
-import { RouterLink, RouterView } from 'vue-router';
+import { RouterView } from 'vue-router';
 import AppHeader from './components/AppHeader.vue';
 </script>
 
 <template>
   <div class="app">
-    <AppHeader msg="Header content" />
-
-    <nav class="app__nav">
-      <!-- transfer to the Header -->
-      <RouterLink to="/">Home</RouterLink>
-      <RouterLink to="/about">About</RouterLink>
-    </nav>
+    <AppHeader title="Vue-3 test application" />
 
     <RouterView />
   </div>
 </template>
 
-<style lang="scss" scoped>
+<style scoped>
 .app {
-  max-height: 100vh;
+  width: 100%;
+  max-width: 1024px;
+  min-height: 100vh;
+  padding: 0 12px;
+  margin: 0 auto;
+}
 
-  &__nav a.router-link-exact-active {
-    color: var(--color-text);
-  }
-
-  &__nav a.router-link-exact-active:hover {
-    background-color: transparent;
-  }
-
-  @media (min-width: 1024px) {
-    //
+@media (min-width: 1024px) {
+  .app {
+    /* // */
   }
 }
 </style>
