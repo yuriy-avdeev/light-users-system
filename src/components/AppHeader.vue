@@ -20,16 +20,10 @@ defineProps<{
 
 <style scoped>
 .header {
-  /* // */
+  background-color: greenyellow;
 }
 
 .router-link-exact-active {
   color: blue;
-}
-
-@media (hover: hover) {
-  .header__link:hover {
-    color: red;
-  }
 }
 </style>

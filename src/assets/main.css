@@ -1,4 +1,4 @@
-@import '../assets/fonts/font.css';
+@import '@/assets/fonts/font.css';
 
 :root {
   --color-white: #ffffff;
@@ -29,6 +29,7 @@
   box-sizing: border-box;
   margin: 0;
   padding: 0;
+  font-family: 'Roboto';
 }
 
 body {
