@@ -12,7 +12,6 @@ defineProps<{
 
     <nav class="header__nav">
       <RouterLink class="header__link" to="/">Home</RouterLink>
-
       <RouterLink class="header__link" to="/about">About</RouterLink>
     </nav>
   </header>
@@ -20,10 +19,23 @@ defineProps<{
 
 <style scoped>
 .header {
-  background-color: greenyellow;
+  width: 100%;
+  padding: 12px;
+  background-color: var(--color-background-secondary);
+}
+
+.header__title,
+.header__nav {
+  width: 100%;
 }
 
 .router-link-exact-active {
-  color: blue;
+  text-decoration: underline;
+}
+
+@media (min-width: 1048px) {
+  .header {
+    padding: 16px calc((100% - 1024px) / 2);
+  }
 }
 </style>

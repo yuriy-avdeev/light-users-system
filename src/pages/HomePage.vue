@@ -4,6 +4,6 @@
 
 <template>
   <main>
-    <h1>Home view (page)</h1>
+    <h1>Home page test</h1>
   </main>
 </template>

@@ -2,14 +2,15 @@
 
 :root {
   --color-white: #ffffff;
-  --color-white-soft: #f8f8f8;
+  --color-white-soft: #f8f8f8b4;
   --color-white-mute: #f2f2f2;
 
   --color-black: #181818;
   --color-black-soft: #222222;
-  --color-black-mute: #282828;
+  --color-black-mute: #282828ab;
 
   --color-background: var(--color-white-mute);
+  --color-background-secondary: var(--color-black-mute);
   --color-text: var(--color-black-soft);
   --color-text-hovered: #0000007c;
 
@@ -33,7 +34,6 @@
 }
 
 body {
-  min-height: 100vh;
   color: var(--color-text);
   background: var(--color-background);
   transition: color 400ms, background-color 400ms;

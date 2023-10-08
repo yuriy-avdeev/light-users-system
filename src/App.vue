@@ -1,28 +1,33 @@
 <script setup lang="ts">
 import { RouterView } from 'vue-router';
 import AppHeader from './components/AppHeader.vue';
+import AppFooter from './components/AppFooter.vue';
 </script>
 
 <template>
   <div class="app">
     <AppHeader title="Vue-3 test application" />
 
-    <RouterView />
+    <div class="app__body">
+      <RouterView />
+    </div>
+
+    <AppFooter />
   </div>
 </template>
 
 <style scoped>
 .app {
-  width: 100%;
-  max-width: 1024px;
+  width: 100vw;
   min-height: 100vh;
-  padding: 0 12px;
-  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
 }
 
-@media (min-width: 1024px) {
-  .app {
-    /* // */
-  }
+.app__body {
+  width: 100%;
+  max-width: 1024px;
+  margin: 0 auto;
+  flex: 1 0 auto;
 }
 </style>
