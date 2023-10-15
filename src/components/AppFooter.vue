@@ -13,14 +13,20 @@
   background-color: var(--color-background-secondary);
 }
 
+.footer__text {
+  font: 500 12px/1.3 'Roboto';
+  color: var(--color-white-soft);
+}
+
+@media (min-width: 768px) {
+  .footer__text {
+    font-size: 14px;
+  }
+}
+
 @media (min-width: 1048px) {
   .footer {
     padding: 16px calc((100% - 1024px) / 2);
-  }
-
-  .footer__text {
-    font: 500 14px/1.3 'Roboto';
-    color: var(--color-white-soft);
   }
 }
 </style>

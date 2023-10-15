@@ -24,18 +24,59 @@ defineProps<{
   background-color: var(--color-background-secondary);
 }
 
-.header__title,
+.header__title {
+  text-align: center;
+  font: 500 18px/1.3 'Roboto';
+  color: var(--color-white-soft);
+  margin-bottom: 5px;
+}
+
 .header__nav {
-  width: 100%;
+  text-align: right;
+}
+
+.header__link {
+  font: 500 12px/1.3 'Roboto';
+  color: var(--color-white-soft);
+  margin-left: 14px;
+  transition: color 350ms;
+  text-decoration: none;
+  padding-bottom: 1px;
+  border-bottom: solid 2px transparent;
+  cursor: default;
+  position: relative;
 }
 
 .router-link-exact-active {
-  text-decoration: underline;
+  color: var(--color-text-hovered);
+  border-bottom: solid 2px var(--color-text-hovered);
 }
 
 @media (min-width: 1048px) {
   .header {
     padding: 16px calc((100% - 1024px) / 2);
+  }
+}
+
+@media (hover: hover) {
+  .header__link:hover:not(.router-link-exact-active) {
+    color: var(--color-text-hovered);
+    cursor: pointer;
+  }
+
+  .header__link::after {
+    content: '';
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background-color: var(--color-text-hovered);
+    transition: width 350ms;
+  }
+
+  .header__link:hover:not(.router-link-exact-active)::after {
+    width: 100%;
   }
 }
 </style>
