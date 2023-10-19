@@ -12,6 +12,7 @@ defineProps<{
 
     <nav class="header__nav">
       <RouterLink class="header__link" to="/">Home</RouterLink>
+      <RouterLink class="header__link" to="/users">Users</RouterLink>
       <RouterLink class="header__link" to="/about">About</RouterLink>
     </nav>
   </header>

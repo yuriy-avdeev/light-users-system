@@ -5,6 +5,7 @@
   "compilerOptions": {
     "composite": true,
     "baseUrl": ".",
+    "types": ["vue", "vue-router"],
     "paths": {
       "@/*": ["./src/*"]
     }
