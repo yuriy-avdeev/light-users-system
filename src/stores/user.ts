@@ -21,6 +21,8 @@ export const useUserStore = defineStore('user', () => {
     id: 555,
   });
 
+  // TODO - create for this list separate store and import it here
+  // TODO - check before add new user its existing
   const users = ref<User[]>([
     {
       login: 'admin',
@@ -28,6 +30,13 @@ export const useUserStore = defineStore('user', () => {
       first_name: 'John',
       second_name: 'Dow',
       id: 555,
+    },
+    {
+      login: 'admin',
+      password: 'qwerty',
+      first_name: 'Admin',
+      second_name: 'Admin',
+      id: 333,
     },
   ]);
 
@@ -38,12 +47,12 @@ export const useUserStore = defineStore('user', () => {
       (u) => u.login === login && u.password === password
     );
     if (foundUser) {
-      // user = foundUser;
+      user.value = foundUser;
       auth.value = true;
-      // Save credentials (e.g., in cookies or local storage)
+      // save credentials (e.g., in cookies or local storage) - to save a progress between page reloads
     }
   }
-
+  // TODO - add a button to the header
   function logout() {
     auth.value = false;
   }

@@ -3,13 +3,13 @@
 </script>
 
 <template>
-  <div class="about">
-    <h1>About page test</h1>
+  <div class="about-page">
+    <h1 class="about-page__title">About page test</h1>
   </div>
 </template>
 
 <style>
-.about {
+.about-page {
   display: flex;
   justify-content: center;
 }

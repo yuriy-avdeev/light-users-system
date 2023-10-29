@@ -8,9 +8,7 @@ import AppFooter from './components/AppFooter.vue';
   <div class="app">
     <AppHeader title="Vue-3 test application" />
 
-    <div class="app__body">
-      <RouterView />
-    </div>
+    <RouterView class="app__body" />
 
     <AppFooter />
   </div>

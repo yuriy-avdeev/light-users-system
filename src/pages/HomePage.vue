@@ -3,7 +3,14 @@
 </script>
 
 <template>
-  <main>
-    <h1>Home page test</h1>
-  </main>
+  <div class="home-page">
+    <h1 class="home-page__title">Home page test</h1>
+  </div>
 </template>
+
+<style>
+.home-page {
+  display: flex;
+  justify-content: center;
+}
+</style>

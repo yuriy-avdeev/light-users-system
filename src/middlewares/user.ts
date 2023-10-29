@@ -1,23 +1,31 @@
 import type { RouteLocationNormalized, NavigationGuardNext } from 'vue-router';
+import { useUserStore } from '@/stores/user';
 
-// TODO - import users here
-interface User {
-  id: number;
-  name: string;
-}
-
-const users: User[] = [
-  { id: 555, name: 'User 1' },
-  { id: 333, name: 'User 2' },
-];
-
-export const validateUser = (
+export const validateId = (
   to: RouteLocationNormalized,
   from: RouteLocationNormalized,
   next: NavigationGuardNext
 ) => {
+  const userStore = useUserStore();
   const userId: number = Number(to.params.id);
-  const userExists: boolean = users.some((user) => user.id === userId);
-  if (userExists) next();
-  else next('/not-found');
+  const isUserExists: boolean = userStore.users.some((u) => u.id === userId);
+  if (isUserExists) {
+    next();
+  } else {
+    next('/not-found');
+  }
+};
+
+export const validateAuth = (
+  to: RouteLocationNormalized,
+  from: RouteLocationNormalized,
+  next: NavigationGuardNext
+) => {
+  const userStore = useUserStore();
+  const isAllowedPath = ['/', '/login'].includes(to.path);
+  if (!isAllowedPath && !userStore.isAuthenticated) {
+    next('/login');
+  } else {
+    next();
+  }
 };
