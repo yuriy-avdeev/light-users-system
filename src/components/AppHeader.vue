@@ -1,19 +1,63 @@
 <script setup lang="ts">
-import { RouterLink } from 'vue-router';
+import { computed } from 'vue';
+import { RouterLink, useRouter } from 'vue-router';
+import { useUserStore } from '@/stores/user';
 
-defineProps<{
-  title: String;
-}>();
+const props = defineProps({
+  title: {
+    type: String,
+    required: true,
+  },
+});
+
+const router = useRouter();
+const userStore = useUserStore();
+
+const buttonText = computed(() => {
+  return userStore.isAuthenticated ? 'Logout' : 'Login';
+})
+
+const handleLoginButton = () => {
+  if (userStore.isAuthenticated) {
+    userStore.logout();
+  } else {
+    router.push('/login');
+  }
+}
 </script>
 
 <template>
   <header class="header">
-    <h3 class="header__title">{{ title }}</h3>
+    <h3 class="header__title">{{ props.title }}</h3>
+
+    <button
+      class="header__button"
+      @click.prevent="handleLoginButton"
+    >
+      {{ buttonText }}
+    </button>
 
     <nav class="header__nav">
-      <RouterLink class="header__link" to="/">Home</RouterLink>
-      <RouterLink class="header__link" to="/about">About</RouterLink>
-      <RouterLink class="header__link" to="/users">Users</RouterLink>
+      <RouterLink
+        class="header__link"
+        to="/"
+      >
+        Home
+      </RouterLink>
+
+      <RouterLink
+        class="header__link"
+        to="/about"
+      >
+        About
+      </RouterLink>
+
+      <RouterLink
+        class="header__link"
+        to="/users"
+      >
+        Users
+      </RouterLink>
     </nav>
   </header>
 </template>

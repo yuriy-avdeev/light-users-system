@@ -29,3 +29,16 @@ export const validateAuth = (
     next();
   }
 };
+
+export const protectLoginPage = (
+  to: RouteLocationNormalized,
+  from: RouteLocationNormalized,
+  next: NavigationGuardNext
+) => {
+  const userStore = useUserStore();
+  if (userStore.isAuthenticated) {
+    next('/');
+  } else {
+    next();
+  }
+};
