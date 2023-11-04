@@ -6,7 +6,7 @@ import { computed } from 'vue';
 const userStore = useUserStore();
 const { isAuthenticated, user } = storeToRefs(userStore);
 const userName = computed(
-  () => `${user.value.first_name} ${user.value.second_name}`
+  () => `${user?.value?.first_name} ${user?.value?.second_name}`
 );
 </script>
 

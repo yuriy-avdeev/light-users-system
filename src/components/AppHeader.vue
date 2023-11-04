@@ -20,6 +20,7 @@ const buttonText = computed(() => {
 const handleLoginButton = () => {
   if (userStore.isAuthenticated) {
     userStore.logout();
+    router.push('/');
   } else {
     router.push('/login');
   }
