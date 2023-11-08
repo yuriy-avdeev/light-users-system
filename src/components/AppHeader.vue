@@ -22,6 +22,7 @@ const handleLoginButton = () => {
     userStore.logout();
     router.push('/');
   } else {
+    // TODO - rethink this - open popup on home page
     router.push('/login');
   }
 }
@@ -30,13 +31,6 @@ const handleLoginButton = () => {
 <template>
   <header class="header">
     <h3 class="header__title">{{ props.title }}</h3>
-
-    <button
-      class="header__button"
-      @click.prevent="handleLoginButton"
-    >
-      {{ buttonText }}
-    </button>
 
     <nav class="header__nav">
       <RouterLink
@@ -60,6 +54,13 @@ const handleLoginButton = () => {
         Users
       </RouterLink>
     </nav>
+
+    <button
+      class="header__button"
+      @click.prevent="handleLoginButton"
+    >
+      {{ buttonText }}
+    </button>
   </header>
 </template>
 
@@ -67,14 +68,33 @@ const handleLoginButton = () => {
 .header {
   width: 100%;
   padding: 12px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  flex-wrap: wrap;
   background-color: var(--color-background-secondary);
 }
 
 .header__title {
+  width: 100%;
   text-align: center;
   font: 500 18px/1.3 'Roboto';
   color: var(--color-white-soft);
   margin-bottom: 5px;
+}
+
+.header__button {
+  padding: 5px 6px 5px 25px;
+  border-radius: 4px;
+  border: none;
+  outline: none;
+  font: 500 12px/1.3 'Roboto';
+  color: var(--color-white-soft);
+  background: url(@/assets/icons/user.svg) no-repeat;
+  background-size: 18px;
+  background-position: 5px center;
+  transition: box-shadow 350ms;
+  cursor: pointer;
 }
 
 .header__nav {
@@ -105,6 +125,10 @@ const handleLoginButton = () => {
 }
 
 @media (hover: hover) {
+  .header__button:hover {
+    box-shadow: inset 0 0 8px var(--color-white-soft);
+  }
+
   .header__link:hover:not(.router-link-exact-active) {
     color: var(--color-text-hovered);
     cursor: pointer;

@@ -8,6 +8,7 @@
 
 <style scoped>
 .footer {
+  margin-top: auto;
   width: 100%;
   padding: 12px;
   background-color: var(--color-background-secondary);

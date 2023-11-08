@@ -26,7 +26,7 @@ import AppFooter from './components/AppFooter.vue';
   width: 100%;
   max-width: 1024px;
   margin: 0 auto;
-  flex: 1 0 auto;
+  flex: 1;
   box-shadow: 0 5px 25px #d5d5d5;
   padding: 16px 12px;
 }

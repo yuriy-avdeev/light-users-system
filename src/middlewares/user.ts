@@ -1,44 +1,25 @@
-import type { RouteLocationNormalized, NavigationGuardNext } from 'vue-router';
+import type { RouteLocationNormalized } from 'vue-router';
 import { useUserStore } from '@/stores/user';
 
-export const validateId = (
-  to: RouteLocationNormalized,
-  from: RouteLocationNormalized,
-  next: NavigationGuardNext
-) => {
+export const validateId = (to: RouteLocationNormalized) => {
   const userStore = useUserStore();
   const userId: number = Number(to.params.id);
   const isUserExists: boolean = userStore.users.some((u) => u.id === userId);
-  if (isUserExists) {
-    next();
-  } else {
-    next('/not-found');
+  if (!isUserExists) {
+    return { path: '/not-found' };
   }
+  return true;
 };
 
-export const validateAuth = (
-  to: RouteLocationNormalized,
-  from: RouteLocationNormalized,
-  next: NavigationGuardNext
-) => {
-  const userStore = useUserStore();
-  const isAllowedPath = ['/', '/login'].includes(to.path);
-  if (!isAllowedPath && !userStore.isAuthenticated) {
-    next('/login');
-  } else {
-    next();
-  }
-};
-
-export const protectLoginPage = (
-  to: RouteLocationNormalized,
-  from: RouteLocationNormalized,
-  next: NavigationGuardNext
-) => {
+export const validateAuth = (to: RouteLocationNormalized) => {
   const userStore = useUserStore();
   if (userStore.isAuthenticated) {
-    next('/');
-  } else {
-    next();
+    return true;
   }
+  const isHomePage = to.path === '/';
+  const isNotFoundPage = to.matched[0].path === '/:pathMatch(.*)*';
+  if (isHomePage || isNotFoundPage) {
+    return true;
+  }
+  return { path: '/', query: { fromProtectedRoute: 'true' } };
 };

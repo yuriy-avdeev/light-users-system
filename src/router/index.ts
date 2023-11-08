@@ -1,10 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import HomePage from '../pages/HomePage.vue';
-import {
-  validateId,
-  validateAuth,
-  protectLoginPage,
-} from '../middlewares/user';
+import { validateId, validateAuth } from '../middlewares/user.js';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -13,16 +9,10 @@ const router = createRouter({
     {
       path: '/',
       component: HomePage,
-    },
-
-    {
-      path: '/login',
-      component: () => import('../pages/LoginPage.vue'),
       // pass a prop - to continue going to a page after login
       props: (route) => ({
         redirectedFrom: route.redirectedFrom?.path,
       }),
-      beforeEnter: protectLoginPage,
     },
 
     {
