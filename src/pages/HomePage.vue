@@ -46,5 +46,6 @@ onMounted(() => {
 .home-page {
   display: flex;
   justify-content: center;
+  position: relative;
 }
 </style>

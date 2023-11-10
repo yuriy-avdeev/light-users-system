@@ -22,8 +22,7 @@ const handleLoginButton = () => {
     userStore.logout();
     router.push('/');
   } else {
-    // TODO - rethink this - open popup on home page
-    router.push('/login');
+    // TODO - open popup on home page ('/') with login form
   }
 }
 </script>

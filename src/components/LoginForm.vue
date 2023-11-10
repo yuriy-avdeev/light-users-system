@@ -18,6 +18,7 @@ const password = ref('');
 const performLogin = () => {
     // TODO - split login for user and for admin
     const isAuth = userStore.login(login.value, password.value);
+    // TODO - add logic if !redirectedFrom
     if (isAuth) {
         router.push(props.redirectedFrom);
     } else {
@@ -55,11 +56,13 @@ const performLogin = () => {
 </template>
 
 <style scoped>
-/* rework */
 .login-form {
+    padding: 16px 12px;
     display: flex;
     flex-direction: column;
     gap: 12px;
+    border-radius: 6px;
+    background-color: var(--color-white);
 }
 
 .login-form__input {
@@ -79,12 +82,21 @@ const performLogin = () => {
 }
 
 .login-form__button {
-    /*  */
+    border-radius: 8px;
+    border: none;
+    background-color: var(--color-background-secondary);
+    padding: 4px;
+    cursor: pointer;
+    font: 500 13px/1.2 var(--main-font);
+    color: var(--color-white);
+    transition: color 300ms, background-color 300ms;
 }
 
 @media (hover: hover) {
     .login-form__button:hover {
-        /*  */
+        background-color: var(--color-white);
+        box-shadow: inset 10px -10px 15px var(--color-background);
+        color: var(--color-background-secondary);
     }
 }
 </style>

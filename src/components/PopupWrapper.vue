@@ -12,7 +12,13 @@
 
 <style scoped>
 .popup {
-    /*  */
+    position: absolute;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.25);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0 10px;
 }
 
 .popup__content-container {
