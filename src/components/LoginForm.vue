@@ -4,7 +4,7 @@ import { useUserStore } from '@/stores/user';
 import { useRouter } from 'vue-router';
 
 const props = defineProps({
-    redirectedFrom: {
+    nextPage: {
         type: String,
         default: null,
     },
@@ -18,10 +18,10 @@ const password = ref('');
 const performLogin = () => {
     // TODO - split login for user and for admin
     const isAuth = userStore.login(login.value, password.value);
-    // TODO - add logic if !redirectedFrom
     if (isAuth) {
-        router.push(props.redirectedFrom);
-    } else {
+        router.push(props.nextPage);
+    }
+    if (!isAuth) {
         // TODO - add some user notification
     }
 };
@@ -57,7 +57,9 @@ const performLogin = () => {
 
 <style scoped>
 .login-form {
-    padding: 16px 12px;
+    width: calc(100% - 30px);
+    max-width: 320px;
+    padding: 18px 14px;
     display: flex;
     flex-direction: column;
     gap: 12px;
@@ -85,6 +87,7 @@ const performLogin = () => {
     border-radius: 8px;
     border: none;
     background-color: var(--color-background-secondary);
+    margin-top: 5px;
     padding: 4px;
     cursor: pointer;
     font: 500 13px/1.2 var(--main-font);

@@ -2,6 +2,7 @@
 import { computed } from 'vue';
 import { RouterLink, useRouter } from 'vue-router';
 import { useUserStore } from '@/stores/user';
+import { useLoginFormStore } from '@/stores/loginForm';
 
 const props = defineProps({
   title: {
@@ -12,17 +13,18 @@ const props = defineProps({
 
 const router = useRouter();
 const userStore = useUserStore();
+const loginFormStore = useLoginFormStore();
 
 const buttonText = computed(() => {
   return userStore.isAuthenticated ? 'Logout' : 'Login';
 })
 
 const handleLoginButton = () => {
+  router.push('/');
   if (userStore.isAuthenticated) {
     userStore.logout();
-    router.push('/');
   } else {
-    // TODO - open popup on home page ('/') with login form
+    loginFormStore.openLoginForm();
   }
 }
 </script>

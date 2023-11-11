@@ -9,10 +9,6 @@ const router = createRouter({
     {
       path: '/',
       component: HomePage,
-      // pass a prop - to continue going to a page after login
-      props: (route) => ({
-        redirectedFrom: route.redirectedFrom?.path,
-      }),
     },
 
     {

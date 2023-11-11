@@ -1,6 +1,6 @@
-// store/user.ts
 import { defineStore } from 'pinia';
 import { ref, computed } from 'vue';
+import { useLoginFormStore } from './loginForm';
 
 interface User {
   login: string;
@@ -11,8 +11,8 @@ interface User {
 }
 
 export const useUserStore = defineStore('user', () => {
+  const loginFormStore = useLoginFormStore();
   const auth = ref(false);
-
   // 'user' is a ref that can hold or User or null, initial value is set to null
   const user = ref<User | null>(null);
 
@@ -39,13 +39,18 @@ export const useUserStore = defineStore('user', () => {
   const isAuthenticated = computed(() => auth.value);
 
   const login = (login: string, password: string): boolean => {
+    const trimmedLogin = login.trim();
+    const trimmedPassword = password.trim();
     const isAdmin =
-      login === import.meta.env.VITE_ADMIN_LOGIN &&
-      password === import.meta.env.VITE_ADMIN_PASSWORD;
+      trimmedLogin === import.meta.env.VITE_ADMIN_LOGIN &&
+      trimmedPassword === import.meta.env.VITE_ADMIN_PASSWORD;
 
     if (isAdmin) {
       user.value = users.value[0]; // mock action
       auth.value = true;
+      loginFormStore.closeLoginForm();
+    } else {
+      // user notification
     }
     return auth.value;
 
