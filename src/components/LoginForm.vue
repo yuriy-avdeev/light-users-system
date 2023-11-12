@@ -1,30 +1,39 @@
 <script setup lang="ts">
-import { ref } from 'vue';
-import { useUserStore } from '@/stores/user';
-import { useRouter } from 'vue-router';
+import { ref, onMounted } from 'vue'
+import { useUserStore } from '@/stores/user'
+import { useLoginFormStore } from '@/stores/loginForm'
+import { useRouter } from 'vue-router'
 
 const props = defineProps({
     nextPage: {
         type: String,
-        default: null,
+        default: '/',
     },
-});
+})
 
-const router = useRouter();
-const userStore = useUserStore();
-const login = ref('');
-const password = ref('');
+const userStore = useUserStore()
+const loginFormStore = useLoginFormStore()
+const router = useRouter()
+const login = ref('')
+const password = ref('')
+const loginInput = ref()
 
-const performLogin = () => {
-    // TODO - split login for user and for admin
-    const isAuth = userStore.login(login.value, password.value);
+onMounted(() => {
+    loginInput.value.focus()
+})
+
+const performLogin = async () => {
+    const trimmedLogin = login.value.trim()
+    const trimmedPassword = password.value.trim()
+    const isAuth = await userStore.login(trimmedLogin, trimmedPassword)
     if (isAuth) {
-        router.push(props.nextPage);
+        loginFormStore.closeLoginForm()
+        router.push(props.nextPage)
     }
     if (!isAuth) {
         // TODO - add some user notification
     }
-};
+}
 </script>
 
 <template>
@@ -34,6 +43,7 @@ const performLogin = () => {
     >
         <!-- TODO - add a reminder if DEV mode -> if (import.meta.env.DEV) ... else (import.meta.env.PROD) ... -->
         <input
+            ref="loginInput"
             class="login-form__input login-page__input_login"
             v-model="login"
             placeholder="Username"
@@ -59,7 +69,7 @@ const performLogin = () => {
 .login-form {
     width: calc(100% - 30px);
     max-width: 320px;
-    padding: 18px 14px;
+    padding: 20px 14px;
     display: flex;
     flex-direction: column;
     gap: 12px;

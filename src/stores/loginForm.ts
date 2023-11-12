@@ -1,21 +1,16 @@
-import { defineStore } from 'pinia';
-import { ref } from 'vue';
+import { defineStore } from 'pinia'
+import { ref } from 'vue'
 
 export const useLoginFormStore = defineStore('loginForm', () => {
-  const showForm = ref(false);
-  const nextPage = ref('/');
-
-  const defineNextPage = (payload: string) => {
-    nextPage.value = payload;
-  };
+  const showForm = ref(false)
 
   const openLoginForm = () => {
-    showForm.value = true;
-  };
+    showForm.value = true
+  }
 
   const closeLoginForm = () => {
-    showForm.value = false;
-  };
+    showForm.value = false
+  }
 
-  return { showForm, nextPage, openLoginForm, closeLoginForm, defineNextPage };
-});
+  return { showForm, openLoginForm, closeLoginForm }
+})

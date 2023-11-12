@@ -1,19 +1,27 @@
 <script setup lang="ts">
-import { useLoginFormStore } from '@/stores/loginForm';
-import PopupWrapper from '@/components/PopupWrapper.vue';
-import LoginForm from '@/components/LoginForm.vue';
+import { ref } from 'vue'
+import { onBeforeRouteLeave } from 'vue-router'
+import { useLoginFormStore } from '@/stores/loginForm'
+import PopupWrapper from '@/components/PopupWrapper.vue'
+import LoginForm from '@/components/LoginForm.vue'
 
-const loginFormStore = useLoginFormStore();
+const loginFormStore = useLoginFormStore()
+const previousRoute = ref('')
+
+onBeforeRouteLeave((to) => {
+  previousRoute.value = to.fullPath
+})
 </script>
 
 <template>
   <div class="home-page">
     <h1 class="home-page__title">Home page test</h1>
+
     <PopupWrapper
       v-if="loginFormStore.showForm"
       @click.self="loginFormStore.closeLoginForm()"
     >
-      <LoginForm :next-page="loginFormStore.nextPage" />
+      <LoginForm :next-page="previousRoute" />
     </PopupWrapper>
   </div>
 </template>
@@ -22,6 +30,5 @@ const loginFormStore = useLoginFormStore();
 .home-page {
   display: flex;
   justify-content: center;
-  position: relative;
 }
 </style>

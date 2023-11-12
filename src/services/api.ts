@@ -1,6 +1,6 @@
 fetch('https://jsonplaceholder.typicode.com/users/7')
   .then((response) => response.json())
-  .then((json) => console.log(json));
+  .then((json) => console.log(json))
 
 fetch('https://jsonplaceholder.typicode.com/posts', {
   method: 'POST',
@@ -10,8 +10,8 @@ fetch('https://jsonplaceholder.typicode.com/posts', {
     userId: 1,
   }),
   headers: {
-    'Content-type': 'application/json; charset=UTF-8',
+    'Content-type': 'application/json charset=UTF-8',
   },
 })
   .then((response) => response.json())
-  .then((json) => console.log(json));
+  .then((json) => console.log(json))

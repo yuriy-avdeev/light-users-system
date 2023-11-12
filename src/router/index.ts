@@ -1,6 +1,6 @@
-import { createRouter, createWebHistory } from 'vue-router';
-import HomePage from '../pages/HomePage.vue';
-import { validateId, validateAuth } from '../middlewares/user.js';
+import { createRouter, createWebHistory } from 'vue-router'
+import HomePage from '../pages/HomePage.vue'
+import { validateId, validateAuth } from '../services/middlewares.js'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -32,8 +32,8 @@ const router = createRouter({
       component: () => import('../pages/NotFoundPage.vue'),
     },
   ],
-});
+})
 
-router.beforeEach(validateAuth);
+router.beforeEach(validateAuth)
 
-export default router;
+export default router
