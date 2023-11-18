@@ -170,7 +170,7 @@ const handleLoginButton = () => {
     bottom: -1px;
     left: 0;
     width: 0;
-    height: 1px;
+    height: 2px;
     background-color: var(--color-text-hovered);
     transition: width 300ms;
   }

@@ -8,10 +8,10 @@ import type { NewUser, UserWithCredentials } from '@/types/store-types'
 
 const mockUsers: UserWithCredentials[] = [
   {
-    first_name: 'John',
-    second_name: 'Doe',
+    first_name: 'User',
+    second_name: 'Smith',
     id: 1,
-    login: 'john_doe',
+    login: 'user',
     password: '',
   },
   {
@@ -38,7 +38,7 @@ export const useUsersStore = defineStore('users', () => {
   // simulate BE - hash passwords and initialize users
   const initializeUsers = async () => {
     for (const user of mockUsers) {
-      user.password = await bcrypt.hash('default', 10)
+      user.password = await bcrypt.hash('qwerty', 10)
       users.value.push(user)
     }
   }
