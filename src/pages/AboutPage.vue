@@ -4,7 +4,7 @@
 
 <template>
   <div class="about-page">
-    <h1 class="about-page__title">About page test</h1>
+    <h1 class="about-page__title">About page</h1>
   </div>
 </template>
 

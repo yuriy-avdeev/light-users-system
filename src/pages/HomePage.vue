@@ -15,7 +15,7 @@ onBeforeRouteLeave((to) => {
 
 <template>
   <div class="home-page">
-    <h1 class="home-page__title">Home page test</h1>
+    <h1 class="home-page__title">Home page</h1>
 
     <PopupWrapper
       v-if="loginFormStore.showForm"

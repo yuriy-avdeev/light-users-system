@@ -22,7 +22,7 @@ const trimmedPassword = ref('')
 const userNotification = ref('')
 const loginInput: Ref<HTMLInputElement | null> = ref(null)
 
-const isButtonDisabled = computed(() => trimmedLogin.value.length < 4 || trimmedPassword.value.length < 6)
+const isButtonDisabled = computed(() => trimmedLogin.value.length < 4 || trimmedPassword.value.length < 5)
 const loginPlaceholder = computed(() => import.meta.env.DEV ? 'user' : 'jim_beam')
 
 watch(login, debounce((newValue: string) => {
@@ -38,9 +38,13 @@ onMounted(() => {
 })
 
 const performLogin = async () => {
+    if (isButtonDisabled.value) {
+        return
+    }
     const isAuth = await userStore.login(trimmedLogin.value, trimmedPassword.value)
     if (isAuth) {
-        userNotification.value = `Welcome, ${userStore.currentUser?.first_name}!`
+        const userName = userStore.isAdmin ? 'Admin' : userStore.currentUser?.first_name
+        userNotification.value = `Welcome, ${userName}!`
         setTimeout(() => {
             loginFormStore.closeLoginForm()
         }, 2000)
@@ -103,10 +107,10 @@ const performLogin = async () => {
                 />
 
                 <span
-                    v-if="trimmedPassword.length && trimmedPassword.length < 6"
+                    v-if="trimmedPassword.length && trimmedPassword.length < 5"
                     class="login-form__input-hint"
                 >
-                    it needs {{ 6 - trimmedPassword.length }} more {{ trimmedPassword.length === 5 ? 'char' : 'chars' }}
+                    it needs {{ 5 - trimmedPassword.length }} more {{ trimmedPassword.length === 4 ? 'char' : 'chars' }}
                     here
                 </span>
 

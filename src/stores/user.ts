@@ -22,6 +22,7 @@ export const useUserStore = defineStore('user', () => {
       isAdmin.value = true
       auth.value = true
       localStorage.removeItem('currentUser')
+      sessionStorage.setItem('admin', 'true')
       return true
     }
     // normal user login process
@@ -49,6 +50,7 @@ export const useUserStore = defineStore('user', () => {
     isAdmin.value = false
     auth.value = false
     localStorage.removeItem('currentUser')
+    sessionStorage.removeItem('admin')
   }
 
   const storeUserInLocalStorage = (user: User) => {
@@ -75,15 +77,20 @@ export const useUserStore = defineStore('user', () => {
   }
 
   // will be triggered only once during the store initialization
-  const loadUserFromLocalStorage = () => {
-    const storedUser = getUserFromLocalStorageIfValid()
-    if (storedUser) {
-      currentUser.value = storedUser
+  const loadUserFromLocalStorages = () => {
+    if (sessionStorage.getItem('admin')) {
+      isAdmin.value = true
       auth.value = true
+    } else {
+      const storedUser = getUserFromLocalStorageIfValid()
+      if (storedUser) {
+        currentUser.value = storedUser
+        auth.value = true
+      }
     }
   }
 
-  loadUserFromLocalStorage()
+  loadUserFromLocalStorages()
 
   return { auth, isAdmin, currentUser, isAuthenticated, login, logout }
 })
