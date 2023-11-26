@@ -32,6 +32,7 @@ const handleLoginButton = () => {
 const logout = () => {
   userStore.logout()
   isConfirmationContainerOpened.value = false
+  router.push('/')
 }
 </script>
 
@@ -55,10 +56,11 @@ const logout = () => {
       </RouterLink>
 
       <RouterLink
+        v-if="userStore.isAdmin"
         class="header__link"
         to="/users"
       >
-        Users
+        List of users
       </RouterLink>
 
       <RouterLink
@@ -121,7 +123,7 @@ const logout = () => {
   width: 100%;
   padding: 12px;
   display: flex;
-  align-items: flex-end;
+  align-items: center;
   justify-content: space-between;
   flex-wrap: wrap;
   background-color: var(--color-background-secondary);
@@ -130,7 +132,7 @@ const logout = () => {
 .header__title {
   width: 100%;
   text-align: center;
-  font: 500 18px/1.3 'Roboto';
+  font: 500 20px/1.3 'Roboto';
   color: var(--color-white-soft);
   margin-bottom: 5px;
 }
@@ -140,7 +142,7 @@ const logout = () => {
 }
 
 .header__link {
-  font: 500 12px/1.3 'Roboto';
+  font: 500 14px/1.3 'Roboto';
   color: var(--color-white-soft);
   margin-left: 14px;
   transition: color 350ms;
@@ -169,7 +171,7 @@ const logout = () => {
   border: none;
   outline: none;
   background: transparent;
-  font: 500 12px/1 'Roboto';
+  font: 500 14px/1 'Roboto';
   color: var(--color-white-soft);
   transition: box-shadow 350ms;
   cursor: pointer;
