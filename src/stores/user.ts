@@ -25,7 +25,9 @@ export const useUserStore = defineStore('user', () => {
       sessionStorage.setItem('admin', 'true')
       return true
     }
+
     // normal user login process
+    await usersStore.initializeUsers()
     const foundUser = usersStore.users.find((u) => u.login === login)
     if (!foundUser) {
       return false
@@ -34,7 +36,8 @@ export const useUserStore = defineStore('user', () => {
     if (!passwordMatch) {
       return false
     }
-    // set the current user and store in local storage
+
+    // set the current user data and store it in the local storage
     currentUser.value = {
       first_name: foundUser.first_name,
       second_name: foundUser.second_name,

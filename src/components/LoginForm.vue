@@ -23,7 +23,8 @@ const userNotification = ref('')
 const loginInput: Ref<HTMLInputElement | null> = ref(null)
 
 const isButtonDisabled = computed(() => trimmedLogin.value.length < 4 || trimmedPassword.value.length < 5)
-const loginPlaceholder = computed(() => import.meta.env.DEV ? 'user' : 'jim_beam')
+const loginPlaceholder = computed(() => import.meta.env.DEV ? 'user or admin' : 'jim_beam or admin')
+const passwordPlaceholder = computed(() => import.meta.env.DEV ? 'qwerty or admin' : 'qwerty or 12345')
 
 watch(login, debounce((newValue: string) => {
     trimmedLogin.value = newValue.trim()
@@ -103,7 +104,7 @@ const performLogin = async () => {
                     class="login-form__input login-page__input_password"
                     v-model="password"
                     type="password"
-                    placeholder="qwerty"
+                    :placeholder="passwordPlaceholder"
                 />
 
                 <span

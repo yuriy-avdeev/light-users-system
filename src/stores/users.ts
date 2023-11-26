@@ -4,11 +4,10 @@ import bcrypt from 'bcryptjs'
 import type { NewUser, UserWithCredentials } from '@/types/store-types'
 
 // TODO - check before add new user its existing - needs mock or real DB
-// TODO - create additional workspace and way to save users' passwords
 
 const mockUsers: UserWithCredentials[] = [
   {
-    first_name: 'User',
+    first_name: 'John',
     second_name: 'Smith',
     id: 1,
     login: 'user',
@@ -37,6 +36,9 @@ export const useUsersStore = defineStore('users', () => {
 
   // simulate BE - hash passwords and initialize users
   const initializeUsers = async () => {
+    if (users.value.length) {
+      return
+    }
     for (const user of mockUsers) {
       user.password = await bcrypt.hash('qwerty', 10)
       users.value.push(user)
@@ -55,8 +57,5 @@ export const useUsersStore = defineStore('users', () => {
       password: hashedPassword,
     })
   }
-
-  initializeUsers()
-
-  return { users, addUser }
+  return { users, initializeUsers, addUser }
 })
