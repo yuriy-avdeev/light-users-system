@@ -3,6 +3,7 @@ import { computed, ref } from 'vue'
 import { RouterLink, useRouter } from 'vue-router'
 import { useUserStore } from '@/stores/user'
 import { useLoginFormStore } from '@/stores/loginForm'
+import UiButton from './UI/UiButton.vue'
 
 const props = defineProps({
   title: {
@@ -72,13 +73,16 @@ const logout = () => {
       </RouterLink>
     </nav>
 
-    <div class="header__login-container">
-      <button
-        class="header__login-button"
-        :class="[{
-          'header__login-button--active': userStore.auth && !userStore.isAdmin,
-          'header__login-button--focus': isConfirmationContainerOpened
-        }]"
+    <div class="header__login">
+      <UiButton
+        :text="loginButtonText"
+        isDarkBase
+        :isActive="isConfirmationContainerOpened"
+        :class="[
+          'header__login-button',
+          { 'header__login-button_has-user': userStore.auth && !userStore.isAdmin },
+          { 'header__login-button_active': isConfirmationContainerOpened }
+        ]"
         @click.prevent="handleLoginButton"
       >
         <span
@@ -87,32 +91,30 @@ const logout = () => {
         >
           A
         </span>
-
-        {{ loginButtonText }}
-      </button>
+      </UiButton>
 
       <div
-        class="header__confirmation-container"
-        :class="{ 'header__confirmation-container--active': isConfirmationContainerOpened }"
+        class="header__confirmation-wrapper"
+        :class="{ 'header__confirmation-wrapper_active': isConfirmationContainerOpened }"
       >
-        <p class="header__confirmation-text">
-          Are you sure?
-        </p>
-
-        <button
-          class="
-          header__confirmation-button"
-          @click.prevent="logout"
+        <div
+          class="header__confirmation-container"
+          :class="{ 'header__confirmation-container_active': isConfirmationContainerOpened }"
         >
-          YES
-        </button>
+          <p class="header__confirmation-text">
+            Are you sure?
+          </p>
 
-        <button
-          class="header__confirmation-button"
-          @click.prevent="isConfirmationContainerOpened = false"
-        >
-          NO
-        </button>
+          <UiButton
+            text="YES"
+            @click.prevent="logout"
+          />
+
+          <UiButton
+            text="NO"
+            @click.prevent="isConfirmationContainerOpened = false"
+          />
+        </div>
       </div>
     </div>
   </header>
@@ -158,32 +160,22 @@ const logout = () => {
   border-bottom: solid 2px var(--color-text-hovered);
 }
 
-.header__login-container {
+.header__login {
+  margin-left: auto;
   position: relative;
 }
 
 .header__login-button {
-  padding: 8px 10px;
-  height: 28px;
-  display: flex;
-  align-items: center;
-  border-radius: 6px;
-  border: none;
-  outline: none;
-  background: transparent;
-  font: 500 14px/1 'Roboto';
-  color: var(--color-white-soft);
-  transition: box-shadow 350ms;
-  cursor: pointer;
+  min-height: 32px;
+  padding: 4px 12px;
 }
 
-.header__login-button--focus {
-  box-shadow: inset 3px -3px 6px var(--color-white-soft);
-  border-radius: 6px 6px 0 0;
+.header__login-button_active {
+  border-radius: 16px 16px 0 16px;
 }
 
-.header__login-button--active {
-  padding-left: 28px;
+.header__login-button_has-user {
+  padding-left: 30px;
   background: url(@/assets/icons/user.svg) no-repeat;
   background-size: 18px;
   background-position: 5px center;
@@ -194,25 +186,40 @@ const logout = () => {
   margin-right: 4px;
 }
 
-.header__confirmation-container {
-  width: 125px;
+.header__confirmation-wrapper {
   height: 0;
+  width: 125px;
   overflow: hidden;
+  position: absolute;
+  top: calc(100% + 2px);
+  right: 0;
+  height: 0;
+  border-radius: 8px 0 8px 8px;
+}
+
+.header__confirmation-wrapper_active {
+  height: 75px;
+}
+
+.header__confirmation-container {
+  width: 100%;
+  height: 75px;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-wrap: wrap;
   gap: 7px;
-  position: absolute;
-  top: calc(100% + 2px);
-  right: 0;
+  position: relative;
+  top: -90px;
+  opacity: 0;
   border-radius: 8px 0 8px 8px;
   background-color: var(--color-white);
-  transition: height 350ms;
+  transition: top 450ms, opacity 400ms;
 }
 
-.header__confirmation-container--active {
-  height: 75px;
+.header__confirmation-container_active {
+  top: 0;
+  opacity: 1;
 }
 
 .header__confirmation-text {
@@ -244,18 +251,6 @@ const logout = () => {
 }
 
 @media (hover: hover) {
-  .header__login-button:hover {
-    box-shadow: inset 3px -3px 6px var(--color-white-soft);
-  }
-
-  .header__confirmation-button:first-of-type:hover {
-    box-shadow: inset 0 0 5px var(--color-dark-grey);
-  }
-
-  .header__confirmation-button:last-of-type:hover {
-    box-shadow: inset 0 0 5px var(--color-success);
-  }
-
   .header__link:hover:not(.router-link-exact-active) {
     color: var(--color-text-hovered);
     cursor: pointer;

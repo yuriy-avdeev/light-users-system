@@ -4,6 +4,7 @@ import { useRouter } from 'vue-router'
 import { useUserStore } from '@/stores/user'
 import { useLoginFormStore } from '@/stores/loginForm'
 import { debounce } from '@/utilities/debounce'
+import UiButton from './UI/UiButton.vue'
 
 const props = defineProps({
     nextPage: {
@@ -114,16 +115,12 @@ const performLogin = async () => {
                     it needs {{ 5 - trimmedPassword.length }} more {{ trimmedPassword.length === 4 ? 'char' : 'chars' }}
                     here
                 </span>
-
             </label>
 
-            <button
-                class="login-form__button"
-                :class="{ 'login-form__button_disabled': isButtonDisabled }"
-                type="submit"
-            >
-                Login
-            </button>
+            <UiButton
+                text="Login"
+                :isDisabled="isButtonDisabled"
+            />
         </form>
     </div>
 </template>
@@ -196,30 +193,5 @@ const performLogin = async () => {
 .login-form__input:focus-visible {
     outline: none;
     box-shadow: 0 0 3px var(--color-background-secondary);
-}
-
-.login-form__button {
-    border-radius: 6px;
-    border: none;
-    background-color: var(--color-background-secondary);
-    margin-top: 5px;
-    padding: 6px 4px;
-    cursor: pointer;
-    font: 500 13px/1.2 var(--main-font);
-    color: var(--color-white);
-    transition: color 300ms, background-color 300ms;
-}
-
-.login-form__button_disabled {
-    pointer-events: none;
-    background-color: var(--color-dark-grey);
-}
-
-@media (hover: hover) {
-    .login-form__button:hover {
-        background-color: var(--color-white);
-        box-shadow: inset 10px -10px 15px var(--color-background);
-        color: var(--color-background-secondary);
-    }
 }
 </style>

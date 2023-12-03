@@ -1,7 +1,7 @@
 <template>
   <footer class="footer">
     <p class="footer__text">
-      &copy; {{ new Date().getFullYear() }}. Yuriy Avdeed. All rights reserved.
+      &copy; {{ new Date().getFullYear() }} Y. Avdeev
     </p>
   </footer>
 </template>
