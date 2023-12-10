@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { onMounted } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useUsersStore } from '@/stores/users'
 import type { User } from '@/types/store-types'
@@ -7,12 +6,6 @@ import UiButton from './UI/UiButton.vue'
 
 const usersStore = useUsersStore()
 const { users } = storeToRefs(usersStore)
-
-onMounted(async () => {
-    if (!users.value.length) {
-        await usersStore.initializeUsers()
-    }
-})
 
 const editUser = (user: User) => [
     console.log('user: ', user)
@@ -26,15 +19,7 @@ const deleteUser = (id: number) => [
 </script>
 
 <template>
-    <div v-if="!users">
-        <!-- TODO - add loader component -->
-        Loading users...
-    </div>
-
-    <table
-        v-else
-        class="users-list"
-    >
+    <table class="users-list">
         <thead>
             <tr>
                 <th>ID</th>

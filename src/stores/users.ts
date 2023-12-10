@@ -39,9 +39,13 @@ export const useUsersStore = defineStore('users', () => {
     if (users.value.length) {
       return
     }
-    for (const user of mockUsers) {
-      user.password = await bcrypt.hash('qwerty', 10)
-      users.value.push(user)
+    try {
+      for (const user of mockUsers) {
+        user.password = await bcrypt.hash('qwerty', 10)
+        users.value.push(user)
+      }
+    } catch {
+      throw new Error('Error: fetching users')
     }
   }
 
