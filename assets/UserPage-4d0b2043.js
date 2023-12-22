@@ -1,1 +1,0 @@
-import{d as a,o as t,c as r,a as s,t as o}from"./index-cda76058.js";const i=a({__name:"UserPage",setup(n){return(e,p)=>(t(),r("div",null,[s("h2",null,"User with id - "+o(e.$route.params.id)+" page",1)]))}});export{i as default};
