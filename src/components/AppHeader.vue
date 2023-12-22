@@ -108,11 +108,13 @@ const logout = () => {
           <UiButton
             text="YES"
             @click.prevent="logout"
+            class="header__confirmation-button"
           />
 
           <UiButton
             text="NO"
             @click.prevent="isConfirmationContainerOpened = false"
+            class="header__confirmation-button"
           />
         </div>
       </div>
@@ -166,8 +168,9 @@ const logout = () => {
 }
 
 .header__login-button {
-  min-height: 32px;
-  padding: 4px 12px;
+  min-height: 30px;
+  padding: 4px 15px;
+  border: none;
 }
 
 .header__login-button_active {
@@ -175,10 +178,10 @@ const logout = () => {
 }
 
 .header__login-button_has-user {
-  padding-left: 30px;
+  padding-left: 36px;
   background: url(@/assets/icons/user.svg) no-repeat;
   background-size: 18px;
-  background-position: 5px center;
+  background-position: 9px center;
 }
 
 .header__button-admin-letter {
@@ -203,7 +206,7 @@ const logout = () => {
 
 .header__confirmation-container {
   width: 100%;
-  height: 75px;
+  height: 70px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -231,17 +234,8 @@ const logout = () => {
 }
 
 .header__confirmation-button {
-  padding: 6px;
-  display: flex;
-  align-items: center;
-  border-radius: 3px;
+  padding: 4px 12px;
   border: none;
-  outline: none;
-  background: none;
-  font: 500 14px/1 'Roboto';
-  color: var(--color-black-soft);
-  transition: box-shadow 350ms;
-  cursor: pointer;
 }
 
 @media (min-width: 1048px) {

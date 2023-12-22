@@ -45,6 +45,7 @@ export const useUsersStore = defineStore('users', () => {
         users.value.push(user)
       }
     } catch {
+      users.value = []
       throw new Error('Error: fetching users')
     }
   }

@@ -40,17 +40,23 @@ onMounted(async () => {
   <div class="users-list-page">
     <AppLoader v-if="isLoading" />
 
-    <!-- TODO rework these handlers -->
     <PopupWrapper
       v-else-if="error"
-      @click.self="error = null"
-      @keydown.esc="error = null"
+      @click.self=" error = null"
     >
-      <p class="users-list-page"> {{ error }}</p>
-      {{ error }}
+      <div class="users-list-page__error-container">
+        <button
+          class="users-list-page__error-close"
+          @click.prevent=" error = null"
+        >
+          &#10006;
+        </button>
+        <span class="users-list-page__error-sign"> &#10006; </span>
+        <p class="users-list-page__error-text"> {{ error }}</p>
+      </div>
     </PopupWrapper>
 
-    <template v-else>
+    <template v-if="users.length">
       <UiButton
         text="Create User"
         @click.prevent="createUser"
@@ -64,5 +70,54 @@ onMounted(async () => {
 <style scoped>
 .users-list-page {
   /*  */
+}
+
+.users-list-page__error-container {
+  width: calc(100% - 30px);
+  max-width: 320px;
+  padding: 0 8px 34px;
+  border-radius: 6px;
+  background-color: var(--color-white);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.users-list-page__error-close {
+  margin: 4px 0 12px auto;
+  border: none;
+  outline: none;
+  background-color: transparent;
+  cursor: pointer;
+  color: var(--color-danger);
+  transition: opacity 400ms;
+}
+
+.users-list-page__error-sign {
+  font-size: 16px;
+  line-height: 1;
+  font-weight: 500;
+  color: var(--color-danger);
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 2px solid var(--color-danger);
+  margin-bottom: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.users-list-page__error-text {
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--color-danger);
+}
+
+@media (hover: hover) {
+  .users-list-page__error-close:hover {
+    opacity: 0.6;
+  }
 }
 </style>
