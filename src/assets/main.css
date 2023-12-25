@@ -2,7 +2,7 @@
 
 :root {
   --color-white: #ffffff;
-  --color-white-soft: #f8f8f8b4;
+  --color-white-soft: #f8f8f8ef;
 
   --color-black: #181818;
   --color-black-soft: #222222;
@@ -11,7 +11,7 @@
   --color-success: #00b606;
   --color-danger: #ff3232;
 
-  --color-background: #e4ebe180;
+  --color-background: #f8f8f8b4;
   --color-background-secondary: #72c1c5;
 
   --color-text: var(--color-black-soft);

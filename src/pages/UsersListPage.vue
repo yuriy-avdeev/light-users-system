@@ -56,10 +56,11 @@ onMounted(async () => {
       </div>
     </PopupWrapper>
 
-    <template v-if="users.length">
+    <template v-if="!isLoading && users.length">
       <UiButton
         text="Create User"
         @click.prevent="createUser"
+        class="users-list-page__create-button"
       />
 
       <UsersList />
@@ -113,6 +114,10 @@ onMounted(async () => {
   font-size: 15px;
   font-weight: 500;
   color: var(--color-danger);
+}
+
+.users-list-page__create-button {
+  margin: 0 0 15px auto;
 }
 
 @media (hover: hover) {

@@ -151,13 +151,14 @@ const logout = () => {
   margin-left: 14px;
   transition: color 350ms;
   text-decoration: none;
-  padding-bottom: 1px;
+  padding-bottom: 3px;
   border-bottom: solid 2px transparent;
-  cursor: default;
+  cursor: pointer;
   position: relative;
 }
 
 .router-link-exact-active {
+  cursor: default;
   color: var(--color-text-hovered);
   border-bottom: solid 2px var(--color-text-hovered);
 }
@@ -247,22 +248,21 @@ const logout = () => {
 @media (hover: hover) {
   .header__link:hover:not(.router-link-exact-active) {
     color: var(--color-text-hovered);
-    cursor: pointer;
   }
 
   .header__link::after {
     content: '';
     position: absolute;
-    bottom: -1px;
+    bottom: -2px;
     left: 0;
     width: 0;
     height: 2px;
     background-color: var(--color-text-hovered);
-    transition: width 300ms;
   }
 
   .header__link:hover:not(.router-link-exact-active)::after {
     width: 100%;
+    transition: width 300ms;
   }
 }
 </style>
