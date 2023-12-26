@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue'
+import { computed, watch, ref, type Ref } from 'vue'
 import { RouterLink, useRouter } from 'vue-router'
 import { useUserStore } from '@/stores/user'
 import { useLoginFormStore } from '@/stores/loginForm'
@@ -16,9 +16,20 @@ const router = useRouter()
 const userStore = useUserStore()
 const loginFormStore = useLoginFormStore()
 const isConfirmationContainerOpened = ref(false)
+const containerRef: Ref<HTMLElement | null> = ref(null)
 
 const loginButtonText = computed(() => {
   return userStore.isAuthenticated ? 'Logout' : 'Login'
+})
+
+watch(isConfirmationContainerOpened, (newValue) => {
+  if (newValue) {
+    document.addEventListener('keydown', handlePressEsc)
+    document.addEventListener('click', handleClickOutside)
+  } else {
+    document.removeEventListener('keydown', handlePressEsc)
+    document.removeEventListener('click', handleClickOutside)
+  }
 })
 
 const handleLoginButton = () => {
@@ -34,6 +45,22 @@ const logout = () => {
   userStore.logout()
   isConfirmationContainerOpened.value = false
   router.push('/')
+}
+
+const closeConfirmationContainer = () => {
+  isConfirmationContainerOpened.value = false
+}
+
+const handlePressEsc = (e: KeyboardEvent) => {
+  if (e.key === 'Escape') {
+    closeConfirmationContainer()
+  }
+}
+
+const handleClickOutside = (e: MouseEvent) => {
+  if (containerRef.value && !containerRef.value.contains(e.target as Node)) {
+    closeConfirmationContainer()
+  }
 }
 </script>
 
@@ -83,7 +110,7 @@ const logout = () => {
           { 'header__login-button_has-user': userStore.auth && !userStore.isAdmin },
           { 'header__login-button_active': isConfirmationContainerOpened }
         ]"
-        @click.prevent="handleLoginButton"
+        @click.stop.prevent="handleLoginButton"
       >
         <span
           v-if="userStore.isAdmin"
@@ -98,6 +125,7 @@ const logout = () => {
         :class="{ 'header__confirmation-wrapper_active': isConfirmationContainerOpened }"
       >
         <div
+          ref="containerRef"
           class="header__confirmation-container"
           :class="{ 'header__confirmation-container_active': isConfirmationContainerOpened }"
         >

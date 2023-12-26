@@ -127,12 +127,9 @@ const performLogin = async () => {
 
 <style scoped>
 .login-form {
-    height: 200px;
-    width: calc(100% - 30px);
+    width: 100%;
     max-width: 320px;
-    padding: 20px 14px;
-    border-radius: 6px;
-    background-color: var(--color-white);
+    padding: 10px 6px;
     display: flex;
     justify-content: center;
     align-items: center;

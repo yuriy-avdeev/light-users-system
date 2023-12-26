@@ -1,105 +1,131 @@
 <script setup lang="ts">
+import { ref } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useUsersStore } from '@/stores/users'
 import type { User } from '@/types/store-types'
 import UiButton from './UI/UiButton.vue'
+import PopupWrapper from '@/components/PopupWrapper.vue'
+// import type of the new user
 
 const usersStore = useUsersStore()
 const { users } = storeToRefs(usersStore)
+const isOpenPopup = ref(false)
 
-const editUser = (user: User) => [
+const createUser = () => {
+    isOpenPopup.value = true
+    // open popup with form - pointless to create new user manually here, but...
+}
+
+const editUser = (user: User) => {
     console.log('user: ', user)
     //
-]
+}
 
-const deleteUser = (id: number) => [
+const deleteUser = (id: number) => {
     console.log('id: ', id)
     //
-]
+}
 </script>
 
 <template>
-    <table class="users-list">
-        <thead>
-            <tr class="users-list__header">
-                <th class="users-list__column users-list__column_id">ID</th>
+    <div class="user-list">
+        <UiButton
+            text="Create User"
+            @click.prevent="createUser"
+            class="users-list__create-button"
+        />
 
-                <th class="users-list__column users-list__column_first-name">First Name</th>
+        <PopupWrapper
+            v-if="isOpenPopup"
+            @closePopup="isOpenPopup = false"
+        >
+            <div class="users-list__user-container">
+                test
+            </div>
+        </PopupWrapper>
 
-                <th class="users-list__column users-list__column_second-name">Second Name</th>
-                <th></th>
-                <th></th>
-            </tr>
-        </thead>
+        <table class="users-table">
+            <thead>
+                <tr class="users-table__header">
+                    <th class="users-table__column users-table__column_id">ID</th>
 
-        <tbody>
-            <tr
-                v-for="user in users"
-                :key="user.id"
-                class="users-list__row"
-            >
-                <td class="users-list__column users-list__column_id">{{ user.id }}</td>
+                    <th class="users-table__column users-table__column_first-name">First Name</th>
 
-                <td class="users-list__column users-list__column_first-name">{{ user.first_name }}</td>
+                    <th class="users-table__column users-table__column_second-name">Second Name</th>
+                    <th></th>
+                    <th></th>
+                </tr>
+            </thead>
 
-                <td class="users-list__column users-list__column_second-name">{{ user.second_name }}</td>
+            <tbody>
+                <tr
+                    v-for="user in users"
+                    :key="user.id"
+                    class="users-table__row"
+                >
+                    <td class="users-table__column users-table__column_id">{{ user.id }}</td>
 
-                <td class="users-list__column users-list__column_button">
-                    <UiButton
-                        text="Edit"
-                        @click.prevent="editUser(user)"
-                        class="users-list__button"
-                    />
-                </td>
+                    <td class="users-table__column users-table__column_first-name">{{ user.first_name }}</td>
 
-                <td class="users-list__column users-list__column_button">
-                    <UiButton
-                        text="Delete"
-                        @click.prevent="deleteUser(user.id)"
-                        class="users-list__button"
-                    />
-                </td>
-            </tr>
-        </tbody>
-    </table>
+                    <td class="users-table__column users-table__column_second-name">{{ user.second_name }}</td>
+
+                    <td class="users-table__column users-table__column_button">
+                        <UiButton
+                            text="Edit"
+                            @click.prevent="editUser(user)"
+                            class="users-table__button"
+                        />
+                    </td>
+
+                    <td class="users-table__column users-table__column_button">
+                        <UiButton
+                            text="Delete"
+                            @click.prevent="deleteUser(user.id)"
+                            class="users-table__button"
+                        />
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
 </template>
 
 <style scoped>
-.users-list {
-    /*  */
+.users-list__create-button {
+    margin: 0 0 15px auto;
 }
 
-.users-list__header,
-.users-list__row:nth-of-type(even) {
+.users-table__header,
+.users-table__row:nth-of-type(even) {
     background-color: var(--color-light-grey);
 }
 
-.users-list__column {
+.users-table__column {
     padding: 4px;
     text-align: start;
     font-size: 14px;
 }
 
-.users-list__column_id {
+.users-table__column_id {
     width: 60px;
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
-.users-list__column_first-name {
+.users-table__column_first-name {
     width: 160px;
 }
 
-.users-list__column_second-name {
+.users-table__column_second-name {
     width: 190px;
 }
 
-.users-list__column_button {
+.users-table__column_button {
     padding: 2px 10px;
 }
 
-.users-list__button {
+.users-table__button {
     padding: 4px 14px;
 }
 </style>
