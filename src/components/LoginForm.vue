@@ -56,7 +56,7 @@ const performLogin = async () => {
         userNotification.value = 'Please, let\'s use correct login and password.'
         setTimeout(() => {
             userNotification.value = ''
-        }, 3000)
+        }, 2000)
     }
 }
 </script>

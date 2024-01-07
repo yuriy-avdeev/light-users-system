@@ -21,12 +21,12 @@ const handlePressEsc = (e: KeyboardEvent) => {
 <template>
     <div
         class="popup"
-        @click.self="$emit('closePopup')"
+        @click.self="emit('closePopup')"
     >
         <div class="popup__container">
             <button
                 class="popup__button-close"
-                @click.prevent="$emit('closePopup')"
+                @click.stop.prevent="emit('closePopup')"
             >
                 &#10006;
             </button>
