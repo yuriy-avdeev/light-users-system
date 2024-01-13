@@ -13,10 +13,10 @@ export const useUserStore = defineStore('user', () => {
 
   const isAuthenticated = computed(() => auth.value)
 
-  const login = async (login: string, password: string): Promise<boolean> => {
+  const login = async (e_mail: string, password: string): Promise<boolean> => {
     // is admin credentials
     if (
-      login === import.meta.env.VITE_ADMIN_LOGIN &&
+      e_mail === import.meta.env.VITE_ADMIN_E_MAIL &&
       password === import.meta.env.VITE_ADMIN_PASSWORD
     ) {
       isAdmin.value = true
@@ -28,7 +28,7 @@ export const useUserStore = defineStore('user', () => {
 
     // normal user login process
     await usersStore.initializeUsers()
-    const foundUser = usersStore.users.find((u) => u.login === login)
+    const foundUser = usersStore.users.find((u) => u.e_mail === e_mail)
     if (!foundUser) {
       return false
     }
@@ -49,11 +49,14 @@ export const useUserStore = defineStore('user', () => {
   }
 
   const logout = () => {
-    currentUser.value = null
-    isAdmin.value = false
     auth.value = false
-    localStorage.removeItem('currentUser')
-    sessionStorage.removeItem('admin')
+    if (isAdmin.value) {
+      isAdmin.value = false
+      sessionStorage.removeItem('admin')
+    } else {
+      currentUser.value = null
+      localStorage.removeItem('currentUser')
+    }
   }
 
   const storeUserInLocalStorage = (user: User) => {

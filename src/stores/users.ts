@@ -3,33 +3,30 @@ import { defineStore } from 'pinia'
 import bcrypt from 'bcryptjs'
 import type { NewUser, UserWithCredentials } from '@/types/store-types'
 
-// TODO - check before add new user its existing - needs mock or real DB
-
+// TODO - rework as an object in order not to iterate huge array if adding new user
 const mockUsers: UserWithCredentials[] = [
   {
     first_name: 'John',
     second_name: 'Smith',
     id: 1,
-    login: 'user',
+    e_mail: 'my@mail.com',
     password: '',
   },
   {
     first_name: 'Jane',
     second_name: 'Doe',
     id: 2,
-    login: 'jane_doe',
+    e_mail: 'jane@mail.com',
     password: '',
   },
   {
     first_name: 'Jim',
     second_name: 'Beam',
     id: 3,
-    login: 'jim_beam',
+    e_mail: 'jim@mail.com',
     password: '',
   },
 ]
-
-// TODO - add admin rights on /users route with CRUD
 
 export const useUsersStore = defineStore('users', () => {
   const users = ref<UserWithCredentials[]>([])
@@ -51,16 +48,18 @@ export const useUsersStore = defineStore('users', () => {
   }
 
   const addUser = async (newUserData: NewUser) => {
-    const existedUser = users.value.find((u) => u.login === newUserData.login)
+    const existedUser = users.value.find((u) => u.e_mail === newUserData.e_mail)
     if (existedUser) {
-      return
+      return `This e-mail - ${newUserData.e_mail} is already used. Please choose another one and try again.`
     }
     const hashedPassword = await bcrypt.hash(newUserData.password, 10)
+    // here should be logic to update mockUsers but it's pointless without DB
     users.value.push({
       ...newUserData,
       id: users.value.length + 1,
       password: hashedPassword,
     })
+    return `Welcome, ${newUserData.first_name}!`
   }
   return { users, initializeUsers, addUser }
 })

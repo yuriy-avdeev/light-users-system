@@ -37,7 +37,6 @@ const handlePressEsc = (e: KeyboardEvent) => {
 
 <style scoped>
 .popup {
-    padding: 0 10px;
     position: absolute;
     top: 0;
     left: 0;
@@ -54,7 +53,7 @@ const handlePressEsc = (e: KeyboardEvent) => {
     flex-direction: column;
     width: calc(100% - 30px);
     max-width: 320px;
-    padding: 0 8px 34px;
+    padding: 0 14px 30px;
     border-radius: 6px;
     background-color: var(--color-white);
 }
@@ -65,7 +64,10 @@ const handlePressEsc = (e: KeyboardEvent) => {
     outline: none;
     background-color: transparent;
     cursor: pointer;
+    color: var(--color-black-soft);
     transition: opacity 400ms;
+    position: relative;
+    left: 5px;
 }
 
 @media (hover: hover) {

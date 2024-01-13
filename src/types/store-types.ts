@@ -5,13 +5,13 @@ export interface User {
 }
 
 export interface UserWithCredentials extends User {
-  login: string
+  e_mail: string
   password: string
 }
 
 export interface NewUser {
   first_name: string
   second_name: string
-  login: string
+  e_mail: string
   password: string
 }

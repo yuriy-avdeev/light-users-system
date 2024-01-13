@@ -5,6 +5,7 @@ import { useUsersStore } from '@/stores/users'
 import type { User } from '@/types/store-types'
 import UiButton from './UI/UiButton.vue'
 import PopupWrapper from '@/components/PopupWrapper.vue'
+import RegistrationForm from './RegistrationForm.vue'
 // import type of the new user
 
 const usersStore = useUsersStore()
@@ -39,9 +40,7 @@ const deleteUser = (id: number) => {
             v-if="isOpenPopup"
             @closePopup="isOpenPopup = false"
         >
-            <div class="users-list__user-container">
-                test
-            </div>
+            <RegistrationForm />
         </PopupWrapper>
 
         <table class="users-table">

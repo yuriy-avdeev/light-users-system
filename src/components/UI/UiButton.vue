@@ -38,6 +38,7 @@ const props = defineProps({
             'ui-button_dark': !props.isDarkBase,
             'ui-button_light': props.isDarkBase
         }"
+        :disabled="isDisabled"
         :type="props.type"
     >
         <slot></slot>

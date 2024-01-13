@@ -16,19 +16,19 @@ const props = defineProps({
 const userStore = useUserStore()
 const loginFormStore = useLoginFormStore()
 const router = useRouter()
-const login = ref('')
-const trimmedLogin = ref('')
+const eMail = ref('')
+const trimmedEMail = ref('')
 const password = ref('')
 const trimmedPassword = ref('')
 const userNotification = ref('')
-const loginInput: Ref<HTMLInputElement | null> = ref(null)
+const eMailInput: Ref<HTMLInputElement | null> = ref(null)
 
-const isButtonDisabled = computed(() => trimmedLogin.value.length < 4 || trimmedPassword.value.length < 5)
-const loginPlaceholder = computed(() => import.meta.env.DEV ? 'user or admin' : 'jim_beam or admin')
+const isButtonDisabled = computed(() => trimmedEMail.value.length < 4 || trimmedPassword.value.length < 5)
+const eMailPlaceholder = computed(() => import.meta.env.DEV ? 'my@mail.com or admin' : 'jim@mail.com or admin')
 const passwordPlaceholder = computed(() => import.meta.env.DEV ? 'qwerty or admin' : 'qwerty or 12345')
 
-watch(login, debounce((newValue: string) => {
-    trimmedLogin.value = newValue.trim()
+watch(eMail, debounce((newValue: string) => {
+    trimmedEMail.value = newValue.trim()
 }, 200))
 
 watch(password, debounce((newValue: string) => {
@@ -36,24 +36,25 @@ watch(password, debounce((newValue: string) => {
 }, 200))
 
 onMounted(() => {
-    loginInput.value?.focus()
+    eMailInput.value?.focus()
 })
 
+const showUserNotification = (text: string) => {
+    userNotification.value = text
+}
+
 const performLogin = async () => {
-    if (isButtonDisabled.value) {
-        return
-    }
-    const isAuth = await userStore.login(trimmedLogin.value, trimmedPassword.value)
+    const isAuth = await userStore.login(trimmedEMail.value, trimmedPassword.value)
     if (isAuth) {
         const userName = userStore.isAdmin ? 'Admin' : userStore.currentUser?.first_name
-        userNotification.value = `Welcome, ${userName}!`
+        showUserNotification(`Welcome, ${userName}!`)
         setTimeout(() => {
             loginFormStore.closeLoginForm()
         }, 2000)
         router.push(props.nextPage)
     }
     if (!isAuth) {
-        userNotification.value = 'Please, let\'s use correct login and password.'
+        showUserNotification('Please, let\'s use correct e-mail and password.')
         setTimeout(() => {
             userNotification.value = ''
         }, 2000)
@@ -79,22 +80,21 @@ const performLogin = async () => {
             class="login-form__form"
             @submit.enter.prevent="performLogin"
         >
-            <!-- TODO - add a reminder if DEV mode -> if (import.meta.env.DEV) ... else (import.meta.env.PROD) ... -->
             <label class="login-form__label">
-                Username
+                E-mail
 
                 <input
-                    ref="loginInput"
-                    class="login-form__input login-page__input_login"
-                    v-model="login"
-                    :placeholder="loginPlaceholder"
+                    ref="eMailInput"
+                    class="login-form__input"
+                    v-model="eMail"
+                    :placeholder="eMailPlaceholder"
                 />
 
                 <span
-                    v-if="trimmedLogin.length && trimmedLogin.length < 4"
+                    v-if="trimmedEMail.length && trimmedEMail.length < 4"
                     class="login-form__input-hint"
                 >
-                    it needs {{ 4 - trimmedLogin.length }} more {{ trimmedLogin.length === 3 ? 'char' : 'chars' }} here
+                    it needs {{ 4 - trimmedEMail.length }} more {{ trimmedEMail.length === 3 ? 'char' : 'chars' }} here
                 </span>
             </label>
 
@@ -102,7 +102,7 @@ const performLogin = async () => {
                 Password
 
                 <input
-                    class="login-form__input login-page__input_password"
+                    class="login-form__input"
                     v-model="password"
                     type="password"
                     :placeholder="passwordPlaceholder"
@@ -120,6 +120,7 @@ const performLogin = async () => {
             <UiButton
                 text="Login"
                 :isDisabled="isButtonDisabled"
+                class="login-form__button"
             />
         </form>
     </div>
@@ -129,7 +130,6 @@ const performLogin = async () => {
 .login-form {
     width: 100%;
     max-width: 320px;
-    padding: 10px 6px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -190,5 +190,9 @@ const performLogin = async () => {
 .login-form__input:focus-visible {
     outline: none;
     box-shadow: 0 0 3px var(--color-background-secondary);
+}
+
+.login-form__button {
+    margin-top: 15px;
 }
 </style>
