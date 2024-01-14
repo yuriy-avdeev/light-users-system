@@ -5,6 +5,7 @@ import { debounce } from '@/utilities/debounce'
 import UiButton from './UI/UiButton.vue'
 
 // TODO - reuse this form for register user from header button click (needs to add the button)
+const emit = defineEmits(['is-registered'])
 const usersStore = useUsersStore()
 const firstName = ref('')
 const trimmedFirstName = ref('')
@@ -14,7 +15,8 @@ const eMail = ref('')
 const trimmedEMail = ref('')
 const password = ref('')
 const trimmedPassword = ref('')
-const userNotification = ref('')
+const userNotificationSuccess = ref('')
+const userNotificationFailure = ref('')
 const firstNameInput: Ref<HTMLInputElement | null> = ref(null)
 
 const isButtonDisabled = computed(() =>
@@ -40,42 +42,63 @@ watch(password, debounce((newValue: string) => {
     trimmedPassword.value = newValue.trim()
 }, 200))
 
-watch(userNotification, () => {
-    setTimeout(() => {
-        userNotification.value = ''
-    }, 2500)
-})
-
 onMounted(() => {
     firstNameInput.value?.focus()
 })
 
-const performRegistration = async () => {
-    userNotification.value = await usersStore.addUser({
-        e_mail: trimmedEMail.value,
-        password: trimmedPassword.value,
-        first_name: trimmedFirstName.value,
-        second_name: trimmedSecondName.value,
-    })
-    // TODO - offer to insert eMail and password one more time
-    // TODO - user notification logic here
-    // TODO - add logic (here or in the parent and check user type + in the store (mock BE) existing users)
+const handleRegistration = async () => {
+    try {
+        const { user } = await usersStore.addUser({
+            e_mail: trimmedEMail.value,
+            password: trimmedPassword.value,
+            first_name: trimmedFirstName.value,
+            second_name: trimmedSecondName.value,
+        })
+        userNotificationSuccess.value = `Welcome, ${user.first_name}!`
+    } catch (e) {
+        if (e instanceof Error && e.message) {
+            userNotificationFailure.value = e.message
+        } else {
+            userNotificationFailure.value = 'Some problems with registration. Please, try later.'
+        }
+    } finally {
+        setTimeout(() => {
+            if (userNotificationSuccess.value) {
+                cleanForm()
+                emit('is-registered')
+                userNotificationSuccess.value = ''
+            } else {
+                userNotificationFailure.value = ''
+            }
+        }, 3000)
+    }
+}
+
+const cleanForm = () => {
+    firstName.value = ''
+    secondName.value = ''
+    eMail.value = ''
+    password.value = ''
 }
 </script>
 
 <template>
     <div class="registration-form">
         <h3
-            v-if="userNotification"
+            v-if="userNotificationSuccess || userNotificationFailure"
             class="registration-form__user-notification"
+            :class="[
+                { 'registration-form__user-notification_success': userNotificationSuccess },
+                { 'registration-form__user-notification_failure': userNotificationFailure },
+            ]"
         >
-            {{ userNotification }}
+            {{ userNotificationSuccess ? userNotificationSuccess : userNotificationFailure }}
         </h3>
 
         <form
             v-else
             class="registration-form__form"
-            @submit.enter.prevent="performRegistration"
+            @submit.enter.prevent="handleRegistration"
         >
             <label class="registration-form__label">
                 First name

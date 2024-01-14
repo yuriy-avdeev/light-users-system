@@ -2,7 +2,7 @@
 import { ref } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useUsersStore } from '@/stores/users'
-import type { User } from '@/types/store-types'
+import type { IUser } from '@/types/store-types'
 import UiButton from './UI/UiButton.vue'
 import PopupWrapper from '@/components/PopupWrapper.vue'
 import RegistrationForm from './RegistrationForm.vue'
@@ -17,12 +17,12 @@ const createUser = () => {
     // open popup with form - pointless to create new user manually here, but...
 }
 
-const editUser = (user: User) => {
+const editUser = (user: IUser) => {
     console.log('user: ', user)
     //
 }
 
-const deleteUser = (id: number) => {
+const deleteUser = (id: number | string) => {
     console.log('id: ', id)
     //
 }
@@ -38,9 +38,9 @@ const deleteUser = (id: number) => {
 
         <PopupWrapper
             v-if="isOpenPopup"
-            @closePopup="isOpenPopup = false"
+            @close-popup="isOpenPopup = false"
         >
-            <RegistrationForm />
+            <RegistrationForm @is-registered="isOpenPopup = false" />
         </PopupWrapper>
 
         <table class="users-table">
@@ -51,7 +51,11 @@ const deleteUser = (id: number) => {
                     <th class="users-table__column users-table__column_first-name">First Name</th>
 
                     <th class="users-table__column users-table__column_second-name">Second Name</th>
+
+                    <th class="users-table__column users-table__column_e-mail">E-mail</th>
+
                     <th></th>
+
                     <th></th>
                 </tr>
             </thead>
@@ -67,6 +71,8 @@ const deleteUser = (id: number) => {
                     <td class="users-table__column users-table__column_first-name">{{ user.first_name }}</td>
 
                     <td class="users-table__column users-table__column_second-name">{{ user.second_name }}</td>
+
+                    <td class="users-table__column users-table__column_e-mail">{{ user.e_mail }}</td>
 
                     <td class="users-table__column users-table__column_button">
                         <UiButton
@@ -113,11 +119,15 @@ const deleteUser = (id: number) => {
 }
 
 .users-table__column_first-name {
-    width: 160px;
+    width: 200px;
 }
 
 .users-table__column_second-name {
-    width: 190px;
+    width: 200px;
+}
+
+.users-table__column_e-mail {
+    width: 240px;
 }
 
 .users-table__column_button {

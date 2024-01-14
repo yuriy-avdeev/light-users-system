@@ -19,7 +19,7 @@ onBeforeRouteLeave((to) => {
 
     <PopupWrapper
       v-if="loginFormStore.showForm"
-      @closePopup="loginFormStore.closeLoginForm"
+      @close-popup="loginFormStore.closeLoginForm"
     >
       <LoginForm :next-page="previousRoute" />
     </PopupWrapper>

@@ -2,11 +2,11 @@ import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
 import bcrypt from 'bcryptjs'
 import { useUsersStore } from './users'
-import type { User } from '@/types/store-types'
+import type { IUser } from '@/types/store-types'
 
 export const useUserStore = defineStore('user', () => {
   // 'user' is a ref that can hold or User or null, initial value is null
-  const currentUser = ref<User | null>(null)
+  const currentUser = ref<IUser | null>(null)
   const isAdmin = ref<boolean>(false)
   const auth = ref<boolean>(false)
   const usersStore = useUsersStore()
@@ -42,6 +42,8 @@ export const useUserStore = defineStore('user', () => {
       first_name: foundUser.first_name,
       second_name: foundUser.second_name,
       id: foundUser.id,
+      e_mail: foundUser.e_mail,
+      password: '',
     }
     auth.value = true
     storeUserInLocalStorage(currentUser.value)
@@ -59,7 +61,7 @@ export const useUserStore = defineStore('user', () => {
     }
   }
 
-  const storeUserInLocalStorage = (user: User) => {
+  const storeUserInLocalStorage = (user: IUser) => {
     const data = {
       user,
       timestamp: new Date().getTime(),

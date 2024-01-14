@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { onMounted, onUnmounted } from 'vue'
 
-const emit = defineEmits(['closePopup'])
+const emit = defineEmits(['close-popup'])
 
 onMounted(() => {
     document.addEventListener('keydown', handlePressEsc)
@@ -13,7 +13,7 @@ onUnmounted(() => {
 
 const handlePressEsc = (e: KeyboardEvent) => {
     if (e.key === 'Escape') {
-        emit('closePopup')
+        emit('close-popup')
     }
 }
 </script>
@@ -21,12 +21,12 @@ const handlePressEsc = (e: KeyboardEvent) => {
 <template>
     <div
         class="popup"
-        @click.self="emit('closePopup')"
+        @click.self="emit('close-popup')"
     >
         <div class="popup__container">
             <button
                 class="popup__button-close"
-                @click.stop.prevent="emit('closePopup')"
+                @click.stop.prevent="emit('close-popup')"
             >
                 &#10006;
             </button>

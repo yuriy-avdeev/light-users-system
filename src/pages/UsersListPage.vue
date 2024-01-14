@@ -36,7 +36,7 @@ onMounted(async () => {
 
     <PopupWrapper
       v-else-if="error"
-      @closePopup="error = null"
+      @close-popup="error = null"
     >
       <div class="users-list-page__error-container">
         <span class="users-list-page__error-sign"> &#10006; </span>
