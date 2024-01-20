@@ -2,7 +2,7 @@
 import { ref, type Ref, onMounted, computed, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import { useUserStore } from '@/stores/user'
-import { useLoginFormStore } from '@/stores/loginForm'
+import { useUserAccessFormStore } from '@/stores/userAccessForm'
 import { debounce } from '@/utilities/debounce'
 import UiButton from './UI/UiButton.vue'
 
@@ -14,7 +14,7 @@ const props = defineProps({
 })
 
 const userStore = useUserStore()
-const loginFormStore = useLoginFormStore()
+const useAccessFormStore = useUserAccessFormStore()
 const router = useRouter()
 const eMail = ref('')
 const trimmedEMail = ref('')
@@ -49,7 +49,7 @@ const performLogin = async () => {
         const userName = userStore.isAdmin ? 'Admin' : userStore.currentUser?.first_name
         showUserNotification(`Welcome, ${userName}!`)
         setTimeout(() => {
-            loginFormStore.closeLoginForm()
+            useAccessFormStore.closeUserAccessForm()
         }, 2000)
         router.push(props.nextPage)
     }

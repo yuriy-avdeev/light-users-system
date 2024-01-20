@@ -2,7 +2,7 @@
 import { computed, watch, ref, type Ref } from 'vue'
 import { RouterLink, useRouter } from 'vue-router'
 import { useUserStore } from '@/stores/user'
-import { useLoginFormStore } from '@/stores/loginForm'
+import { useUserAccessFormStore } from '@/stores/userAccessForm'
 import UiButton from './UI/UiButton.vue'
 
 const props = defineProps({
@@ -14,7 +14,7 @@ const props = defineProps({
 
 const router = useRouter()
 const userStore = useUserStore()
-const loginFormStore = useLoginFormStore()
+const userAccessFormStore = useUserAccessFormStore()
 const isConfirmationContainerOpened = ref(false)
 const containerRef: Ref<HTMLElement | null> = ref(null)
 
@@ -36,7 +36,7 @@ const handleLoginButton = () => {
   if (userStore.isAuthenticated) {
     isConfirmationContainerOpened.value = !isConfirmationContainerOpened.value
   } else {
-    loginFormStore.openLoginForm()
+    userAccessFormStore.openUserAccessForm()
     router.push('/')
   }
 }

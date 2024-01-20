@@ -1,6 +1,6 @@
 import type { RouteLocationNormalized } from 'vue-router'
 import { useUserStore } from '@/stores/user'
-import { useLoginFormStore } from '@/stores/loginForm'
+import { useUserAccessFormStore } from '@/stores/userAccessForm'
 
 export const validateId = (to: RouteLocationNormalized) => {
   const userStore = useUserStore()
@@ -23,7 +23,7 @@ export const validateAuth = (to: RouteLocationNormalized) => {
     return true
   }
 
-  const loginFormStore = useLoginFormStore()
-  loginFormStore.openLoginForm()
+  const userAccessFormStore = useUserAccessFormStore()
+  userAccessFormStore.openUserAccessForm()
   return { path: '/' }
 }

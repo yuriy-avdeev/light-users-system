@@ -26,10 +26,12 @@ const handlePressEsc = (e: KeyboardEvent) => {
         <div class="popup__container">
             <button
                 class="popup__button-close"
+                type="button"
                 @click.stop.prevent="emit('close-popup')"
             >
                 &#10006;
             </button>
+
             <slot></slot>
         </div>
     </div>
@@ -49,25 +51,26 @@ const handlePressEsc = (e: KeyboardEvent) => {
 }
 
 .popup__container {
+    position: relative;
     display: flex;
     flex-direction: column;
     width: calc(100% - 30px);
     max-width: 320px;
-    padding: 0 14px 30px;
+    padding: 20px 14px 30px;
     border-radius: 6px;
     background-color: var(--color-white);
 }
 
 .popup__button-close {
-    margin: 4px 0 12px auto;
     border: none;
     outline: none;
     background-color: transparent;
     cursor: pointer;
     color: var(--color-black-soft);
     transition: opacity 400ms;
-    position: relative;
-    left: 5px;
+    position: absolute;
+    top: 5px;
+    right: 10px;
 }
 
 @media (hover: hover) {

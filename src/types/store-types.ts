@@ -1,14 +1,15 @@
-export interface INewUser {
+export type NewUser = {
   first_name: string
   second_name: string
   e_mail: string
   password: string
 }
 
-export interface IUser extends INewUser {
+export type User = NewUser & {
   id: number | string
 }
-
-export interface IMockUser {
-  [key: string]: IUser
+export type MockUser = {
+  [key: string]: User
 }
+
+export type SortableUsersListFields = 'first_name' | 'second_name' | 'e_mail'

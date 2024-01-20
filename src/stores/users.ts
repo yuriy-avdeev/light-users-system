@@ -1,38 +1,47 @@
 import { ref } from 'vue'
 import { defineStore } from 'pinia'
 import bcrypt from 'bcryptjs'
-import type { IUser, INewUser, IMockUser } from '@/types/store-types'
+import type { User, NewUser, MockUser } from '@/types/store-types'
 
-// table of users - add sorting
-// in the popup with login add button to open registration form
+// TODO:
+// in the popup with login add button to open registration form - go to user's tab and automatically login if new user (check init user list - only if admin)
 // mobile-first flexibility
+// pagination
+// table user list - full width of parent container
 
-const mockUsers: IMockUser = {
+const mockUsers: MockUser = {
   'my@mail.com': {
-    first_name: 'John',
+    first_name: 'User#1',
     second_name: 'Smith',
     id: 1,
     e_mail: 'my@mail.com',
     password: '',
   },
-  'jane@mail.com': {
-    first_name: 'Jane',
-    second_name: 'Doe',
+  'sam@mail.com': {
+    first_name: 'Sam',
+    second_name: 'Snow',
     id: 2,
-    e_mail: 'jane@mail.com',
+    e_mail: 'sam@mail.com',
+    password: '',
+  },
+  'anna@mail.com': {
+    first_name: 'Anna',
+    second_name: 'Doe',
+    id: 3,
+    e_mail: 'anna@mail.com',
     password: '',
   },
   'jim@mail.com': {
     first_name: 'Jim',
     second_name: 'Beam',
-    id: 3,
+    id: 4,
     e_mail: 'jim@mail.com',
     password: '',
   },
 }
 
 export const useUsersStore = defineStore('users', () => {
-  const users = ref<IUser[]>([])
+  const users = ref<User[]>([])
 
   // simulate BE - hash passwords and initialize users
   const initializeUsers = async () => {
@@ -51,7 +60,7 @@ export const useUsersStore = defineStore('users', () => {
     }
   }
 
-  const addUser = async (newUserData: INewUser) => {
+  const addUser = async (newUserData: NewUser) => {
     // here should be invocation of validation fields function
     if (mockUsers[newUserData.e_mail]) {
       throw new Error(

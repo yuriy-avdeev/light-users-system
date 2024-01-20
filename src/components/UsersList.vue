@@ -1,23 +1,72 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, computed, watch } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useUsersStore } from '@/stores/users'
-import type { IUser } from '@/types/store-types'
+import type { User, SortableUsersListFields } from '@/types/store-types'
 import UiButton from './UI/UiButton.vue'
 import PopupWrapper from '@/components/PopupWrapper.vue'
 import RegistrationForm from './RegistrationForm.vue'
-// import type of the new user
 
 const usersStore = useUsersStore()
 const { users } = storeToRefs(usersStore)
 const isOpenPopup = ref(false)
+const sortByFirstName = ref('')
+const sortBySecondName = ref('')
+const sortByEMail = ref('')
 
-const createUser = () => {
-    isOpenPopup.value = true
-    // open popup with form - pointless to create new user manually here, but...
+const usersModelList = computed(() => {
+    let sortField: SortableUsersListFields | null = null
+    let sortOrder = ''
+    if (sortByFirstName.value) {
+        sortField = 'first_name'
+        sortOrder = sortByFirstName.value
+    } else if (sortBySecondName.value) {
+        sortField = 'second_name'
+        sortOrder = sortBySecondName.value
+    } else if (sortByEMail.value) {
+        sortField = 'e_mail'
+        sortOrder = sortByEMail.value
+    }
+    if (sortField) {
+        return getSortedList(sortField, sortOrder)
+    }
+    return users.value
+})
+
+const getSortedList = (field: SortableUsersListFields, order: string) => {
+    if (order === 'up') {
+        return [...users.value].sort((a, b) => a[field].localeCompare(b[field]))
+    }
+    return [...users.value].sort((a, b) => b[field].localeCompare(a[field]))
 }
 
-const editUser = (user: IUser) => {
+watch(sortByFirstName, (newValue) => {
+    if (newValue) {
+        sortBySecondName.value = ''
+        sortByEMail.value = ''
+    }
+})
+
+watch(sortBySecondName, (newValue) => {
+    if (newValue) {
+        sortByFirstName.value = ''
+        sortByEMail.value = ''
+    }
+})
+
+watch(sortByEMail, (newValue) => {
+    if (newValue) {
+        sortByFirstName.value = ''
+        sortBySecondName.value = ''
+    }
+})
+
+const createUser = () => {
+    // it's pointless to create new user manually and it needs just for training
+    isOpenPopup.value = true
+}
+
+const editUser = (user: User) => {
     console.log('user: ', user)
     //
 }
@@ -46,13 +95,76 @@ const deleteUser = (id: number | string) => {
         <table class="users-table">
             <thead>
                 <tr class="users-table__header">
-                    <th class="users-table__column users-table__column_id">ID</th>
+                    <th class="users-table__column users-table__column_id">&#x2116;</th>
 
-                    <th class="users-table__column users-table__column_first-name">First Name</th>
+                    <th class="users-table__column users-table__column_first-name">
+                        <span>
 
-                    <th class="users-table__column users-table__column_second-name">Second Name</th>
+                        </span>
+                        <button
+                            class="users-table__arrow"
+                            :class="{ 'users-table__arrow_active': sortByFirstName === 'up' }"
+                            type="button"
+                            @click.prevent="sortByFirstName = 'up'"
+                        >
+                            ▲
+                        </button>
 
-                    <th class="users-table__column users-table__column_e-mail">E-mail</th>
+                        <button
+                            class="users-table__arrow"
+                            :class="{ 'users-table__arrow_active': sortByFirstName === 'down' }"
+                            type="button"
+                            @click.prevent="sortByFirstName = 'down'"
+                        >
+                            ▼
+                        </button>
+
+                        First Name
+                    </th>
+
+                    <th class="users-table__column users-table__column_second-name">
+                        <button
+                            class="users-table__arrow"
+                            :class="{ 'users-table__arrow_active': sortBySecondName === 'up' }"
+                            type="button"
+                            @click.prevent="sortBySecondName = 'up'"
+                        >
+                            ▲
+                        </button>
+
+                        <button
+                            class="users-table__arrow"
+                            :class="{ 'users-table__arrow_active': sortBySecondName === 'down' }"
+                            type="button"
+                            @click.prevent="sortBySecondName = 'down'"
+                        >
+                            ▼
+                        </button>
+
+                        Second Name
+                    </th>
+
+                    <th class="users-table__column users-table__column_e-mail">
+                        <button
+                            class="users-table__arrow"
+                            :class="{ 'users-table__arrow_active': sortByEMail === 'up' }"
+                            type="button"
+                            @click.prevent="sortByEMail = 'up'"
+                        >
+                            ▲
+                        </button>
+
+                        <button
+                            class="users-table__arrow"
+                            :class="{ 'users-table__arrow_active': sortByEMail === 'down' }"
+                            type="button"
+                            @click.prevent="sortByEMail = 'down'"
+                        >
+                            ▼
+                        </button>
+
+                        E-mail
+                    </th>
 
                     <th></th>
 
@@ -62,13 +174,13 @@ const deleteUser = (id: number | string) => {
 
             <tbody>
                 <tr
-                    v-for="user in users"
+                    v-for="(user, index) in usersModelList"
                     :key="user.id"
                     class="users-table__row"
                 >
-                    <td class="users-table__column users-table__column_id">{{ user.id }}</td>
+                    <td class="users-table__column users-table__column_id">{{ index + 1 }}</td>
 
-                    <td class="users-table__column users-table__column_first-name">{{ user.first_name }}</td>
+                    <td class="users-table__column users-table__column_first-name"> {{ user.first_name }} </td>
 
                     <td class="users-table__column users-table__column_second-name">{{ user.second_name }}</td>
 
@@ -136,5 +248,29 @@ const deleteUser = (id: number | string) => {
 
 .users-table__button {
     padding: 4px 14px;
+}
+
+.users-table__arrow:last-of-type {
+    margin-right: 20px;
+}
+
+.users-table__arrow {
+    padding: 1px;
+    border: none;
+    outline: none;
+    background: none;
+    font-size: 12px;
+    transition: color 300ms;
+}
+
+.users-table__arrow_active {
+    color: var(--color-info);
+}
+
+@media (hover: hover) {
+    .users-table__arrow:hover {
+        cursor: pointer;
+        color: var(--color-info);
+    }
 }
 </style>
