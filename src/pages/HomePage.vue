@@ -9,7 +9,11 @@ import UiButton from '@/components/UI/UiButton.vue'
 
 const userAccessFormStore = useUserAccessFormStore()
 const previousRoute = ref('')
-const showRegisterForm = ref(false)
+const showLoginForm = ref(true)
+const userNotification = ref('')
+const userNotificationClassModifier = ref('')
+
+// TODO - transfer almost all logic outside and leave here omnly components
 
 onBeforeRouteLeave((to) => {
   previousRoute.value = to.fullPath
@@ -17,7 +21,36 @@ onBeforeRouteLeave((to) => {
 
 const closePopup = () => {
   userAccessFormStore.closeUserAccessForm()
-  showRegisterForm.value = false
+  showLoginForm.value = true
+  userNotification.value = ''
+}
+
+const handleLogin = (payload: { isSuccessful: boolean, message: string }) => {
+  showNotification(payload.message, payload.isSuccessful ? 'success' : 'failed')
+  resetNotificationWithDelay(2500, payload.isSuccessful)
+}
+
+const handleRegistration = (payload: { isSuccessful: boolean, message: string }) => {
+  showNotification(payload.message, payload.isSuccessful ? 'success' : 'failed')
+  resetNotificationWithDelay(3000)
+  if (payload.isSuccessful) {
+    showLoginForm.value = true
+  }
+}
+
+const showNotification = (message: string, modifier: string) => {
+  userNotification.value = message
+  userNotificationClassModifier.value = modifier
+}
+
+const resetNotificationWithDelay = (delay: number, shouldCosePopup: boolean = false) => {
+  setTimeout(() => {
+    userNotification.value = ''
+    userNotificationClassModifier.value = ''
+    if (shouldCosePopup) {
+      closePopup()
+    }
+  }, delay)
 }
 </script>
 
@@ -29,20 +62,33 @@ const closePopup = () => {
       v-if="userAccessFormStore.showAccessForm"
       @close-popup="closePopup"
     >
-      <UiButton
-        class="home-page__toggle-button"
-        type="button"
-        @click.prevent="showRegisterForm = !showRegisterForm"
+      <h3
+        v-if="userNotification"
+        :class="`home-page__popup-notification ${userNotificationClassModifier}`"
       >
-        click to {{ showRegisterForm ? 'login' : 'register' }}
-      </UiButton>
+        {{ userNotification }}
+      </h3>
 
-      <RegistrationForm v-if="showRegisterForm" />
+      <template v-else>
+        <UiButton
+          class="home-page__toggle-button"
+          type="button"
+          @click.prevent="showLoginForm = !showLoginForm"
+        >
+          click to {{ showLoginForm ? 'register' : 'login' }}
+        </UiButton>
 
-      <LoginForm
-        v-else
-        :next-page="previousRoute"
-      />
+        <LoginForm
+          v-if="showLoginForm"
+          :next-page="previousRoute"
+          @is-login="handleLogin"
+        />
+
+        <RegistrationForm
+          v-else
+          @is-registered="handleRegistration"
+        />
+      </template>
     </PopupWrapper>
   </div>
 </template>
@@ -57,5 +103,20 @@ const closePopup = () => {
   width: fit-content;
   margin: 0 auto 15px 0;
   padding: 4px 8px !important;
+}
+
+.home-page__popup-notification {
+  padding: 0 15px;
+  font-size: 18px;
+  font-weight: 500;
+  text-align: center;
+}
+
+.home-page__popup-notification.success {
+  color: var(--color-success);
+}
+
+.home-page__popup-notification.failed {
+  color: var(--color-danger);
 }
 </style>

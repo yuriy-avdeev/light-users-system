@@ -7,10 +7,11 @@ import type { User } from '@/types/store-types'
 export const useUserStore = defineStore('user', () => {
   // 'user' is a ref that can hold or User or null, initial value is null
   const currentUser = ref<User | null>(null)
-  const isAdmin = ref<boolean>(false)
-  const auth = ref<boolean>(false)
+  const isAdmin = ref(false)
+  const auth = ref(false)
   const usersStore = useUsersStore()
 
+  // TODO - why don't use 'auth' directly?
   const isAuthenticated = computed(() => auth.value)
 
   const login = async (e_mail: string, password: string): Promise<boolean> => {
@@ -33,7 +34,7 @@ export const useUserStore = defineStore('user', () => {
       return false
     }
     const passwordMatch = await bcrypt.compare(password, foundUser.password)
-    if (!passwordMatch) {
+    if (!passwordMatch || e_mail === 'admin') {
       return false
     }
 

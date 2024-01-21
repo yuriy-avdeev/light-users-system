@@ -4,7 +4,6 @@ import { useUsersStore } from '@/stores/users'
 import { debounce } from '@/utilities/debounce'
 import UiButton from './UI/UiButton.vue'
 
-// TODO - reuse this form for register user from header button click (needs to add the button)
 const emit = defineEmits(['is-registered'])
 const usersStore = useUsersStore()
 const firstName = ref('')
@@ -15,8 +14,6 @@ const eMail = ref('')
 const trimmedEMail = ref('')
 const password = ref('')
 const trimmedPassword = ref('')
-const userNotificationSuccess = ref('')
-const userNotificationFailure = ref('')
 const firstNameInput: Ref<HTMLInputElement | null> = ref(null)
 
 const isButtonDisabled = computed(() =>
@@ -54,23 +51,19 @@ const handleRegistration = async () => {
             first_name: trimmedFirstName.value,
             second_name: trimmedSecondName.value,
         })
-        userNotificationSuccess.value = `Welcome, ${user.first_name}!`
+        emit('is-registered', {
+            isSuccessful: true,
+            message: `${user.first_name}, you were registered successfully. Now you just need to login.`
+        })
+        cleanForm()
     } catch (e) {
+        let message: string
         if (e instanceof Error && e.message) {
-            userNotificationFailure.value = e.message
+            message = e.message
         } else {
-            userNotificationFailure.value = 'Some problems with registration. Please, try later.'
+            message = 'Some problems with your registration. Please, try again later.'
         }
-    } finally {
-        setTimeout(() => {
-            if (userNotificationSuccess.value) {
-                cleanForm()
-                emit('is-registered')
-                userNotificationSuccess.value = ''
-            } else {
-                userNotificationFailure.value = ''
-            }
-        }, 3000)
+        emit('is-registered', { isSuccessful: false, message })
     }
 }
 
@@ -83,108 +76,75 @@ const cleanForm = () => {
 </script>
 
 <template>
-    <div class="registration-form">
-        <h3
-            v-if="userNotificationSuccess || userNotificationFailure"
-            class="registration-form__user-notification"
-            :class="[
-                { 'registration-form__user-notification_success': userNotificationSuccess },
-                { 'registration-form__user-notification_failure': userNotificationFailure },
-            ]"
-        >
-            {{ userNotificationSuccess ? userNotificationSuccess : userNotificationFailure }}
-        </h3>
+    <form
+        class="registration-form"
+        @submit.enter.prevent="handleRegistration"
+    >
+        <label class="registration-form__label">
+            First name
 
-        <form
-            v-else
-            class="registration-form__form"
-            @submit.enter.prevent="handleRegistration"
-        >
-            <label class="registration-form__label">
-                First name
-
-                <input
-                    ref="firstNameInput"
-                    class="registration-form__input"
-                    v-model="firstName"
-                />
-            </label>
-
-            <label class="registration-form__label">
-                Second name
-
-                <input
-                    class="registration-form__input"
-                    v-model="secondName"
-                />
-            </label>
-
-            <label class="registration-form__label">
-                E-mail
-
-                <input
-                    class="registration-form__input"
-                    v-model="eMail"
-                />
-
-                <span
-                    v-if="trimmedEMail.length && trimmedEMail.length < 4"
-                    class="registration-form__input-hint"
-                >
-                    it needs {{ 4 - trimmedEMail.length }} more {{ trimmedEMail.length === 3 ? 'char' : 'chars' }} here
-                </span>
-            </label>
-
-            <label class="registration-form__label">
-                Password
-
-                <input
-                    class="registration-form__input"
-                    v-model="password"
-                    type="password"
-                />
-
-                <span
-                    v-if="trimmedPassword.length && trimmedPassword.length < 5"
-                    class="registration-form__input-hint"
-                >
-                    it needs {{ 5 - trimmedPassword.length }} more {{ trimmedPassword.length === 4 ? 'char' : 'chars' }}
-                    here
-                </span>
-            </label>
-
-            <UiButton
-                text="Register"
-                :isDisabled="isButtonDisabled"
-                class="registration-form__button"
+            <input
+                ref="firstNameInput"
+                class="registration-form__input"
+                v-model="firstName"
             />
-        </form>
-    </div>
+        </label>
+
+        <label class="registration-form__label">
+            Second name
+
+            <input
+                class="registration-form__input"
+                v-model="secondName"
+            />
+        </label>
+
+        <label class="registration-form__label">
+            E-mail
+
+            <input
+                class="registration-form__input"
+                v-model="eMail"
+            />
+
+            <span
+                v-if="trimmedEMail.length && trimmedEMail.length < 4"
+                class="registration-form__input-hint"
+            >
+                it needs {{ 4 - trimmedEMail.length }} more {{ trimmedEMail.length === 3 ? 'char' : 'chars' }} here
+            </span>
+        </label>
+
+        <label class="registration-form__label">
+            Password
+
+            <input
+                class="registration-form__input"
+                v-model="password"
+                type="password"
+            />
+
+            <span
+                v-if="trimmedPassword.length && trimmedPassword.length < 5"
+                class="registration-form__input-hint"
+            >
+                it needs {{ 5 - trimmedPassword.length }} more {{ trimmedPassword.length === 4 ? 'char' : 'chars' }}
+                here
+            </span>
+        </label>
+
+        <UiButton
+            text="Register"
+            :isDisabled="isButtonDisabled"
+            class="registration-form__button"
+        />
+    </form>
 </template>
 
 <style scoped>
 .registration-form {
     width: 100%;
     max-width: 320px;
-}
-
-.registration-form__user-notification {
-    padding: 0 15px;
-    font-size: 18px;
-    font-weight: 500;
-    text-align: center;
-}
-
-.registration-form__user-notification_success {
-    color: var(--color-success);
-}
-
-.registration-form__user-notification_failure {
-    color: var(--color-danger);
-}
-
-.registration-form__form {
-    width: 100%;
     height: 100%;
     display: flex;
     flex-direction: column;

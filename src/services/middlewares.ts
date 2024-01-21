@@ -4,26 +4,28 @@ import { useUserAccessFormStore } from '@/stores/userAccessForm'
 
 export const validateId = (to: RouteLocationNormalized) => {
   const userStore = useUserStore()
-  const userId: number = Number(to.params.id)
-  if (userStore.isAdmin || userStore.currentUser?.id === userId) {
+  const userId = to.params.id
+  if (String(userStore.currentUser?.id) === userId) {
     return true
   }
   return { path: '/not-found' }
 }
 
 export const validateAuth = (to: RouteLocationNormalized) => {
-  const userStore = useUserStore()
-  if (userStore.isAuthenticated) {
-    return true
+  if (['/users', '/users/'].includes(to.fullPath)) {
+    const userStore = useUserStore()
+    return userStore.isAdmin ? true : { path: '/' }
   }
 
-  const isHomePage = to.path === '/'
-  const isNotFoundPage = to.matched[0].path === '/:pathMatch(.*)*'
-  if (isHomePage || isNotFoundPage) {
-    return true
+  const isRequiresAuth = to.matched.some((record) => record.meta.requiresAuth)
+  if (isRequiresAuth) {
+    const userStore = useUserStore()
+    if (userStore.isAuthenticated) {
+      return true
+    }
+    const userAccessFormStore = useUserAccessFormStore()
+    userAccessFormStore.openUserAccessForm()
+    return { path: '/' }
   }
-
-  const userAccessFormStore = useUserAccessFormStore()
-  userAccessFormStore.openUserAccessForm()
-  return { path: '/' }
+  return true
 }

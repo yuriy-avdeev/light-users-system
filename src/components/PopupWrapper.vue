@@ -56,7 +56,7 @@ const handlePressEsc = (e: KeyboardEvent) => {
     flex-direction: column;
     width: calc(100% - 30px);
     max-width: 320px;
-    padding: 20px 14px 30px;
+    padding: 28px 14px 30px;
     border-radius: 6px;
     background-color: var(--color-white);
 }

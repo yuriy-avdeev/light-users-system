@@ -2,7 +2,6 @@
 import { ref, type Ref, onMounted, computed, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import { useUserStore } from '@/stores/user'
-import { useUserAccessFormStore } from '@/stores/userAccessForm'
 import { debounce } from '@/utilities/debounce'
 import UiButton from './UI/UiButton.vue'
 
@@ -12,15 +11,13 @@ const props = defineProps({
         default: '/',
     },
 })
-
+const emit = defineEmits(['is-login'])
 const userStore = useUserStore()
-const useAccessFormStore = useUserAccessFormStore()
 const router = useRouter()
 const eMail = ref('')
 const trimmedEMail = ref('')
 const password = ref('')
 const trimmedPassword = ref('')
-const userNotification = ref('')
 const eMailInput: Ref<HTMLInputElement | null> = ref(null)
 
 const isButtonDisabled = computed(() => trimmedEMail.value.length < 4 || trimmedPassword.value.length < 5)
@@ -39,120 +36,72 @@ onMounted(() => {
     eMailInput.value?.focus()
 })
 
-const showUserNotification = (text: string) => {
-    userNotification.value = text
-}
-
 const performLogin = async () => {
     const isAuth = await userStore.login(trimmedEMail.value, trimmedPassword.value)
     if (isAuth) {
         const userName = userStore.isAdmin ? 'Admin' : userStore.currentUser?.first_name
-        showUserNotification(`Welcome, ${userName}!`)
-        setTimeout(() => {
-            useAccessFormStore.closeUserAccessForm()
-        }, 2000)
+        emit('is-login', { isSuccessful: true, message: `Welcome, ${userName}!` })
         router.push(props.nextPage)
-    }
-    if (!isAuth) {
-        showUserNotification('Please, let\'s use correct e-mail and password.')
-        setTimeout(() => {
-            userNotification.value = ''
-        }, 2000)
+    } else {
+        emit('is-login', { isSuccessful: false, message: 'Please, let\'s use correct e-mail and password.' })
     }
 }
 </script>
 
 <template>
-    <div class="login-form">
-        <h3
-            v-if="userNotification"
-            class="login-form__user-notification"
-            :class="[{
-                'login-form__user-notification_success': userStore.isAuthenticated,
-                'login-form__user-notification_failure': !userStore.isAuthenticated,
-            }]"
-        >
-            {{ userNotification }}
-        </h3>
+    <form
+        class="login-form"
+        @submit.enter.prevent="performLogin"
+    >
+        <label class="login-form__label">
+            E-mail
 
-        <form
-            v-else
-            class="login-form__form"
-            @submit.enter.prevent="performLogin"
-        >
-            <label class="login-form__label">
-                E-mail
-
-                <input
-                    ref="eMailInput"
-                    class="login-form__input"
-                    v-model="eMail"
-                    :placeholder="eMailPlaceholder"
-                />
-
-                <span
-                    v-if="trimmedEMail.length && trimmedEMail.length < 4"
-                    class="login-form__input-hint"
-                >
-                    it needs {{ 4 - trimmedEMail.length }} more {{ trimmedEMail.length === 3 ? 'char' : 'chars' }} here
-                </span>
-            </label>
-
-            <label class="login-form__label">
-                Password
-
-                <input
-                    class="login-form__input"
-                    v-model="password"
-                    type="password"
-                    :placeholder="passwordPlaceholder"
-                />
-
-                <span
-                    v-if="trimmedPassword.length && trimmedPassword.length < 5"
-                    class="login-form__input-hint"
-                >
-                    it needs {{ 5 - trimmedPassword.length }} more {{ trimmedPassword.length === 4 ? 'char' : 'chars' }}
-                    here
-                </span>
-            </label>
-
-            <UiButton
-                text="Login"
-                :isDisabled="isButtonDisabled"
-                class="login-form__button"
+            <input
+                ref="eMailInput"
+                class="login-form__input"
+                v-model="eMail"
+                :placeholder="eMailPlaceholder"
             />
-        </form>
-    </div>
+
+            <span
+                v-if="trimmedEMail.length && trimmedEMail.length < 4"
+                class="login-form__input-hint"
+            >
+                it needs {{ 4 - trimmedEMail.length }} more {{ trimmedEMail.length === 3 ? 'char' : 'chars' }} here
+            </span>
+        </label>
+
+        <label class="login-form__label">
+            Password
+
+            <input
+                class="login-form__input"
+                v-model="password"
+                type="password"
+                :placeholder="passwordPlaceholder"
+            />
+
+            <span
+                v-if="trimmedPassword.length && trimmedPassword.length < 5"
+                class="login-form__input-hint"
+            >
+                it needs {{ 5 - trimmedPassword.length }} more {{ trimmedPassword.length === 4 ? 'char' : 'chars' }}
+                here
+            </span>
+        </label>
+
+        <UiButton
+            text="Login"
+            :isDisabled="isButtonDisabled"
+            class="login-form__button"
+        />
+    </form>
 </template>
 
 <style scoped>
 .login-form {
     width: 100%;
     max-width: 320px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.login-form__user-notification {
-    padding: 0 15px;
-    font-size: 18px;
-    font-weight: 500;
-    text-align: center;
-}
-
-.login-form__user-notification_success {
-    color: var(--color-success);
-}
-
-.login-form__user-notification_failure {
-    color: var(--color-danger);
-}
-
-.login-form__form {
-    height: 100%;
-    flex: 1;
     display: flex;
     flex-direction: column;
     justify-content: space-between;

@@ -8,6 +8,10 @@ import type { User, NewUser, MockUser } from '@/types/store-types'
 // mobile-first flexibility
 // pagination
 // table user list - full width of parent container
+// add id to the table
+// home and about page content
+// tests
+// rearrange components by functionality (not states then computed then watch and methods)
 
 const mockUsers: MockUser = {
   'my@mail.com': {
@@ -62,22 +66,27 @@ export const useUsersStore = defineStore('users', () => {
 
   const addUser = async (newUserData: NewUser) => {
     // here should be invocation of validation fields function
-    if (mockUsers[newUserData.e_mail]) {
+    if (
+      mockUsers[newUserData.e_mail] ||
+      newUserData.e_mail.toLowerCase() === 'admin'
+    ) {
       throw new Error(
-        `This e-mail - ${newUserData.e_mail} is already used. Please choose another one and try again.`
+        `This login or e-mail - "${newUserData.e_mail}" is already used. Please, choose another one and try again.`
       )
     }
     const hashedPassword = await bcrypt.hash(newUserData.password, 10)
+    const mockId = Math.random().toString(36).substr(2, 6)
     // here should be logic to update mockUsers but it's pointless without DB
     users.value.push({
       ...newUserData,
-      id: users.value.length + 1,
+      id: mockId,
       password: hashedPassword,
     })
+
     return {
       user: {
         ...newUserData,
-        id: users.value.length + 1,
+        id: mockId,
       },
     }
   }
