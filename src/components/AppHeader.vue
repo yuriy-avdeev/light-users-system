@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import { computed, watch, ref, type Ref } from 'vue'
-import { RouterLink, useRouter } from 'vue-router'
+import { useRouter } from 'vue-router'
 import { useUserStore } from '@/stores/user'
 import { useUserAccessFormStore } from '@/stores/userAccessForm'
+import HeaderNavigation from './HeaderNavigation.vue'
 import UiButton from './UI/UiButton.vue'
 
 const props = defineProps({
@@ -68,37 +69,7 @@ const handleClickOutside = (e: MouseEvent) => {
   <header class="header">
     <h3 class="header__title">{{ props.title }}</h3>
 
-    <nav class="header__nav">
-      <RouterLink
-        class="header__link"
-        to="/"
-      >
-        Home
-      </RouterLink>
-
-      <RouterLink
-        class="header__link"
-        to="/about"
-      >
-        About
-      </RouterLink>
-
-      <RouterLink
-        v-if="userStore.isAdmin"
-        class="header__link"
-        to="/users"
-      >
-        List of users
-      </RouterLink>
-
-      <RouterLink
-        v-if="userStore.currentUser"
-        class="header__link"
-        :to="`/users/${userStore.currentUser.id}`"
-      >
-        Your page
-      </RouterLink>
-    </nav>
+    <HeaderNavigation />
 
     <div class="header__login">
       <UiButton
@@ -167,28 +138,6 @@ const handleClickOutside = (e: MouseEvent) => {
   font: 500 20px/1.3 'Roboto';
   color: var(--color-white-soft);
   margin-bottom: 5px;
-}
-
-.header__nav {
-  text-align: right;
-}
-
-.header__link {
-  font: 500 14px/1.3 'Roboto';
-  color: var(--color-white-soft);
-  margin-left: 14px;
-  transition: color 350ms;
-  text-decoration: none;
-  padding-bottom: 3px;
-  border-bottom: solid 2px transparent;
-  cursor: pointer;
-  position: relative;
-}
-
-.router-link-exact-active {
-  cursor: default;
-  color: var(--color-text-hovered);
-  border-bottom: solid 2px var(--color-text-hovered);
 }
 
 .header__login {
@@ -270,27 +219,7 @@ const handleClickOutside = (e: MouseEvent) => {
 @media (min-width: 1048px) {
   .header {
     padding: 16px calc((100% - 1024px) / 2);
-  }
-}
-
-@media (hover: hover) {
-  .header__link:hover:not(.router-link-exact-active) {
-    color: var(--color-text-hovered);
-  }
-
-  .header__link::after {
-    content: '';
-    position: absolute;
-    bottom: -2px;
-    left: 0;
-    width: 0;
-    height: 2px;
-    background-color: var(--color-text-hovered);
-  }
-
-  .header__link:hover:not(.router-link-exact-active)::after {
-    width: 100%;
-    transition: width 300ms;
+    padding: 12px;
   }
 }
 </style>

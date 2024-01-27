@@ -4,41 +4,39 @@ import bcrypt from 'bcryptjs'
 import type { User, NewUser, MockUser } from '@/types/store-types'
 
 // TODO:
-// in the popup with login add button to open registration form - go to user's tab and automatically login if new user (check init user list - only if admin)
 // mobile-first flexibility
 // pagination
-// table user list - full width of parent container
-// add id to the table
-// home and about page content
-// tests
+// home and about page content // lorem
 // rearrange components by functionality (not states then computed then watch and methods)
+// tests
+// scss
 
 const mockUsers: MockUser = {
   'my@mail.com': {
     first_name: 'User#1',
     second_name: 'Smith',
-    id: 1,
+    id: 'c30k0e',
     e_mail: 'my@mail.com',
     password: '',
   },
   'sam@mail.com': {
     first_name: 'Sam',
     second_name: 'Snow',
-    id: 2,
+    id: 'c38kle',
     e_mail: 'sam@mail.com',
     password: '',
   },
   'anna@mail.com': {
     first_name: 'Anna',
     second_name: 'Doe',
-    id: 3,
+    id: 'aa0k0e',
     e_mail: 'anna@mail.com',
     password: '',
   },
   'jim@mail.com': {
     first_name: 'Jim',
     second_name: 'Beam',
-    id: 4,
+    id: '6ka8dh',
     e_mail: 'jim@mail.com',
     password: '',
   },

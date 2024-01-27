@@ -72,7 +72,7 @@ const props = defineProps({
 }
 
 .ui-button_active.ui-button_dark {
-    box-shadow: inset 4px -4px 8px var(--color-background-secondary);
+    box-shadow: inset 3px -3px 8px var(--color-background-secondary);
 }
 
 .ui-button_active.ui-button_light {
@@ -93,6 +93,16 @@ const props = defineProps({
 
     .ui-button_light:hover {
         box-shadow: inset 4px -4px 8px var(--color-background);
+    }
+}
+
+@media not (hover: hover) {
+    .ui-button_dark:not(.ui-button_disabled) {
+        box-shadow: inset 1px -1px 6px var(--color-background-secondary);
+    }
+
+    .ui-button_light:not(.ui-button_disabled) {
+        box-shadow: inset 2px -2px 6px var(--color-background);
     }
 }
 </style>

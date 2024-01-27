@@ -78,7 +78,7 @@ const deleteUser = (id: number | string) => {
 </script>
 
 <template>
-    <div class="user-list">
+    <div class="users-list">
         <UiButton
             text="Create User"
             @click.prevent="createUser"
@@ -95,12 +95,13 @@ const deleteUser = (id: number | string) => {
         <table class="users-table">
             <thead>
                 <tr class="users-table__header">
-                    <th class="users-table__column users-table__column_id">&#x2116;</th>
+                    <th class="users-table__column users-table__column_order">&#x2116;</th>
+
+                    <th class="users-table__column users-table__column_id">
+                        ID
+                    </th>
 
                     <th class="users-table__column users-table__column_first-name">
-                        <span>
-
-                        </span>
                         <button
                             class="users-table__arrow"
                             :class="{ 'users-table__arrow_active': sortByFirstName === 'up' }"
@@ -178,7 +179,9 @@ const deleteUser = (id: number | string) => {
                     :key="user.id"
                     class="users-table__row"
                 >
-                    <td class="users-table__column users-table__column_id">{{ index + 1 }}</td>
+                    <td class="users-table__column users-table__column_order">{{ index + 1 }}</td>
+
+                    <td class="users-table__column users-table__column_id">{{ user.id }}</td>
 
                     <td class="users-table__column users-table__column_first-name"> {{ user.first_name }} </td>
 
@@ -212,7 +215,19 @@ const deleteUser = (id: number | string) => {
     margin: 0 0 15px auto;
 }
 
-.users-table__header,
+.users-table {
+    width: 100%;
+}
+
+.users-table__header {
+    height: 35px;
+    background-color: var(--color-light-grey);
+}
+
+.users-table__row {
+    height: 55px;
+}
+
 .users-table__row:nth-of-type(even) {
     background-color: var(--color-light-grey);
 }
@@ -223,11 +238,12 @@ const deleteUser = (id: number | string) => {
     font-size: 14px;
 }
 
+.users-table__column_order {
+    width: 45px;
+}
+
 .users-table__column_id {
-    width: 60px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    width: 90px;
 }
 
 .users-table__column_first-name {
@@ -259,7 +275,7 @@ const deleteUser = (id: number | string) => {
     border: none;
     outline: none;
     background: none;
-    font-size: 12px;
+    font-size: 13px;
     transition: color 300ms;
 }
 
