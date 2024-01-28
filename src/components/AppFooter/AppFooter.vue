@@ -4,4 +4,6 @@
   </footer>
 </template>
 
-<style scoped scr="./app-footer.scss"></style>
+<style scoped>
+@import './app-footer.scss';
+</style>
