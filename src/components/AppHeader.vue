@@ -1,10 +1,11 @@
 <script setup lang="ts">
-import { computed, watch, ref, type Ref } from 'vue'
+import { computed, ref, type Ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useUserStore } from '@/stores/user'
 import { useUserAccessFormStore } from '@/stores/userAccessForm'
-import HeaderNavigation from './HeaderNavigation.vue'
 import UiButton from './UI/UiButton.vue'
+import HeaderNavigation from './HeaderNavigation.vue'
+import DropdownWrapper from './DropdownWrapper.vue'
 
 const props = defineProps({
   title: {
@@ -17,20 +18,9 @@ const router = useRouter()
 const userStore = useUserStore()
 const userAccessFormStore = useUserAccessFormStore()
 const isConfirmationContainerOpened = ref(false)
-const containerRef: Ref<HTMLElement | null> = ref(null)
 
 const loginButtonText = computed(() => {
   return userStore.isAuthenticated ? 'Logout' : 'Login'
-})
-
-watch(isConfirmationContainerOpened, (newValue) => {
-  if (newValue) {
-    document.addEventListener('keydown', handlePressEsc)
-    document.addEventListener('click', handleClickOutside)
-  } else {
-    document.removeEventListener('keydown', handlePressEsc)
-    document.removeEventListener('click', handleClickOutside)
-  }
 })
 
 const handleLoginButton = () => {
@@ -46,22 +36,6 @@ const logout = () => {
   userStore.logout()
   isConfirmationContainerOpened.value = false
   router.push('/')
-}
-
-const closeConfirmationContainer = () => {
-  isConfirmationContainerOpened.value = false
-}
-
-const handlePressEsc = (e: KeyboardEvent) => {
-  if (e.key === 'Escape') {
-    closeConfirmationContainer()
-  }
-}
-
-const handleClickOutside = (e: MouseEvent) => {
-  if (containerRef.value && !containerRef.value.contains(e.target as Node)) {
-    closeConfirmationContainer()
-  }
 }
 </script>
 
@@ -91,37 +65,31 @@ const handleClickOutside = (e: MouseEvent) => {
         </span>
       </UiButton>
 
-      <div
-        class="header__confirmation-wrapper"
-        :class="{ 'header__confirmation-wrapper_active': isConfirmationContainerOpened }"
+      <DropdownWrapper
+        v-if="isConfirmationContainerOpened"
+        @close-container="isConfirmationContainerOpened = false"
       >
-        <div
-          ref="containerRef"
-          class="header__confirmation-container"
-          :class="{ 'header__confirmation-container_active': isConfirmationContainerOpened }"
-        >
-          <p class="header__confirmation-text">
-            Are you sure?
-          </p>
+        <p class="header__confirmation-text">
+          Are you sure?
+        </p>
 
-          <UiButton
-            text="YES"
-            @click.prevent="logout"
-            class="header__confirmation-button"
-          />
+        <UiButton
+          text="YES"
+          @click.prevent="logout"
+          class="header__confirmation-button"
+        />
 
-          <UiButton
-            text="NO"
-            @click.prevent="isConfirmationContainerOpened = false"
-            class="header__confirmation-button"
-          />
-        </div>
-      </div>
+        <UiButton
+          text="NO"
+          @click.prevent="isConfirmationContainerOpened = false"
+          class="header__confirmation-button"
+        />
+      </DropdownWrapper>
     </div>
   </header>
 </template>
 
-<style scoped>
+<style scoped lang="scss">
 .header {
   width: 100%;
   padding: 12px;
@@ -130,90 +98,54 @@ const handleClickOutside = (e: MouseEvent) => {
   justify-content: space-between;
   flex-wrap: wrap;
   background-color: var(--color-background-secondary);
-}
 
-.header__title {
-  width: 100%;
-  text-align: center;
-  font: 500 20px/1.3 'Roboto';
-  color: var(--color-white-soft);
-  margin-bottom: 5px;
-}
+  &__title {
+    width: 100%;
+    text-align: center;
+    font: 500 20px/1.3 'Roboto';
+    color: var(--color-white-soft);
+    margin-bottom: 5px;
+  }
 
-.header__login {
-  margin-left: auto;
-  position: relative;
-}
+  &__login {
+    margin-left: auto;
+    position: relative;
+  }
 
-.header__login-button {
-  min-height: 30px;
-  padding: 4px 15px;
-  border: none;
-}
+  &__login-button {
+    min-height: 30px;
+    padding: 4px 15px;
+    border: none;
+  }
 
-.header__login-button_active {
-  border-radius: 16px 16px 0 16px;
-}
+  &__login-button_active {
+    border-radius: 16px 16px 0 16px;
+  }
 
-.header__login-button_has-user {
-  padding-left: 36px;
-  background: url(@/assets/icons/user.svg) no-repeat;
-  background-size: 18px;
-  background-position: 9px center;
-}
+  &__login-button_has-user {
+    padding-left: 36px;
+    background: url(@/assets/icons/user.svg) no-repeat;
+    background-size: 18px;
+    background-position: 9px center;
+  }
 
-.header__button-admin-letter {
-  font-size: 18px;
-  margin-right: 4px;
-}
+  &__button-admin-letter {
+    font-size: 18px;
+    margin-right: 4px;
+  }
 
-.header__confirmation-wrapper {
-  height: 0;
-  width: 125px;
-  overflow: hidden;
-  position: absolute;
-  top: calc(100% + 2px);
-  right: 0;
-  height: 0;
-  border-radius: 8px 0 8px 8px;
-}
+  &__confirmation-text {
+    margin-top: 7px;
+    width: 100%;
+    font: 400 13px/1 'Roboto';
+    color: var(--color-black-soft);
+    text-align: center;
+  }
 
-.header__confirmation-wrapper_active {
-  height: 75px;
-}
-
-.header__confirmation-container {
-  width: 100%;
-  height: 70px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-wrap: wrap;
-  gap: 7px;
-  position: relative;
-  top: -90px;
-  opacity: 0;
-  border-radius: 8px 0 8px 8px;
-  background-color: var(--color-white);
-  transition: top 450ms, opacity 400ms;
-}
-
-.header__confirmation-container_active {
-  top: 0;
-  opacity: 1;
-}
-
-.header__confirmation-text {
-  margin-top: 7px;
-  width: 100%;
-  font: 400 13px/1 'Roboto';
-  color: var(--color-black-soft);
-  text-align: center;
-}
-
-.header__confirmation-button {
-  padding: 4px 12px;
-  border: none;
+  &__confirmation-button {
+    padding: 4px 12px;
+    border: none;
+  }
 }
 
 @media (min-width: 1048px) {

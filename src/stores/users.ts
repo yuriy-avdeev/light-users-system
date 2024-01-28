@@ -5,11 +5,13 @@ import type { User, NewUser, MockUser } from '@/types/store-types'
 
 // TODO:
 // mobile-first flexibility
+// browser native popup <dialog>
 // pagination
 // home and about page content // lorem
 // rearrange components by functionality (not states then computed then watch and methods)
 // tests
 // scss
+// dropdown components fo reusing
 
 const mockUsers: MockUser = {
   'my@mail.com': {
