@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import HomePage from '../pages/HomePage.vue'
+import HomePage from '../pages/HomePage/HomePage.vue'
 import { validateId, validateAuth } from '../services/middlewares.js'
 
 const router = createRouter({
@@ -14,26 +14,26 @@ const router = createRouter({
 
     {
       path: '/about',
-      component: () => import('../pages/AboutPage.vue'),
+      component: () => import('../pages/AboutPage/AboutPage.vue'),
       meta: { requiresAuth: true },
     },
 
     {
       path: '/users',
-      component: () => import('../pages/UsersListPage.vue'),
+      component: () => import('../pages/UsersListPage/UsersListPage.vue'),
       meta: { requiresAdminCredentials: true },
     },
 
     {
       path: '/users/:id',
-      component: () => import('../pages/UserPage.vue'),
+      component: () => import('../pages/UserPage/UserPage.vue'),
       beforeEnter: validateId,
       meta: { requiresAuth: false },
     },
 
     {
       path: '/:pathMatch(.*)*',
-      component: () => import('../pages/NotFoundPage.vue'),
+      component: () => import('../pages/NotFoundPage/NotFoundPage.vue'),
       meta: { requiresAuth: false },
     },
   ],

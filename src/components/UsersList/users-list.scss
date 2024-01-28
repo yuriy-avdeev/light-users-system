@@ -1,0 +1,80 @@
+.users-list {
+  &__create-button {
+    margin: 0 0 15px auto;
+  }
+
+  .users-table {
+    width: 100%;
+
+    &__header {
+      height: 35px;
+      background-color: var(--color-light-grey);
+    }
+
+    &__row {
+      height: 55px;
+    }
+
+    &__row:nth-of-type(even) {
+      background-color: var(--color-light-grey);
+    }
+
+    &__column {
+      padding: 4px;
+      text-align: start;
+      font-size: 14px;
+    }
+
+    &__column_order {
+      width: 45px;
+    }
+
+    &__column_id {
+      width: 90px;
+    }
+
+    &__column_first-name {
+      width: 200px;
+    }
+
+    &__column_second-name {
+      width: 200px;
+    }
+
+    &__column_e-mail {
+      width: 240px;
+    }
+
+    &__column_button {
+      padding: 2px 10px;
+    }
+
+    &__button {
+      padding: 4px 14px;
+    }
+
+    &__arrow:last-of-type {
+      margin-right: 20px;
+    }
+
+    &__arrow {
+      padding: 1px;
+      border: none;
+      outline: none;
+      background: none;
+      font-size: 13px;
+      transition: color 300ms;
+    }
+
+    &__arrow_active {
+      color: var(--color-info);
+    }
+  }
+}
+
+@media (hover: hover) {
+  .users-table__arrow:hover {
+    cursor: pointer;
+    color: var(--color-info);
+  }
+}

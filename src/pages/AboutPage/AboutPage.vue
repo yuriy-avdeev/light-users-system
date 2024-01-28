@@ -8,9 +8,4 @@
   </div>
 </template>
 
-<style>
-.about-page {
-  display: flex;
-  justify-content: center;
-}
-</style>
+<style scoped src="./about-page.scss"></style>

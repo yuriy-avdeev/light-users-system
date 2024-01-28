@@ -2,18 +2,16 @@
 import { ref } from 'vue'
 import { onBeforeRouteLeave } from 'vue-router'
 import { useUserAccessFormStore } from '@/stores/userAccessForm'
-import PopupWrapper from '@/components/PopupWrapper.vue'
-import LoginForm from '@/components/LoginForm.vue'
-import RegistrationForm from '@/components/RegistrationForm.vue'
-import UiButton from '@/components/UI/UiButton.vue'
+import PopupWrapper from '@/components/PopupWrapper/PopupWrapper.vue'
+import LoginForm from '@/components/LoginForm/LoginForm.vue'
+import RegistrationForm from '@/components/RegistrationForm/RegistrationForm.vue'
+import Button from '@/components/UI/Button/Button.vue'
 
 const userAccessFormStore = useUserAccessFormStore()
 const previousRoute = ref('')
 const showLoginForm = ref(true)
 const userNotification = ref('')
 const userNotificationClassModifier = ref('')
-
-// TODO - transfer almost all logic outside and leave here omnly components
 
 onBeforeRouteLeave((to) => {
   previousRoute.value = to.fullPath
@@ -25,12 +23,15 @@ const closePopup = () => {
   userNotification.value = ''
 }
 
-const handleLogin = (payload: { isSuccessful: boolean, message: string }) => {
+const handleLogin = (payload: { isSuccessful: boolean; message: string }) => {
   showNotification(payload.message, payload.isSuccessful ? 'success' : 'failed')
   resetNotificationWithDelay(2500, payload.isSuccessful)
 }
 
-const handleRegistration = (payload: { isSuccessful: boolean, message: string }) => {
+const handleRegistration = (payload: {
+  isSuccessful: boolean
+  message: string
+}) => {
   showNotification(payload.message, payload.isSuccessful ? 'success' : 'failed')
   resetNotificationWithDelay(3000)
   if (payload.isSuccessful) {
@@ -43,7 +44,10 @@ const showNotification = (message: string, modifier: string) => {
   userNotificationClassModifier.value = modifier
 }
 
-const resetNotificationWithDelay = (delay: number, shouldCosePopup: boolean = false) => {
+const resetNotificationWithDelay = (
+  delay: number,
+  shouldCosePopup: boolean = false
+) => {
   setTimeout(() => {
     userNotification.value = ''
     userNotificationClassModifier.value = ''
@@ -70,13 +74,13 @@ const resetNotificationWithDelay = (delay: number, shouldCosePopup: boolean = fa
       </h3>
 
       <template v-else>
-        <UiButton
+        <Button
           class="home-page__toggle-button"
           type="button"
           @click.prevent="showLoginForm = !showLoginForm"
         >
           click to {{ showLoginForm ? 'register' : 'login' }}
-        </UiButton>
+        </Button>
 
         <LoginForm
           v-if="showLoginForm"
@@ -84,39 +88,10 @@ const resetNotificationWithDelay = (delay: number, shouldCosePopup: boolean = fa
           @is-login="handleLogin"
         />
 
-        <RegistrationForm
-          v-else
-          @is-registered="handleRegistration"
-        />
+        <RegistrationForm v-else @is-registered="handleRegistration" />
       </template>
     </PopupWrapper>
   </div>
 </template>
 
-<style>
-.home-page {
-  display: flex;
-  justify-content: center;
-}
-
-.home-page__toggle-button {
-  width: fit-content;
-  margin: 0 auto 15px 0;
-  padding: 4px 8px !important;
-}
-
-.home-page__popup-notification {
-  padding: 0 15px;
-  font-size: 18px;
-  font-weight: 500;
-  text-align: center;
-}
-
-.home-page__popup-notification.success {
-  color: var(--color-success);
-}
-
-.home-page__popup-notification.failed {
-  color: var(--color-danger);
-}
-</style>
+<style scoped src="./home-page.scss"></style>

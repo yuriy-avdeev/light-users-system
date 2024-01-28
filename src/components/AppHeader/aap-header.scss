@@ -1,0 +1,70 @@
+.header {
+  width: 100%;
+  padding: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  background-color: var(--color-background-secondary);
+
+  &__title {
+    width: 100%;
+    text-align: center;
+    font: 500 20px/1.3 'Roboto';
+    color: var(--color-white-soft);
+    margin-bottom: 5px;
+  }
+
+  &__login {
+    margin-left: auto;
+    position: relative;
+  }
+
+  &__login-button {
+    min-height: 30px;
+    padding: 4px 15px;
+    border: none;
+  }
+
+  &__login-button_active {
+    border-radius: 16px 16px 0 16px;
+  }
+
+  &__login-button_has-user {
+    padding-left: 36px;
+    background: url(@/assets/icons/user.svg) no-repeat;
+    background-size: 18px;
+    background-position: 9px center;
+  }
+
+  &__button-admin-letter {
+    font-size: 18px;
+    margin-right: 4px;
+  }
+
+  &__confirmation-dropdown {
+    min-width: 125px;
+    border-radius: 8px 0 8px 8px;
+    right: 0;
+  }
+
+  &__confirmation-text {
+    margin-top: 7px;
+    width: 100%;
+    font: 400 13px/1 'Roboto';
+    color: var(--color-black-soft);
+    text-align: center;
+  }
+
+  &__confirmation-button {
+    padding: 4px 12px;
+    border: none;
+  }
+}
+
+@media (min-width: 1048px) {
+  .header {
+    padding: 16px calc((100% - 1024px) / 2);
+    padding: 12px;
+  }
+}
