@@ -1,0 +1,1 @@
+import{d as s,o as a,c as _,b as t,t as o,_ as r}from"./index-fbf6965f.js";const n=s({__name:"UserPage",setup(c){return(e,d)=>(a(),_("div",null,[t("h2",null,"User with id - "+o(e.$route.params.id)+" page",1)]))}});const l=r(n,[["__scopeId","data-v-d1e0ba3b"]]);export{l as default};
