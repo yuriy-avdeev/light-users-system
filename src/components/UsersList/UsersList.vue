@@ -4,6 +4,7 @@ import { storeToRefs } from 'pinia'
 import { useUsersStore } from '@/stores/users'
 import type { User, SortableUsersListFields } from '@/types/store-types'
 import Button from '@/components/UI/Button/Button.vue'
+import Arrow from '@/components/UI/Arrow/Arrow.vue'
 import PopupWrapper from '@/components/PopupWrapper/PopupWrapper.vue'
 import RegistrationForm from '@/components/RegistrationForm/RegistrationForm.vue'
 
@@ -81,6 +82,7 @@ const deleteUser = (id: number | string) => {
   <div class="users-list">
     <Button
       text="Create User"
+      type="button"
       @click.prevent="createUser"
       class="users-list__create-button"
     />
@@ -96,83 +98,62 @@ const deleteUser = (id: number | string) => {
             &#x2116;
           </th>
 
-          <th class="users-table__column users-table__column_id">ID</th>
+          <th
+            class="users-table__column users-table__column_id users-table__column_mobile-hidden"
+          >
+            ID
+          </th>
 
           <th class="users-table__column users-table__column_first-name">
-            <button
-              class="users-table__arrow"
-              :class="{ 'users-table__arrow_active': sortByFirstName === 'up' }"
-              type="button"
+            <Arrow
+              direction="up"
+              :is-active="sortByFirstName === 'up'"
               @click.prevent="sortByFirstName = 'up'"
-            >
-              ▲
-            </button>
+            />
 
-            <button
-              class="users-table__arrow"
-              :class="{
-                'users-table__arrow_active': sortByFirstName === 'down',
-              }"
-              type="button"
+            <Arrow
+              direction="down"
+              :is-active="sortByFirstName === 'down'"
               @click.prevent="sortByFirstName = 'down'"
-            >
-              ▼
-            </button>
-
-            First Name
+            />
+            <span>First Name</span>
           </th>
 
           <th class="users-table__column users-table__column_second-name">
-            <button
-              class="users-table__arrow"
-              :class="{
-                'users-table__arrow_active': sortBySecondName === 'up',
-              }"
-              type="button"
+            <Arrow
+              direction="up"
+              :is-active="sortBySecondName === 'up'"
               @click.prevent="sortBySecondName = 'up'"
-            >
-              ▲
-            </button>
+            />
 
-            <button
-              class="users-table__arrow"
-              :class="{
-                'users-table__arrow_active': sortBySecondName === 'down',
-              }"
-              type="button"
+            <Arrow
+              direction="down"
+              :is-active="sortBySecondName === 'down'"
               @click.prevent="sortBySecondName = 'down'"
-            >
-              ▼
-            </button>
-
-            Second Name
+            />
+            <span>Second Name</span>
           </th>
 
-          <th class="users-table__column users-table__column_e-mail">
-            <button
-              class="users-table__arrow"
-              :class="{ 'users-table__arrow_active': sortByEMail === 'up' }"
-              type="button"
+          <th
+            class="users-table__column users-table__column_e-mail users-table__column_mobile-hidden"
+          >
+            <Arrow
+              direction="up"
+              :is-active="sortByEMail === 'up'"
               @click.prevent="sortByEMail = 'up'"
-            >
-              ▲
-            </button>
+            />
 
-            <button
-              class="users-table__arrow"
-              :class="{ 'users-table__arrow_active': sortByEMail === 'down' }"
-              type="button"
+            <Arrow
+              direction="down"
+              :is-active="sortByEMail === 'down'"
               @click.prevent="sortByEMail = 'down'"
-            >
-              ▼
-            </button>
-
-            E-mail
+            />
+            <span>E-mail</span>
           </th>
 
-          <th></th>
+          <th class="users-table__column_mobile-hidden"></th>
 
-          <th></th>
+          <th class="users-table__column_mobile-hidden"></th>
         </tr>
       </thead>
 
@@ -186,7 +167,9 @@ const deleteUser = (id: number | string) => {
             {{ index + 1 }}
           </td>
 
-          <td class="users-table__column users-table__column_id">
+          <td
+            class="users-table__column users-table__column_id users-table__column_mobile-hidden"
+          >
             {{ user.id }}
           </td>
 
@@ -198,21 +181,29 @@ const deleteUser = (id: number | string) => {
             {{ user.second_name }}
           </td>
 
-          <td class="users-table__column users-table__column_e-mail">
+          <td
+            class="users-table__column users-table__column_e-mail users-table__column_mobile-hidden"
+          >
             {{ user.e_mail }}
           </td>
 
-          <td class="users-table__column users-table__column_button">
+          <td
+            class="users-table__column users-table__column_button users-table__column_mobile-hidden"
+          >
             <Button
               text="Edit"
+              type="button"
               @click.prevent="editUser(user)"
               class="users-table__button"
             />
           </td>
 
-          <td class="users-table__column users-table__column_button">
+          <td
+            class="users-table__column users-table__column_button users-table__column_mobile-hidden"
+          >
             <Button
               text="Delete"
+              type="button"
               @click.prevent="deleteUser(user.id)"
               class="users-table__button"
             />

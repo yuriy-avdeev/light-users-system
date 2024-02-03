@@ -1,0 +1,20 @@
+.arrow {
+  padding: 1px;
+  border: none;
+  outline: none;
+  background: none;
+  font-size: 13px;
+  color: var(--color-text);
+  transition: color 300ms;
+
+  &_active {
+    color: var(--color-info);
+  }
+}
+
+@media (hover: hover) {
+  .arrow:hover {
+    cursor: pointer;
+    color: var(--color-info);
+  }
+}

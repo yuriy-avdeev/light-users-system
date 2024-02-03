@@ -50,6 +50,7 @@ const logout = () => {
         :text="loginButtonText"
         isDarkBase
         :isActive="isConfirmationContainerOpened"
+        type="button"
         :class="[
           'header__login-button',
           {
@@ -75,6 +76,7 @@ const logout = () => {
         <Button
           text="YES"
           @click.prevent="logout"
+          type="button"
           class="header__confirmation-button"
         />
 
@@ -82,6 +84,7 @@ const logout = () => {
           text="NO"
           @click.stop.prevent="isConfirmationContainerOpened = false"
           class="header__confirmation-button"
+          type="button"
         />
       </DropdownWrapper>
     </div>

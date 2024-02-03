@@ -4,18 +4,17 @@ import bcrypt from 'bcryptjs'
 import type { User, NewUser, MockUser } from '@/types/store-types'
 
 // TODO:
-// mobile-first flexibility
 // browser native popup <dialog>
 // pagination
 // home and about page content // lorem
 // rearrange components by functionality (not states then computed then watch and methods)
 // tests
 // scss
-// dropdown components fo reusing
+// dropdown components for reusing
 
 const mockUsers: MockUser = {
   'my@mail.com': {
-    first_name: 'User#1',
+    first_name: 'User',
     second_name: 'Smith',
     id: 'c30k0e',
     e_mail: 'my@mail.com',
