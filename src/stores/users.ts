@@ -9,7 +9,7 @@ import type { User, NewUser, MockUser } from '@/types/store-types'
 // home and about page content // lorem
 // rearrange components by functionality (not states then computed then watch and methods)
 // tests
-// scss
+// user page with logic to change e-mail, names etc...
 // dropdown components for reusing
 
 const mockUsers: MockUser = {
