@@ -1,0 +1,47 @@
+.user-form {
+  width: 100%;
+  max-width: 320px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  &__label {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    font-size: 13px;
+    font-weight: 500;
+    position: relative;
+  }
+
+  &__input {
+    margin: 3px 0 13px;
+    padding: 5px 8px;
+    border: 1px solid var(--color-background-secondary);
+    border-radius: 4px;
+    background: transparent;
+    color: var(--color-background-secondary);
+    caret-color: var(--color-background-secondary);
+    cursor: default;
+    transition: box-shadow 250ms;
+  }
+
+  &__input-hint {
+    font-size: 10px;
+    font-weight: 400;
+    color: var(--color-danger);
+    position: absolute;
+    left: 0;
+    bottom: 0;
+  }
+
+  &__input:focus-visible {
+    outline: none;
+    box-shadow: 0 0 3px var(--color-background-secondary);
+  }
+
+  &__button {
+    margin-top: 15px;
+  }
+}

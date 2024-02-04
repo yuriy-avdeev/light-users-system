@@ -41,7 +41,7 @@ onMounted(async () => {
       </div>
     </PopupWrapper>
 
-    <UsersList v-if="!isLoading && users.length" />
+    <UsersList v-if="!isLoading" />
   </div>
 </template>
 

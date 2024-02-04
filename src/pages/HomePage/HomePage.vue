@@ -23,18 +23,24 @@ const closePopup = () => {
   userNotification.value = ''
 }
 
-const handleLogin = (payload: { isSuccessful: boolean; message: string }) => {
-  showNotification(payload.message, payload.isSuccessful ? 'success' : 'failed')
-  resetNotificationWithDelay(2500, payload.isSuccessful)
+const handleLogin = (payload: { is_successful: boolean; message: string }) => {
+  showNotification(
+    payload.message,
+    payload.is_successful ? 'success' : 'failed'
+  )
+  resetNotificationWithDelay(2500, payload.is_successful)
 }
 
 const handleRegistration = (payload: {
-  isSuccessful: boolean
+  is_successful: boolean
   message: string
 }) => {
-  showNotification(payload.message, payload.isSuccessful ? 'success' : 'failed')
+  showNotification(
+    payload.message,
+    payload.is_successful ? 'success' : 'failed'
+  )
   resetNotificationWithDelay(3000)
-  if (payload.isSuccessful) {
+  if (payload.is_successful) {
     showLoginForm.value = true
   }
 }

@@ -10,6 +10,11 @@
   &_active {
     color: var(--color-info);
   }
+
+  &_disabled {
+    pointer-events: none;
+    opacity: 0.2;
+  }
 }
 
 @media (hover: hover) {

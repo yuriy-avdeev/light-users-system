@@ -52,7 +52,21 @@
 
     &_button {
       padding: 2px 10px;
+      position: relative;
     }
+  }
+
+  &__confirmation-dropdown {
+    min-width: 100px;
+    border-radius: 4px;
+    top: 80%;
+    right: 0;
+    z-index: 1;
+  }
+
+  &__confirmation-button {
+    padding: 4px 8px;
+    border: none;
   }
 
   &__button {

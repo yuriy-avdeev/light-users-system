@@ -40,8 +40,11 @@
   }
 
   &__link_desktop {
+    & + & {
+      margin-left: 14px;
+    }
     color: var(--color-white-soft);
-    margin-left: 14px;
+
     transition: color 350ms;
     padding-bottom: 3px;
     border-bottom: solid 2px transparent;

@@ -11,11 +11,24 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
+
+  isDisabled: {
+    type: Boolean,
+    default: false,
+  },
 })
 </script>
 
 <template>
-  <button class="arrow" :class="{ arrow_active: props.isActive }" type="button">
+  <button
+    class="arrow"
+    :class="{
+      arrow_active: props.isActive,
+      arrow_disabled: props.isDisabled,
+    }"
+    type="button"
+    :disabled="isDisabled"
+  >
     {{ direction === 'up' ? '▲' : '▼' }}
   </button>
 </template>

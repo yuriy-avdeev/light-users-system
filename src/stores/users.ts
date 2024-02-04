@@ -10,7 +10,7 @@ import type { User, NewUser, MockUser } from '@/types/store-types'
 // rearrange components by functionality (not states then computed then watch and methods)
 // tests
 // user page with logic to change e-mail, names etc...
-// dropdown components for reusing
+// rethink here users list as an object - in order not to iterate list of users in real life
 
 const mockUsers: MockUser = {
   'my@mail.com': {
@@ -89,5 +89,19 @@ export const useUsersStore = defineStore('users', () => {
       },
     }
   }
-  return { users, initializeUsers, addUser }
+
+  const deleteUser = (id: number | string) => {
+    users.value = users.value.filter((item) => item.id !== id)
+  }
+
+  const editUser = (user: User) => {
+    users.value = users.value.map((item) => {
+      if (item.id === user.id) {
+        return user
+      }
+      return item
+    })
+  }
+
+  return { users, initializeUsers, addUser, deleteUser, editUser }
 })

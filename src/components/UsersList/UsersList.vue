@@ -5,15 +5,18 @@ import { useUsersStore } from '@/stores/users'
 import type { User, SortableUsersListFields } from '@/types/store-types'
 import Button from '@/components/UI/Button/Button.vue'
 import Arrow from '@/components/UI/Arrow/Arrow.vue'
+import DropdownWrapper from '@/components/DropdownWrapper/DropdownWrapper.vue'
 import PopupWrapper from '@/components/PopupWrapper/PopupWrapper.vue'
-import RegistrationForm from '@/components/RegistrationForm/RegistrationForm.vue'
+import UserForm from '@/components/UserForm/UserForm.vue'
 
 const usersStore = useUsersStore()
 const { users } = storeToRefs(usersStore)
-const isOpenPopup = ref(false)
+const isCreateUserPopupOpen = ref(false)
 const sortByFirstName = ref('')
 const sortBySecondName = ref('')
 const sortByEMail = ref('')
+const confirmationContainerToDeleteId = ref<string | number | null>(null)
+const editUserPopupId = ref<string | number | null>(null)
 
 const usersModelList = computed(() => {
   let sortField: SortableUsersListFields | null = null
@@ -64,17 +67,19 @@ watch(sortByEMail, (newValue) => {
 
 const createUser = () => {
   // it's pointless to create new user manually and it needs just for training
-  isOpenPopup.value = true
+  isCreateUserPopupOpen.value = true
 }
 
 const editUser = (user: User) => {
-  console.log('user: ', user)
-  //
+  const id = editUserPopupId.value
+  if (id) {
+    usersStore.editUser({ ...user, id })
+  }
+  editUserPopupId.value = null
 }
 
 const deleteUser = (id: number | string) => {
-  console.log('id: ', id)
-  //
+  usersStore.deleteUser(id)
 }
 </script>
 
@@ -87,8 +92,11 @@ const deleteUser = (id: number | string) => {
       class="users-list__create-button"
     />
 
-    <PopupWrapper v-if="isOpenPopup" @close-popup="isOpenPopup = false">
-      <RegistrationForm @is-registered="isOpenPopup = false" />
+    <PopupWrapper
+      v-if="isCreateUserPopupOpen"
+      @close-popup="isCreateUserPopupOpen = false"
+    >
+      <RegistrationForm @is-registered="isCreateUserPopupOpen = false" />
     </PopupWrapper>
 
     <table class="users-table">
@@ -108,12 +116,14 @@ const deleteUser = (id: number | string) => {
             <Arrow
               direction="up"
               :is-active="sortByFirstName === 'up'"
+              :is-disabled="!users.length"
               @click.prevent="sortByFirstName = 'up'"
             />
 
             <Arrow
               direction="down"
               :is-active="sortByFirstName === 'down'"
+              :is-disabled="!users.length"
               @click.prevent="sortByFirstName = 'down'"
             />
             <span>First Name</span>
@@ -123,12 +133,14 @@ const deleteUser = (id: number | string) => {
             <Arrow
               direction="up"
               :is-active="sortBySecondName === 'up'"
+              :is-disabled="!users.length"
               @click.prevent="sortBySecondName = 'up'"
             />
 
             <Arrow
               direction="down"
               :is-active="sortBySecondName === 'down'"
+              :is-disabled="!users.length"
               @click.prevent="sortBySecondName = 'down'"
             />
             <span>Second Name</span>
@@ -140,12 +152,14 @@ const deleteUser = (id: number | string) => {
             <Arrow
               direction="up"
               :is-active="sortByEMail === 'up'"
+              :is-disabled="!users.length"
               @click.prevent="sortByEMail = 'up'"
             />
 
             <Arrow
               direction="down"
               :is-active="sortByEMail === 'down'"
+              :is-disabled="!users.length"
               @click.prevent="sortByEMail = 'down'"
             />
             <span>E-mail</span>
@@ -193,9 +207,18 @@ const deleteUser = (id: number | string) => {
             <Button
               text="Edit"
               type="button"
-              @click.prevent="editUser(user)"
+              @click.stop.prevent="
+                editUserPopupId = editUserPopupId ? null : user.id
+              "
               class="users-table__button"
             />
+
+            <PopupWrapper
+              v-if="editUserPopupId === user.id"
+              @close-popup="editUserPopupId = null"
+            >
+              <UserForm button-text="Update" @user-data="editUser" />
+            </PopupWrapper>
           </td>
 
           <td
@@ -204,9 +227,34 @@ const deleteUser = (id: number | string) => {
             <Button
               text="Delete"
               type="button"
-              @click.prevent="deleteUser(user.id)"
+              @click.stop.prevent="
+                confirmationContainerToDeleteId =
+                  confirmationContainerToDeleteId ? null : user.id
+              "
               class="users-table__button"
             />
+
+            <DropdownWrapper
+              v-if="confirmationContainerToDeleteId === user.id"
+              @close-container="confirmationContainerToDeleteId = null"
+              class="users-table__confirmation-dropdown"
+            >
+              <p class="users-table__confirmation-text">Are you sure?</p>
+
+              <Button
+                text="YES"
+                @click.prevent="deleteUser(user.id)"
+                type="button"
+                class="users-table__confirmation-button"
+              />
+
+              <Button
+                text="NO"
+                @click.stop.prevent="confirmationContainerToDeleteId = null"
+                class="users-table__confirmation-button"
+                type="button"
+              />
+            </DropdownWrapper>
           </td>
         </tr>
       </tbody>

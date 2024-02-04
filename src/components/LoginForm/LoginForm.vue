@@ -57,11 +57,11 @@ const performLogin = async () => {
     const userName = userStore.isAdmin
       ? 'Admin'
       : userStore.currentUser?.first_name
-    emit('is-login', { isSuccessful: true, message: `Welcome, ${userName}!` })
+    emit('is-login', { is_successful: true, message: `Welcome, ${userName}!` })
     router.push(props.nextPage)
   } else {
     emit('is-login', {
-      isSuccessful: false,
+      is_successful: false,
       message: "Please, let's use correct e-mail and password.",
     })
   }
