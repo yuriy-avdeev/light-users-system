@@ -1,12 +1,15 @@
 <script setup lang="ts">
 import { ref } from 'vue'
+import { useUsersStore } from '@/stores/users'
 import { onBeforeRouteLeave } from 'vue-router'
 import { useUserAccessFormStore } from '@/stores/userAccessForm'
 import PopupWrapper from '@/components/PopupWrapper/PopupWrapper.vue'
 import LoginForm from '@/components/LoginForm/LoginForm.vue'
-import RegistrationForm from '@/components/RegistrationForm/RegistrationForm.vue'
+import UserForm from '@/components/UserForm/UserForm.vue'
 import Button from '@/components/UI/Button/Button.vue'
+import type { User } from '@/types/store-types'
 
+const usersStore = useUsersStore()
 const userAccessFormStore = useUserAccessFormStore()
 const previousRoute = ref('')
 const showLoginForm = ref(true)
@@ -31,17 +34,24 @@ const handleLogin = (payload: { is_successful: boolean; message: string }) => {
   resetNotificationWithDelay(2500, payload.is_successful)
 }
 
-const handleRegistration = (payload: {
-  is_successful: boolean
-  message: string
-}) => {
-  showNotification(
-    payload.message,
-    payload.is_successful ? 'success' : 'failed'
-  )
-  resetNotificationWithDelay(3000)
-  if (payload.is_successful) {
+const handleRegistration = async (user: User) => {
+  try {
+    await usersStore.addUser(user)
+    showNotification(
+      `${user.first_name}, you were registered successfully. Now you just need to login.`,
+      'success'
+    )
     showLoginForm.value = true
+  } catch (e) {
+    let message: string
+    if (e instanceof Error && e.message) {
+      message = e.message
+    } else {
+      message = 'Some problems with your registration. Please, try again later.'
+    }
+    showNotification(message, 'failed')
+  } finally {
+    resetNotificationWithDelay(3000)
   }
 }
 
@@ -94,7 +104,11 @@ const resetNotificationWithDelay = (
           @is-login="handleLogin"
         />
 
-        <RegistrationForm v-else @is-registered="handleRegistration" />
+        <UserForm
+          v-else
+          button-text="Register"
+          @user-data="handleRegistration"
+        />
       </template>
     </PopupWrapper>
   </div>

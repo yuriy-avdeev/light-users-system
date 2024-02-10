@@ -17,6 +17,7 @@ const sortBySecondName = ref('')
 const sortByEMail = ref('')
 const confirmationContainerToDeleteId = ref<string | number | null>(null)
 const editUserPopupId = ref<string | number | null>(null)
+const userWarning = ref('')
 
 const usersModelList = computed(() => {
   let sortField: SortableUsersListFields | null = null
@@ -65,16 +66,26 @@ watch(sortByEMail, (newValue) => {
   }
 })
 
-const createUser = () => {
-  // it's pointless to create new user manually and it needs just for training
-  isCreateUserPopupOpen.value = true
+const createUser = async (user: User) => {
+  // it's pointless to create new user manually but...
+  try {
+    await usersStore.addUser(user)
+    isCreateUserPopupOpen.value = false
+  } catch (e) {
+    if (e instanceof Error && e.message) {
+      userWarning.value = e.message
+    } else {
+      userWarning.value = 'Some problems with creating new user.'
+    }
+    setTimeout(() => {
+      userWarning.value = ''
+    }, 3000)
+  }
 }
 
 const editUser = (user: User) => {
-  const id = editUserPopupId.value
-  if (id) {
-    usersStore.editUser({ ...user, id })
-  }
+  const userId = editUserPopupId.value
+  usersStore.editUser(user, userId)
   editUserPopupId.value = null
 }
 
@@ -88,7 +99,7 @@ const deleteUser = (id: number | string) => {
     <Button
       text="Create User"
       type="button"
-      @click.prevent="createUser"
+      @click.prevent="isCreateUserPopupOpen = true"
       class="users-list__create-button"
     />
 
@@ -96,7 +107,11 @@ const deleteUser = (id: number | string) => {
       v-if="isCreateUserPopupOpen"
       @close-popup="isCreateUserPopupOpen = false"
     >
-      <RegistrationForm @is-registered="isCreateUserPopupOpen = false" />
+      <h3 v-if="userWarning" class="users-list__popup-warning">
+        {{ userWarning }}
+      </h3>
+
+      <UserForm v-else button-text="Register" @user-data="createUser" />
     </PopupWrapper>
 
     <table class="users-table">
@@ -217,7 +232,14 @@ const deleteUser = (id: number | string) => {
               v-if="editUserPopupId === user.id"
               @close-popup="editUserPopupId = null"
             >
-              <UserForm button-text="Update" @user-data="editUser" />
+              <UserForm
+                button-text="Update"
+                :first-name="user.first_name"
+                :second-name="user.second_name"
+                :e-mail="user.e_mail"
+                :show-password="false"
+                @user-data="editUser"
+              />
             </PopupWrapper>
           </td>
 

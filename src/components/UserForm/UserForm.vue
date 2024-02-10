@@ -8,65 +8,97 @@ const props = defineProps({
     type: String,
     require: true,
   },
+
+  firstName: {
+    type: String,
+    default: '',
+  },
+
+  secondName: {
+    type: String,
+    default: '',
+  },
+
+  eMail: {
+    type: String,
+    default: '',
+  },
+
+  password: {
+    type: String,
+    default: '',
+  },
+
+  showPassword: {
+    type: Boolean,
+    default: true,
+  },
 })
 
 const emit = defineEmits(['user-data'])
 
-const isButtonDisabled = computed(
-  () =>
-    trimmedEMail.value.length < 4 ||
-    trimmedPassword.value.length < 5 ||
-    !trimmedFirstName.value.length ||
-    !trimmedSecondName.value.length
-)
+const isButtonAvailable = computed(() => {
+  if (!isEMailValidated.value) {
+    return false
+  }
+  if (props.showPassword) {
+    return (
+      modelFirstName.value.length &&
+      modelSecondName.value.length &&
+      modelPassword.value.length > 4
+    )
+  }
+  return modelFirstName.value.length && modelSecondName.value.length
+})
+
+const isEMailValidated = computed(() => {
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+  return emailRegex.test(modelEMail.value)
+})
 
 const firstNameInput: Ref<HTMLInputElement | null> = ref(null)
 onMounted(() => {
   firstNameInput.value?.focus()
 })
 
-const firstName = ref('')
-const trimmedFirstName = ref('')
+const modelFirstName = ref(props.firstName)
 watch(
-  firstName,
+  modelFirstName,
   debounce((newValue: string) => {
-    trimmedFirstName.value = newValue.trim()
+    modelFirstName.value = newValue.trim()
   }, 200)
 )
 
-const secondName = ref('')
-const trimmedSecondName = ref('')
+const modelSecondName = ref(props.secondName)
 watch(
-  secondName,
+  modelSecondName,
   debounce((newValue: string) => {
-    trimmedSecondName.value = newValue.trim()
+    modelSecondName.value = newValue.trim()
   }, 200)
 )
 
-const eMail = ref('')
-const trimmedEMail = ref('')
+const modelEMail = ref(props.eMail)
 watch(
-  eMail,
+  modelEMail,
   debounce((newValue: string) => {
-    trimmedEMail.value = newValue.trim()
+    modelEMail.value = newValue.trim()
   }, 200)
 )
 
-const password = ref('')
-const trimmedPassword = ref('')
+const modelPassword = ref(props.password)
 watch(
-  password,
+  modelPassword,
   debounce((newValue: string) => {
-    trimmedPassword.value = newValue.trim()
+    modelPassword.value = newValue.trim()
   }, 200)
 )
 
 const handleSubmitForm = () => {
   emit('user-data', {
-    first_name: trimmedFirstName.value,
-    second_name: trimmedSecondName.value,
-    e_mail: trimmedEMail.value,
-    password: trimmedPassword.value,
+    first_name: modelFirstName.value,
+    second_name: modelSecondName.value,
+    e_mail: modelEMail.value,
+    password: modelPassword.value,
   })
 }
 </script>
@@ -79,48 +111,40 @@ const handleSubmitForm = () => {
       <input
         ref="firstNameInput"
         class="user-form__input"
-        v-model="firstName"
+        v-model="modelFirstName"
       />
     </label>
 
     <label class="user-form__label">
       Second name
 
-      <input class="user-form__input" v-model="secondName" />
+      <input class="user-form__input" v-model="modelSecondName" />
     </label>
 
     <label class="user-form__label">
       E-mail
 
-      <input class="user-form__input" v-model="eMail" />
-
-      <span
-        v-if="trimmedEMail.length && trimmedEMail.length < 4"
-        class="user-form__input-hint"
-      >
-        it needs {{ 4 - trimmedEMail.length }} more
-        {{ trimmedEMail.length === 3 ? 'char' : 'chars' }} here
-      </span>
+      <input class="user-form__input" v-model="modelEMail" />
     </label>
 
-    <label class="user-form__label">
+    <label v-if="showPassword" class="user-form__label">
       Password
 
-      <input class="user-form__input" v-model="password" type="password" />
+      <input class="user-form__input" v-model="modelPassword" type="password" />
 
       <span
-        v-if="trimmedPassword.length && trimmedPassword.length < 5"
+        v-if="modelPassword.length && modelPassword.length < 5"
         class="user-form__input-hint"
       >
-        it needs {{ 5 - trimmedPassword.length }} more
-        {{ trimmedPassword.length === 4 ? 'char' : 'chars' }}
+        it needs {{ 5 - modelPassword.length }} more
+        {{ modelPassword.length === 4 ? 'char' : 'chars' }}
         here
       </span>
     </label>
 
     <Button
       :text="$props.buttonText"
-      :isDisabled="isButtonDisabled"
+      :isDisabled="!isButtonAvailable"
       class="user-form__button"
     />
   </form>

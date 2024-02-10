@@ -1,47 +1,16 @@
 import { ref } from 'vue'
 import { defineStore } from 'pinia'
 import bcrypt from 'bcryptjs'
-import type { User, NewUser, MockUser } from '@/types/store-types'
+import type { User, NewUser } from '@/types/store-types'
+import { mockUsers } from '@/assets/mock-data'
 
 // TODO:
-// browser native popup <dialog>
+// user page with logic to change e-mail, names etc...
 // pagination
 // home and about page content // lorem
 // rearrange components by functionality (not states then computed then watch and methods)
 // tests
-// user page with logic to change e-mail, names etc...
 // rethink here users list as an object - in order not to iterate list of users in real life
-
-const mockUsers: MockUser = {
-  'my@mail.com': {
-    first_name: 'User',
-    second_name: 'Smith',
-    id: 'c30k0e',
-    e_mail: 'my@mail.com',
-    password: '',
-  },
-  'sam@mail.com': {
-    first_name: 'Sam',
-    second_name: 'Snow',
-    id: 'c38kle',
-    e_mail: 'sam@mail.com',
-    password: '',
-  },
-  'anna@mail.com': {
-    first_name: 'Anna',
-    second_name: 'Doe',
-    id: 'aa0k0e',
-    e_mail: 'anna@mail.com',
-    password: '',
-  },
-  'jim@mail.com': {
-    first_name: 'Jim',
-    second_name: 'Beam',
-    id: '6ka8dh',
-    e_mail: 'jim@mail.com',
-    password: '',
-  },
-}
 
 export const useUsersStore = defineStore('users', () => {
   const users = ref<User[]>([])
@@ -65,6 +34,7 @@ export const useUsersStore = defineStore('users', () => {
 
   const addUser = async (newUserData: NewUser) => {
     // here should be invocation of validation fields function
+    // TODO - compare not with mockUserUsers but with 'users' list (and it should be converted into an object)
     if (
       mockUsers[newUserData.e_mail] ||
       newUserData.e_mail.toLowerCase() === 'admin'
@@ -94,10 +64,15 @@ export const useUsersStore = defineStore('users', () => {
     users.value = users.value.filter((item) => item.id !== id)
   }
 
-  const editUser = (user: User) => {
+  const editUser = (user: User, userId: number | string) => {
     users.value = users.value.map((item) => {
-      if (item.id === user.id) {
-        return user
+      if (item.id === userId) {
+        return {
+          ...item,
+          first_name: user.first_name,
+          second_name: user.second_name,
+          e_mail: user.e_mail,
+        }
       }
       return item
     })
