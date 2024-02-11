@@ -1,1 +1,0 @@
-import{d as s,o as t,c as o,p as _,a,b as c,_ as p}from"./index-b693cc28.js";const d=e=>(_("data-v-19e93500"),e=e(),a(),e),n={class:"about-page"},r=d(()=>c("h1",{class:"about-page__title"},"About page",-1)),u=[r],i=s({__name:"AboutPage",setup(e){return(l,b)=>(t(),o("div",n,u))}});const h=p(i,[["__scopeId","data-v-19e93500"]]);export{h as default};
