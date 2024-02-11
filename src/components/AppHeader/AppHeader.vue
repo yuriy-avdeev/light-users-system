@@ -41,7 +41,7 @@ const logout = () => {
 
 <template>
   <header class="header">
-    <h3 class="header__title">{{ props.title }}</h3>
+    <h1 class="header__title">{{ props.title }}</h1>
 
     <HeaderNavigation />
 

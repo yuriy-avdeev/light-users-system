@@ -50,4 +50,33 @@ export const mockUsers: MockUser = {
     e_mail: 'andy@mail.com',
     password: '',
   },
+
+  'batty@mail.com': {
+    first_name: 'Batty',
+    second_name: 'Long',
+    id: '75hd9d',
+    e_mail: 'batty@mail.com',
+    password: '',
+  },
+  'carry@mail.com': {
+    first_name: 'Carry',
+    second_name: 'Black',
+    id: '0cdw0w',
+    e_mail: 'carry@mail.com',
+    password: '',
+  },
+  'lucy@mail.com': {
+    first_name: 'Lucy',
+    second_name: 'Jones',
+    id: '34sds0',
+    e_mail: 'lucy@mail.com',
+    password: '',
+  },
+  'tom@mail.com': {
+    first_name: 'Tom',
+    second_name: 'Filch',
+    id: 'jd8d9d',
+    e_mail: 'tom@mail.com',
+    password: '',
+  },
 }

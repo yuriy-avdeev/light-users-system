@@ -4,7 +4,7 @@
 
 <template>
   <div>
-    <h2>User with id - {{ $route.params.id }} page</h2>
+    <h4>User with id - {{ $route.params.id }} page</h4>
   </div>
 </template>
 

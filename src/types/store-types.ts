@@ -3,6 +3,7 @@ export type NewUser = {
   second_name: string
   e_mail: string
   password: string
+  order: number
 }
 
 export type User = NewUser & {

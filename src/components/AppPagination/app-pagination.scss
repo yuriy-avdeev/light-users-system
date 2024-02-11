@@ -1,0 +1,55 @@
+.app-pagination {
+  margin: 10px 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+
+  &__arrow-button {
+    background-color: transparent;
+    border: none;
+    outline: none;
+    padding: 2px;
+    font-size: 12px;
+    color: var(--color-background-secondary);
+    cursor: pointer;
+    transition: opacity 300ms;
+
+    &_disabled {
+      pointer-events: none;
+      opacity: 0.5;
+    }
+  }
+
+  &__list {
+    display: flex;
+    gap: 6px;
+    list-style: none;
+  }
+
+  &__list-item {
+    text-decoration: none;
+  }
+
+  &__list-button {
+    width: 28px;
+    height: 28px;
+    font-size: 12px;
+
+    &_active {
+      box-shadow: inset 1px -1px 5px var(--color-background-secondary);
+    }
+  }
+}
+
+@media (hover: hover) {
+  .app-pagination {
+    &__arrow-button:hover {
+      opacity: 0.7;
+    }
+
+    &__list-button:hover {
+      box-shadow: inset 1px -1px 5px var(--color-background-secondary);
+    }
+  }
+}

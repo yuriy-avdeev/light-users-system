@@ -8,16 +8,20 @@ import Arrow from '@/UI/Arrow/Arrow.vue'
 import ConfirmationContainer from '@/components/ConfirmationContainer/ConfirmationContainer.vue'
 import PopupWrapper from '@/components/PopupWrapper/PopupWrapper.vue'
 import UserForm from '@/components/UserForm/UserForm.vue'
+import AppPagination from '@/components/AppPagination/AppPagination.vue'
+import updateImage from '@/assets/icons/update.svg'
 
 const usersStore = useUsersStore()
 const { users } = storeToRefs(usersStore)
 const isCreateUserPopupOpen = ref(false)
-const sortByFirstName = ref('')
-const sortBySecondName = ref('')
-const sortByEMail = ref('')
 const confirmationContainerToDeleteId = ref<string | number | null>(null)
 const editUserPopupId = ref<string | number | null>(null)
 const userWarning = ref('')
+
+// sorting
+const sortByFirstName = ref('')
+const sortBySecondName = ref('')
+const sortByEMail = ref('')
 
 const usersModelList = computed(() => {
   let sortField: SortableUsersListFields | null = null
@@ -37,6 +41,12 @@ const usersModelList = computed(() => {
   }
   return users.value
 })
+
+const resetSorting = () => {
+  sortByFirstName.value = ''
+  sortBySecondName.value = ''
+  sortByEMail.value = ''
+}
 
 const getSortedList = (field: SortableUsersListFields, order: string) => {
   if (order === 'up') {
@@ -95,6 +105,29 @@ const deleteUser = (id: number | string) => {
   usersStore.deleteUser(id)
   confirmationContainerToDeleteId.value = null
 }
+
+// Pagination
+const currentPaginationPage = ref(1)
+const numberOfEntriesPerPage = 5
+
+const quantityOfPaginationPages = computed(() => {
+  return Math.ceil(usersModelList.value.length / numberOfEntriesPerPage)
+})
+
+const usersListPaginated = computed(() => {
+  if (usersModelList.value.length <= numberOfEntriesPerPage) {
+    return usersModelList.value
+  }
+  const startIndex = (currentPaginationPage.value - 1) * numberOfEntriesPerPage
+  return usersModelList.value.slice(
+    startIndex,
+    startIndex + numberOfEntriesPerPage
+  )
+})
+
+const setCurrentPaginationPage = (payload: number) => {
+  currentPaginationPage.value = payload
+}
 </script>
 
 <template>
@@ -121,7 +154,18 @@ const deleteUser = (id: number | string) => {
       <thead>
         <tr class="users-table__header">
           <th class="users-table__column users-table__column_order">
-            &#x2116;
+            <button
+              class="users-table__update-button"
+              @click.prevent="resetSorting"
+            >
+              <img
+                :src="updateImage"
+                alt="update button"
+                width="13"
+                height="13"
+                loading="lazy"
+              />
+            </button>
           </th>
 
           <th
@@ -191,12 +235,12 @@ const deleteUser = (id: number | string) => {
 
       <tbody>
         <tr
-          v-for="(user, index) in usersModelList"
+          v-for="user in usersListPaginated"
           :key="user.id"
           class="users-table__row"
         >
           <td class="users-table__column users-table__column_order">
-            {{ index + 1 }}
+            {{ user.order }}
           </td>
 
           <td
@@ -269,6 +313,13 @@ const deleteUser = (id: number | string) => {
         </tr>
       </tbody>
     </table>
+
+    <AppPagination
+      v-if="quantityOfPaginationPages > 1"
+      :quantity-of-pages="quantityOfPaginationPages"
+      :current-page="currentPaginationPage"
+      @click-page="setCurrentPaginationPage"
+    />
   </div>
 </template>
 

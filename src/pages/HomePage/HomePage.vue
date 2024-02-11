@@ -76,7 +76,7 @@ const resetNotificationWithDelay = (
 
 <template>
   <div class="home-page">
-    <h1 class="home-page__title">Home page</h1>
+    <h2 class="home-page__title">Home page</h2>
 
     <PopupWrapper
       v-if="userAccessFormStore.showAccessForm"

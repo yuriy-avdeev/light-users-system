@@ -15,20 +15,33 @@ import AppFooter from '@/components/AppFooter/AppFooter.vue'
   </div>
 </template>
 
-<style scoped>
+<style scoped lang="scss">
 .app {
-  width: 100vw;
-  min-height: 100vh;
+  width: 100%;
+  height: 100vh;
   display: flex;
   flex-direction: column;
-}
 
-.app__body {
-  width: 100%;
-  max-width: 1024px;
-  margin: 0 auto;
-  flex: 1;
-  box-shadow: 0 5px 25px #d5d5d5;
-  padding: 16px 12px;
+  &__body {
+    width: 100%;
+    max-width: 1024px;
+    margin: 0 auto;
+    flex: 1;
+    display: flex;
+    box-shadow: 0 5px 25px var(--color-dark-grey);
+    padding: 16px 12px;
+    overflow-y: scroll;
+
+    &::-webkit-scrollbar {
+      width: 7px;
+      background-color: var(--color-light-grey);
+      border-radius: 3px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background-color: var(--color-dark-grey);
+      border-radius: 3px;
+    }
+  }
 }
 </style>

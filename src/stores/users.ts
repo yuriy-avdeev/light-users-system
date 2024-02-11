@@ -6,7 +6,6 @@ import { mockUsers } from '@/services/mock-data'
 
 // TODO:
 // user page with logic to change e-mail, names etc...
-// pagination
 // home and about page content // lorem
 // rearrange components by functionality (not states then computed then watch and methods)
 // tests
@@ -21,11 +20,16 @@ export const useUsersStore = defineStore('users', () => {
       return
     }
     try {
+      const list = []
+      let order = 1
       for (const key in mockUsers) {
         const userData = mockUsers[key]
         userData.password = await bcrypt.hash('qwerty', 10)
-        users.value.push(userData)
+        userData.order = order
+        list.push(userData)
+        order++
       }
+      users.value = list
     } catch {
       users.value = []
       throw new Error('Error: fetching users')
@@ -50,6 +54,7 @@ export const useUsersStore = defineStore('users', () => {
       ...newUserData,
       id: mockId,
       password: hashedPassword,
+      order: users.value.length + 1,
     })
 
     return {

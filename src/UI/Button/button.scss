@@ -6,9 +6,8 @@
   outline: none;
   background-color: transparent;
   padding: 6px 8px;
-  cursor: pointer;
   font: 500 13px/1.2 var(--main-font);
-  transition: box-shadow 200ms, border-color, 300ms;
+  transition: box-shadow 200ms, border-color, 200ms;
 
   &_dark {
     color: var(--color-background-secondary);
@@ -38,6 +37,8 @@
 
 @media (hover: hover) {
   .button {
+    cursor: pointer;
+
     &_dark:hover {
       box-shadow: inset 3px -3px 6px var(--color-background-secondary);
     }
