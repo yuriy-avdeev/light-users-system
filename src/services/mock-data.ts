@@ -7,6 +7,7 @@ export const mockUsers: MockUser = {
     id: 'c30k0e',
     e_mail: 'my@mail.com',
     password: '',
+    order: 0,
   },
   'sam@mail.com': {
     first_name: 'Sam',
@@ -14,6 +15,7 @@ export const mockUsers: MockUser = {
     id: 'c38kle',
     e_mail: 'sam@mail.com',
     password: '',
+    order: 0,
   },
   'anna@mail.com': {
     first_name: 'Anna',
@@ -21,6 +23,7 @@ export const mockUsers: MockUser = {
     id: 'aa0k0e',
     e_mail: 'anna@mail.com',
     password: '',
+    order: 0,
   },
   'jim@mail.com': {
     first_name: 'Jim',
@@ -28,6 +31,7 @@ export const mockUsers: MockUser = {
     id: '6ka8dh',
     e_mail: 'jim@mail.com',
     password: '',
+    order: 0,
   },
   'tim@mail.com': {
     first_name: 'Tim',
@@ -35,6 +39,7 @@ export const mockUsers: MockUser = {
     id: 'c90ooe',
     e_mail: 'tim@mail.com',
     password: '',
+    order: 0,
   },
   'patrick@mail.com': {
     first_name: 'Patrick',
@@ -42,6 +47,7 @@ export const mockUsers: MockUser = {
     id: '12nn0e',
     e_mail: 'patrick@mail.com',
     password: '',
+    order: 0,
   },
   'andy@mail.com': {
     first_name: 'Andy',
@@ -49,14 +55,15 @@ export const mockUsers: MockUser = {
     id: '6klp1a',
     e_mail: 'andy@mail.com',
     password: '',
+    order: 0,
   },
-
   'batty@mail.com': {
     first_name: 'Batty',
     second_name: 'Long',
     id: '75hd9d',
     e_mail: 'batty@mail.com',
     password: '',
+    order: 0,
   },
   'carry@mail.com': {
     first_name: 'Carry',
@@ -64,6 +71,7 @@ export const mockUsers: MockUser = {
     id: '0cdw0w',
     e_mail: 'carry@mail.com',
     password: '',
+    order: 0,
   },
   'lucy@mail.com': {
     first_name: 'Lucy',
@@ -71,6 +79,7 @@ export const mockUsers: MockUser = {
     id: '34sds0',
     e_mail: 'lucy@mail.com',
     password: '',
+    order: 0,
   },
   'tom@mail.com': {
     first_name: 'Tom',
@@ -78,5 +87,6 @@ export const mockUsers: MockUser = {
     id: 'jd8d9d',
     e_mail: 'tom@mail.com',
     password: '',
+    order: 0,
   },
 }
