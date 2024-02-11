@@ -1,0 +1,17 @@
+.confirmation-container {
+  min-width: 115px;
+  border-radius: 4px 0 4px 4px;
+  right: 0;
+  z-index: 1;
+
+  &__text {
+    text-align: center;
+    font-size: 14px;
+    color: var(--color-text);
+  }
+
+  &__button {
+    padding: 4px 8px;
+    border: none;
+  }
+}

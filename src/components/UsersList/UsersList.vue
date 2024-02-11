@@ -5,7 +5,7 @@ import { useUsersStore } from '@/stores/users'
 import type { User, SortableUsersListFields } from '@/types/store-types'
 import Button from '@/components/UI/Button/Button.vue'
 import Arrow from '@/components/UI/Arrow/Arrow.vue'
-import DropdownWrapper from '@/components/DropdownWrapper/DropdownWrapper.vue'
+import ConfirmationContainer from '@/components/ConfirmationContainer/ConfirmationContainer.vue'
 import PopupWrapper from '@/components/PopupWrapper/PopupWrapper.vue'
 import UserForm from '@/components/UserForm/UserForm.vue'
 
@@ -85,12 +85,15 @@ const createUser = async (user: User) => {
 
 const editUser = (user: User) => {
   const userId = editUserPopupId.value
-  usersStore.editUser(user, userId)
+  if (userId) {
+    usersStore.editUser(user, userId)
+  }
   editUserPopupId.value = null
 }
 
 const deleteUser = (id: number | string) => {
   usersStore.deleteUser(id)
+  confirmationContainerToDeleteId.value = null
 }
 </script>
 
@@ -256,27 +259,12 @@ const deleteUser = (id: number | string) => {
               class="users-table__button"
             />
 
-            <DropdownWrapper
+            <ConfirmationContainer
               v-if="confirmationContainerToDeleteId === user.id"
-              @close-container="confirmationContainerToDeleteId = null"
-              class="users-table__confirmation-dropdown"
-            >
-              <p class="users-table__confirmation-text">Are you sure?</p>
-
-              <Button
-                text="YES"
-                @click.prevent="deleteUser(user.id)"
-                type="button"
-                class="users-table__confirmation-button"
-              />
-
-              <Button
-                text="NO"
-                @click.stop.prevent="confirmationContainerToDeleteId = null"
-                class="users-table__confirmation-button"
-                type="button"
-              />
-            </DropdownWrapper>
+              @click-no="confirmationContainerToDeleteId = null"
+              @click-yes="deleteUser(user.id)"
+              text="Are you sure?"
+            />
           </td>
         </tr>
       </tbody>

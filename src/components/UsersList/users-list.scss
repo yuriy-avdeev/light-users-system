@@ -65,25 +65,16 @@
     }
   }
 
-  &__confirmation-dropdown {
-    min-width: 100px;
-    border-radius: 4px;
-    top: 80%;
-    right: 0;
-    z-index: 1;
-  }
-
-  &__confirmation-button {
-    padding: 4px 8px;
-    border: none;
-  }
-
   &__button {
     padding: 4px 14px;
   }
 
   .arrow:last-of-type {
     margin-right: 6px;
+  }
+
+  .confirmation-container {
+    top: 80%;
   }
 }
 

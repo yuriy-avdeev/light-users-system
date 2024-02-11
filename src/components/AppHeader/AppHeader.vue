@@ -5,7 +5,7 @@ import { useUserStore } from '@/stores/user'
 import { useUserAccessFormStore } from '@/stores/userAccessForm'
 import Button from '@/components/UI/Button/Button.vue'
 import HeaderNavigation from '@/components/HeaderNavigation/HeaderNavigation.vue'
-import DropdownWrapper from '@/components/DropdownWrapper/DropdownWrapper.vue'
+import ConfirmationContainer from '@/components/ConfirmationContainer/ConfirmationContainer.vue'
 
 const props = defineProps({
   title: {
@@ -66,27 +66,12 @@ const logout = () => {
         </span>
       </Button>
 
-      <DropdownWrapper
+      <ConfirmationContainer
         v-if="isConfirmationContainerOpened"
-        @close-container="isConfirmationContainerOpened = false"
-        class="header__confirmation-dropdown"
-      >
-        <p class="header__confirmation-text">Are you sure?</p>
-
-        <Button
-          text="YES"
-          @click.prevent="logout"
-          type="button"
-          class="header__confirmation-button"
-        />
-
-        <Button
-          text="NO"
-          @click.stop.prevent="isConfirmationContainerOpened = false"
-          class="header__confirmation-button"
-          type="button"
-        />
-      </DropdownWrapper>
+        @click-no="isConfirmationContainerOpened = false"
+        @click-yes="logout"
+        text="Are you sure?"
+      />
     </div>
   </header>
 </template>
