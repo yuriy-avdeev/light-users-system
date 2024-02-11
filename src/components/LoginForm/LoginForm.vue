@@ -2,8 +2,8 @@
 import { ref, type Ref, onMounted, computed, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import { useUserStore } from '@/stores/user'
-import { debounce } from '@/utilities/debounce'
-import Button from '@/components/UI/Button/Button.vue'
+import Button from '@/UI/Button/Button.vue'
+import { debounce } from '@/services/debounce'
 
 const props = defineProps({
   nextPage: {

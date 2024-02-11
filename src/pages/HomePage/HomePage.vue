@@ -6,7 +6,7 @@ import { useUserAccessFormStore } from '@/stores/userAccessForm'
 import PopupWrapper from '@/components/PopupWrapper/PopupWrapper.vue'
 import LoginForm from '@/components/LoginForm/LoginForm.vue'
 import UserForm from '@/components/UserForm/UserForm.vue'
-import Button from '@/components/UI/Button/Button.vue'
+import Button from '@/UI/Button/Button.vue'
 import type { User } from '@/types/store-types'
 
 const usersStore = useUsersStore()
