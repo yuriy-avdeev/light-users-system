@@ -2,7 +2,7 @@ import { ref } from 'vue'
 import { defineStore } from 'pinia'
 import bcrypt from 'bcryptjs'
 import type { User, NewUser } from '@/types/store-types'
-import { mockUsers } from '@/assets/mock-data'
+import { mockUsers } from '@/services/mock-data'
 
 // TODO:
 // user page with logic to change e-mail, names etc...

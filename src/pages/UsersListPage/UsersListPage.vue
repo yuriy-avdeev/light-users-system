@@ -3,7 +3,7 @@ import { onMounted, ref, type Ref } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useUsersStore } from '@/stores/users'
 import UsersList from '@/components/UsersList/UsersList.vue'
-import Loader from '@/components/UI/Loader/Loader.vue'
+import Loader from '@/UI/Loader/Loader.vue'
 import PopupWrapper from '@/components/PopupWrapper/PopupWrapper.vue'
 
 const usersStore = useUsersStore()
