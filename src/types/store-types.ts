@@ -9,6 +9,7 @@ export type NewUser = {
 export type User = NewUser & {
   id: number | string
 }
+
 export type MockUser = {
   [key: string]: User
 }

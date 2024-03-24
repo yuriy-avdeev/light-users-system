@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed } from 'vue'
-import Button from '@/UI/Button/Button.vue'
+import Button from '@/components/UI/Button/Button.vue'
 
 const emit = defineEmits(['click-page'])
 

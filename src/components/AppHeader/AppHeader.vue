@@ -3,7 +3,7 @@ import { computed, ref, type Ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useUserStore } from '@/stores/user'
 import { useUserAccessFormStore } from '@/stores/userAccessForm'
-import Button from '@/UI/Button/Button.vue'
+import Button from '@/components/UI/Button/Button.vue'
 import HeaderNavigation from '@/components/HeaderNavigation/HeaderNavigation.vue'
 import ConfirmationContainer from '@/components/ConfirmationContainer/ConfirmationContainer.vue'
 

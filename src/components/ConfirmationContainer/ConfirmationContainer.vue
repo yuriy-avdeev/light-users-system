@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import Button from '@/UI/Button/Button.vue'
+import Button from '@/components/UI/Button/Button.vue'
 import DropdownWrapper from '@/components/DropdownWrapper/DropdownWrapper.vue'
 
 const emit = defineEmits(['click-no', 'click-yes'])
