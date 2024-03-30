@@ -4,7 +4,6 @@ import AppHeader from '@/components/AppHeader/AppHeader.vue'
 import AppFooter from '@/components/AppFooter/AppFooter.vue'
 </script>
 
-<!-- TODO - puzzle out fonts uploading on the slow connection -->
 <template>
   <div class="app">
     <AppHeader title="Light users system" />

@@ -45,7 +45,7 @@ export const useUserStore = defineStore('user', () => {
       id: foundUser.id,
       e_mail: foundUser.e_mail,
       password: '',
-      order: 0
+      order: 0,
     }
     auth.value = true
     storeUserInLocalStorage(currentUser.value)

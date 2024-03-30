@@ -76,7 +76,13 @@ const resetNotificationWithDelay = (
 
 <template>
   <div class="home-page">
-    <h2 class="home-page__title">Home page</h2>
+    <img
+      class="home-page__image"
+      src="@/assets/images/feather.png"
+      alt="feather"
+      width="130"
+      height="130"
+    />
 
     <PopupWrapper
       v-if="userAccessFormStore.showAccessForm"

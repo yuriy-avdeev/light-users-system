@@ -1,4 +1,13 @@
 .about-page {
-  display: flex;
-  justify-content: center;
+  display: block;
+
+  &__title {
+    margin: 10px auto 20px;
+    width: fit-content;
+    text-transform: uppercase;
+  }
+
+  &__content {
+    font: 400 16px/1.5 var(--main-font);
+  }
 }

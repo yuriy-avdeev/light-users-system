@@ -9,7 +9,6 @@ import ConfirmationContainer from '@/components/ConfirmationContainer/Confirmati
 import PopupWrapper from '@/components/PopupWrapper/PopupWrapper.vue'
 import UserForm from '@/components/UserForm/UserForm.vue'
 import AppPagination from '@/components/AppPagination/AppPagination.vue'
-import updateImage from '@/assets/icons/update.svg'
 
 const usersStore = useUsersStore()
 const { users } = storeToRefs(usersStore)
@@ -159,7 +158,7 @@ const setCurrentPaginationPage = (payload: number) => {
               @click.prevent="resetSorting"
             >
               <img
-                :src="updateImage"
+                src="@/assets/icons/update.svg"
                 alt="update button"
                 width="13"
                 height="13"
