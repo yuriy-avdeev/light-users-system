@@ -6,10 +6,11 @@ import { mockUsers } from '@/services/mock-data'
 
 // TODO:
 // user page with logic to change e-mail, names etc...
-// home and about page content // lorem
+// filtering users list with highlighting result
 // rearrange components by functionality (not states then computed then watch and methods)
-// tests
 // rethink here users list as an object - in order not to iterate list of users in real life
+// revive api.js
+// delete tests library
 
 export const useUsersStore = defineStore('users', () => {
   const users = ref<User[]>([])

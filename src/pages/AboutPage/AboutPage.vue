@@ -8,7 +8,7 @@
 
     <p class="about-page__content">
       The only reason of creating this page is my desire to add one more static
-      route which does not depend on the user status (administrator or ordinary
+      route which does not depend on the user status (admin or ordinary
       user).
     </p>
 

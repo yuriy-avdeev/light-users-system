@@ -3,6 +3,7 @@ import { ref } from 'vue'
 import { useUsersStore } from '@/stores/users'
 import { onBeforeRouteLeave } from 'vue-router'
 import { useUserAccessFormStore } from '@/stores/userAccessForm'
+import MainIntroduction from '@/components/MainIntroduction/MainIntroduction.vue'
 import PopupWrapper from '@/components/PopupWrapper/PopupWrapper.vue'
 import LoginForm from '@/components/LoginForm/LoginForm.vue'
 import UserForm from '@/components/UserForm/UserForm.vue'
@@ -76,13 +77,7 @@ const resetNotificationWithDelay = (
 
 <template>
   <div class="home-page">
-    <img
-      class="home-page__image"
-      src="@/assets/images/feather.png"
-      alt="feather"
-      width="130"
-      height="130"
-    />
+    <MainIntroduction />
 
     <PopupWrapper
       v-if="userAccessFormStore.showAccessForm"

@@ -1,0 +1,21 @@
+.main-introduction {
+  width: 100%;
+
+  &__image {
+    float: left;
+    margin: 0 20px 10px 0;
+  }
+
+  &__text {
+    font: 400 18px/1.5 var(--main-font);
+  }
+
+  &__link {
+    text-decoration: none;
+    color: var(--color-info);
+  }
+
+  &__list {
+    list-style: inside;
+  }
+}
