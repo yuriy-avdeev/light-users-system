@@ -107,7 +107,7 @@ const handleSubmitForm = () => {
   <form class="user-form" @submit.enter.prevent="handleSubmitForm">
     <label class="user-form__label">
       First name
-
+      <!-- TODO: apply UI input -->
       <input
         ref="firstNameInput"
         class="user-form__input"
