@@ -61,12 +61,13 @@ onMounted(() => {
   firstNameInput.value?.focus()
 })
 
+// TODO - debounce looks like unworking here
 const modelFirstName = ref(props.firstName)
 watch(
   modelFirstName,
   debounce((newValue: string) => {
     modelFirstName.value = newValue.trim()
-  }, 200)
+  }, 2000)
 )
 
 const modelSecondName = ref(props.secondName)

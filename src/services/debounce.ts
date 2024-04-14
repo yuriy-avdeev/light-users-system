@@ -5,7 +5,9 @@ export function debounce<T extends (...args: any[]) => any>(
   let timeoutId: number | undefined
 
   return function (...args: Parameters<T>): void {
-    clearTimeout(timeoutId)
+    if (timeoutId) {
+      clearTimeout(timeoutId)
+    }
     timeoutId = window.setTimeout(() => func(...args), delay)
   }
 }

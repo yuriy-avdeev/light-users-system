@@ -3,21 +3,21 @@
   display: flex;
   flex-direction: column;
   position: relative;
-  padding-bottom: 14px;
+
+  &_disabled {
+    opacity: 0.7;
+    pointer-events: none;
+  }
 
   &__input {
-    padding: 5px 25px 5px 12px;
+    height: 30px;
+    padding: 5px 28px 5px 12px;
     border: 1px solid var(--color-background-secondary);
-    border-radius: 12px;
+    border-radius: 10px;
     background: transparent;
     color: var(--color-background-secondary);
     caret-color: var(--color-background-secondary);
     transition: box-shadow 250ms;
-
-    &_disabled {
-      opacity: 0.7;
-      pointer-events: none;
-    }
 
     &:focus-visible {
       outline: none;
@@ -25,15 +25,23 @@
     }
   }
 
-  &__button-close {
+  &__icons-container {
     position: absolute;
     right: 10px;
     top: 4px;
+  }
+
+  &__button-clear {
     background-color: transparent;
     border: none;
     outline: none;
-    color: var(--color-background-secondary);
+    color: var(--color-dark-grey);
     cursor: pointer;
+  }
+
+  &__search-icon {
+    color: var(--color-background-secondary);
+    opacity: 0.6;
   }
 
   &__warning {
@@ -42,7 +50,7 @@
     color: var(--color-danger);
     position: absolute;
     left: 0;
-    bottom: 0;
+    top: calc(100% + 2px);
   }
 }
 

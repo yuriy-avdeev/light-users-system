@@ -1,7 +1,22 @@
 <script setup lang="ts">
-import { defineProps, defineEmits, computed } from 'vue'
+import {
+  defineProps,
+  defineEmits,
+  computed,
+  type Ref,
+  ref,
+  onMounted,
+} from 'vue'
+import { debounce } from '@/services/debounce'
 
 const emit = defineEmits(['update:modelValue'])
+const inputElement: Ref<HTMLInputElement | null> = ref(null)
+
+onMounted(() => {
+  if (props.isFocused) {
+    inputElement.value?.focus()
+  }
+})
 
 const props = defineProps({
   modelValue: {
@@ -40,31 +55,49 @@ const inputModel = computed({
     return props.modelValue
   },
   set(newValue) {
-    emit('update:modelValue', newValue.trim())
+    setValueByDebounce(newValue.trim())
   },
 })
+
+const setValueByDebounce = debounce((value: string) => {
+  emit('update:modelValue', value)
+}, props.debounceDelay)
 </script>
 
 <template>
-  <div class="input">
+  <div
+    class="input"
+    :class="{
+      input_disabled: props.isDisabled,
+    }"
+  >
     <input
+      ref="inputElement"
       type="text"
       class="input__input"
-      :class="{
-        input__input_disabled: props.isDisabled,
-        'input__input_has-warning': props.warningText,
-      }"
       :placeholder="props.placeholder"
       v-model="inputModel"
     />
 
-    <button
-      class="input__button-close"
-      type="button"
-      @click.prevent="inputModel = ''"
-    >
-      &#10006;
-    </button>
+    <div class="input__icons-container">
+      <button
+        v-if="inputModel"
+        class="input__button-clear"
+        type="button"
+        @click.prevent="inputModel = ''"
+      >
+        &#10006;
+      </button>
+
+      <img
+        v-else
+        class="input__search-icon"
+        src="@/assets/icons/search.svg"
+        alt="search icon"
+        width="11"
+        height="11"
+      />
+    </div>
 
     <span class="input__warning">
       {{ props.warningText }}
