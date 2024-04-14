@@ -1,26 +1,66 @@
 <script setup lang="ts">
-import { ref, computed, watch } from 'vue'
+import { ref, computed, watch, onUpdated } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useUsersStore } from '@/stores/users'
 import type { User, SortableUsersListFields } from '@/types/store-types'
 import Button from '@/components/UI/Button/Button.vue'
 import Arrow from '@/components/UI/Arrow/Arrow.vue'
+import Input from '@/components/UI/Input/Input.vue'
 import ConfirmationContainer from '@/components/ConfirmationContainer/ConfirmationContainer.vue'
 import PopupWrapper from '@/components/PopupWrapper/PopupWrapper.vue'
 import UserForm from '@/components/UserForm/UserForm.vue'
 import AppPagination from '@/components/AppPagination/AppPagination.vue'
 
 const usersStore = useUsersStore()
-const { users } = storeToRefs(usersStore)
+const { users: usersStoredList } = storeToRefs(usersStore)
 const isCreateUserPopupOpen = ref(false)
 const confirmationContainerToDeleteId = ref<string | number | null>(null)
 const editUserPopupId = ref<string | number | null>(null)
-const userWarning = ref('')
+const popupWarning = ref('')
+const searchValue = ref('')
+
+// filtering
+const getFilteredList = () => {
+  const query = searchValueModel.value.toLowerCase()
+  return usersStoredList.value.filter((item) => {
+    const { first_name, second_name, e_mail } = item
+    return (
+      first_name.toLowerCase().includes(query) ||
+      second_name.toLowerCase().includes(query) ||
+      e_mail.toLowerCase().includes(query)
+    )
+  })
+}
+
+const searchValueModel = computed(() => {
+  if (searchValue.value.length >= 3) {
+    return searchValue.value
+  }
+  return ''
+})
+
+const usersStoredListFiltered = computed(() => {
+  if (searchValueModel.value) {
+    return getFilteredList()
+  }
+  return usersStoredList.value
+})
 
 // sorting
 const sortByFirstName = ref('')
 const sortBySecondName = ref('')
 const sortByEMail = ref('')
+
+const getSortedList = (field: SortableUsersListFields, order: string) => {
+  if (order === 'up') {
+    return [...usersStoredListFiltered.value].sort((a, b) =>
+      a[field].localeCompare(b[field])
+    )
+  }
+  return [...usersStoredListFiltered.value].sort((a, b) =>
+    b[field].localeCompare(a[field])
+  )
+}
 
 const usersModelList = computed(() => {
   let sortField: SortableUsersListFields | null = null
@@ -38,20 +78,13 @@ const usersModelList = computed(() => {
   if (sortField) {
     return getSortedList(sortField, sortOrder)
   }
-  return users.value
+  return usersStoredListFiltered.value
 })
 
 const resetSorting = () => {
   sortByFirstName.value = ''
   sortBySecondName.value = ''
   sortByEMail.value = ''
-}
-
-const getSortedList = (field: SortableUsersListFields, order: string) => {
-  if (order === 'up') {
-    return [...users.value].sort((a, b) => a[field].localeCompare(b[field]))
-  }
-  return [...users.value].sort((a, b) => b[field].localeCompare(a[field]))
 }
 
 watch(sortByFirstName, (newValue) => {
@@ -75,6 +108,7 @@ watch(sortByEMail, (newValue) => {
   }
 })
 
+// CRUD
 const createUser = async (user: User) => {
   // it's pointless to create new user manually but...
   try {
@@ -82,12 +116,12 @@ const createUser = async (user: User) => {
     isCreateUserPopupOpen.value = false
   } catch (e) {
     if (e instanceof Error && e.message) {
-      userWarning.value = e.message
+      popupWarning.value = e.message
     } else {
-      userWarning.value = 'Some problems with creating new user.'
+      popupWarning.value = 'Some problems with creating new user.'
     }
     setTimeout(() => {
-      userWarning.value = ''
+      popupWarning.value = ''
     }, 3000)
   }
 }
@@ -131,24 +165,38 @@ const setCurrentPaginationPage = (payload: number) => {
 
 <template>
   <div class="users-list">
-    <Button
-      text="Create User"
-      type="button"
-      @click.prevent="isCreateUserPopupOpen = true"
-      class="users-list__create-button"
-    />
+    <div class="users-list__top-container">
+      <Input
+        v-model="searchValue"
+        placeholder="Search users by names"
+        :warning-text="
+          searchValue.length && searchValue.length < 3
+            ? 'It should include at least 3 characters'
+            : ''
+        "
+        :debounce-delay="250"
+      />
+
+      <Button
+        text="Create User"
+        type="button"
+        @click.prevent="isCreateUserPopupOpen = true"
+        class="users-list__create-button"
+      />
+    </div>
 
     <PopupWrapper
       v-if="isCreateUserPopupOpen"
       @close-popup="isCreateUserPopupOpen = false"
     >
-      <h3 v-if="userWarning" class="users-list__popup-warning">
-        {{ userWarning }}
+      <h3 v-if="popupWarning" class="users-list__popup-warning">
+        {{ popupWarning }}
       </h3>
 
       <UserForm v-else button-text="Register" @user-data="createUser" />
     </PopupWrapper>
 
+    <!-- TODO: try to create a table component -->
     <table class="users-table">
       <thead>
         <tr class="users-table__header">
@@ -177,14 +225,14 @@ const setCurrentPaginationPage = (payload: number) => {
             <Arrow
               direction="up"
               :is-active="sortByFirstName === 'up'"
-              :is-disabled="!users.length"
+              :is-disabled="!usersStoredListFiltered.length"
               @click.prevent="sortByFirstName = 'up'"
             />
 
             <Arrow
               direction="down"
               :is-active="sortByFirstName === 'down'"
-              :is-disabled="!users.length"
+              :is-disabled="!usersStoredListFiltered.length"
               @click.prevent="sortByFirstName = 'down'"
             />
             <span>First Name</span>
@@ -194,14 +242,14 @@ const setCurrentPaginationPage = (payload: number) => {
             <Arrow
               direction="up"
               :is-active="sortBySecondName === 'up'"
-              :is-disabled="!users.length"
+              :is-disabled="!usersStoredListFiltered.length"
               @click.prevent="sortBySecondName = 'up'"
             />
 
             <Arrow
               direction="down"
               :is-active="sortBySecondName === 'down'"
-              :is-disabled="!users.length"
+              :is-disabled="!usersStoredListFiltered.length"
               @click.prevent="sortBySecondName = 'down'"
             />
             <span>Second Name</span>
@@ -213,14 +261,14 @@ const setCurrentPaginationPage = (payload: number) => {
             <Arrow
               direction="up"
               :is-active="sortByEMail === 'up'"
-              :is-disabled="!users.length"
+              :is-disabled="!usersStoredListFiltered.length"
               @click.prevent="sortByEMail = 'up'"
             />
 
             <Arrow
               direction="down"
               :is-active="sortByEMail === 'down'"
-              :is-disabled="!users.length"
+              :is-disabled="!usersStoredListFiltered.length"
               @click.prevent="sortByEMail = 'down'"
             />
             <span>E-mail</span>
