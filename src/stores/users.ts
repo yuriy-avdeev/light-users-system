@@ -70,19 +70,20 @@ export const useUsersStore = defineStore('users', () => {
     users.value = users.value.filter((item) => item.id !== id)
   }
 
-  const editUser = (user: User, userId: number | string) => {
-    users.value = users.value.map((item) => {
-      if (item.id === userId) {
-        return {
-          ...item,
-          first_name: user.first_name,
-          second_name: user.second_name,
-          e_mail: user.e_mail,
-        }
-      }
-      return item
-    })
+  const editUserData = (user: User, userId: number | string) => {
+    const index = users.value.findIndex((item) => item.id === userId)
+    if (index === -1) {
+      throw new Error('User not found')
+    }
+    const updatedUser = {
+      ...users.value[index],
+      first_name: user.first_name,
+      second_name: user.second_name,
+      e_mail: user.e_mail,
+    }
+    users.value[index] = updatedUser
+    return updatedUser
   }
 
-  return { users, initializeUsers, addUser, deleteUser, editUser }
+  return { users, initializeUsers, addUser, deleteUser, editUserData }
 })

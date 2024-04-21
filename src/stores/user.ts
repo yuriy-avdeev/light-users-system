@@ -14,6 +14,13 @@ export const useUserStore = defineStore('user', () => {
   // TODO - why don't use 'auth' directly?
   const isAuthenticated = computed(() => auth.value)
 
+  const initializeUsersStore = async () => {
+    console.log('initializeUsersStore: call')
+    if (!usersStore.users.length) {
+      await usersStore.initializeUsers()
+    }
+  }
+
   const login = async (e_mail: string, password: string): Promise<boolean> => {
     // is admin credentials
     if (
@@ -28,7 +35,8 @@ export const useUserStore = defineStore('user', () => {
     }
 
     // normal user login process
-    await usersStore.initializeUsers()
+    // TODO - add loading in component
+    await initializeUsersStore()
     const foundUser = usersStore.users.find((u) => u.e_mail === e_mail)
     if (!foundUser) {
       return false
@@ -54,6 +62,7 @@ export const useUserStore = defineStore('user', () => {
 
   const logout = () => {
     auth.value = false
+    usersStore.users = []
     if (isAdmin.value) {
       isAdmin.value = false
       sessionStorage.removeItem('admin')
@@ -91,16 +100,38 @@ export const useUserStore = defineStore('user', () => {
     if (sessionStorage.getItem('admin')) {
       isAdmin.value = true
       auth.value = true
-    } else {
-      const storedUser = getUserFromLocalStorageIfValid()
-      if (storedUser) {
-        currentUser.value = storedUser
-        auth.value = true
-      }
+      return
+    }
+    const storedUser = getUserFromLocalStorageIfValid()
+    if (storedUser) {
+      currentUser.value = storedUser
+      auth.value = true
     }
   }
 
-  loadUserFromLocalStorages()
+  const editUserData = (userData: User, userId: number | string) => {
+    try {
+      const updatedUserData = usersStore.editUserData(userData, userId)
+      if (updatedUserData) {
+        currentUser.value = updatedUserData
+      }
+    } catch (e) {
+      // TODO - return message to show to user
+    }
+  }
 
-  return { auth, isAdmin, currentUser, isAuthenticated, login, logout }
+  // pointless to use initializeUsers() in real project (with server stored data)
+  // TODO - try to find a solution to request only current user data
+  loadUserFromLocalStorages()
+  initializeUsersStore()
+
+  return {
+    auth,
+    isAdmin,
+    currentUser,
+    isAuthenticated,
+    login,
+    logout,
+    editUserData,
+  }
 })

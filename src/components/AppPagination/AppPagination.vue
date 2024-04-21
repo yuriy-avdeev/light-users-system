@@ -2,6 +2,7 @@
 import { computed } from 'vue'
 import Button from '@/components/UI/Button/Button.vue'
 
+// TODO: add arrows right and left to toggle pages
 const emit = defineEmits(['click-page'])
 
 const props = defineProps({

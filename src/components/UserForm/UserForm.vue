@@ -31,7 +31,7 @@ const props = defineProps({
 
   showPassword: {
     type: Boolean,
-    default: true,
+    default: false,
   },
 })
 

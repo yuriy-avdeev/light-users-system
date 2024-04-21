@@ -15,6 +15,8 @@ onMounted(async () => {
   if (!users.value.length) {
     try {
       isLoading.value = true
+      // TODO - if delete all users and leave and turn back to page it will again initialize users...
+      // but maybe it's ok
       await usersStore.initializeUsers()
       error.value = null
     } catch (e) {

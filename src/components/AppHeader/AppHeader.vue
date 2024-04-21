@@ -56,8 +56,8 @@ const logout = () => {
           {
             'header__login-button_has-user':
               userStore.auth && !userStore.isAdmin,
+            'header__login-button_active': isConfirmationContainerOpened,
           },
-          { 'header__login-button_active': isConfirmationContainerOpened },
         ]"
         @click.stop.prevent="handleLoginButton"
       >

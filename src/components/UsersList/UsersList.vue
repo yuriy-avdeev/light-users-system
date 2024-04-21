@@ -126,10 +126,10 @@ const createUser = async (user: User) => {
   }
 }
 
-const editUser = (user: User) => {
+const editUserData = (user: User) => {
   const userId = editUserPopupId.value
   if (userId) {
-    usersStore.editUser(user, userId)
+    usersStore.editUserData(user, userId)
   }
   editUserPopupId.value = null
 }
@@ -331,8 +331,7 @@ const setCurrentPaginationPage = (payload: number) => {
                 :first-name="user.first_name"
                 :second-name="user.second_name"
                 :e-mail="user.e_mail"
-                :show-password="false"
-                @user-data="editUser"
+                @user-data="editUserData"
               />
             </PopupWrapper>
           </td>
