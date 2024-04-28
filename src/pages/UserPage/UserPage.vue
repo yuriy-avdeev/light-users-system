@@ -54,8 +54,8 @@ const editUserData = (userData: User) => {
     </ul>
 
     <p class="user-page__message">
-      If you want to change our data, please click button below and when you are
-      ready dion't forget to save updates.
+      If you want to change your data, please click button below and when you
+      are ready don't forget to save updates.
     </p>
 
     <Button

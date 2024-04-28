@@ -47,9 +47,9 @@ const userStore = useUserStore()
 
       <span v-else>Your page.</span>
 
-      Two latest ones are available for amin and ordinary user accordingly and
-      they provide the most various features like browsing users list or page of
-      a single user and their CRUD.
+      Two latest ones are available for an admin and an ordinary user
+      accordingly and they provide the most various features like browsing users
+      list or page of a single user and their CRUD.
       <br />
 
       I have also created a login form and a registration form. They are
