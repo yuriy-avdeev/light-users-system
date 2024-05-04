@@ -168,20 +168,40 @@ const setCurrentPaginationPage = (payload: number) => {
     <div class="users-list__top-container">
       <Input
         v-model="searchValue"
+        class="users-list__input"
         placeholder="Search users by names"
         :warning-text="
           searchValue.length && searchValue.length < 3
             ? 'It should include at least 3 characters'
             : ''
         "
-        :debounce-delay="250"
-      />
+      >
+        <div class="users-list__input-icon-container">
+          <button
+            v-if="searchValue"
+            class="users-list__input-button-clear"
+            type="button"
+            @click.prevent="searchValue = ''"
+          >
+            &#10006;
+          </button>
+
+          <img
+            v-else
+            class="users-list__input-search-icon"
+            src="@/assets/icons/search.svg"
+            alt="search icon"
+            width="11"
+            height="11"
+          />
+        </div>
+      </Input>
 
       <Button
+        class="users-list__create-button"
         text="Create User"
         type="button"
         @click.prevent="isCreateUserPopupOpen = true"
-        class="users-list__create-button"
       />
     </div>
 
@@ -193,7 +213,12 @@ const setCurrentPaginationPage = (payload: number) => {
         {{ popupWarning }}
       </h3>
 
-      <UserForm v-else button-text="Register" @user-data="createUser" />
+      <UserForm
+        v-else
+        button-text="Register"
+        show-password
+        @user-data="createUser"
+      />
     </PopupWrapper>
 
     <!-- TODO: try to create a table component -->

@@ -1,8 +1,10 @@
 <script setup lang="ts">
-import { ref, type Ref, onMounted, computed, watch } from 'vue'
+import { ref, computed } from 'vue'
+import { checkEMail } from '@/services/helper.ts'
+import Input from '@/components/UI/Input/Input.vue'
 import Button from '@/components/UI/Button/Button.vue'
-import { debounce } from '@/services/debounce'
 
+const emit = defineEmits(['user-data'])
 const props = defineProps({
   buttonText: {
     type: String,
@@ -35,64 +37,28 @@ const props = defineProps({
   },
 })
 
-const emit = defineEmits(['user-data'])
+const modelFirstName = ref(props.firstName)
+const modelSecondName = ref(props.secondName)
+const modelEMail = ref(props.eMail)
+const modelPassword = ref(props.password)
 
 const isButtonAvailable = computed(() => {
-  if (!isEMailValidated.value) {
-    return false
-  }
   if (props.showPassword) {
     return (
+      isValidEMail.value &&
       modelFirstName.value.length &&
       modelSecondName.value.length &&
-      modelPassword.value.length > 4
+      modelPassword.value.length >= 5
     )
   }
-  return modelFirstName.value.length && modelSecondName.value.length
+  return (
+    isValidEMail.value &&
+    modelFirstName.value.length &&
+    modelSecondName.value.length
+  )
 })
 
-const isEMailValidated = computed(() => {
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-  return emailRegex.test(modelEMail.value)
-})
-
-const firstNameInput: Ref<HTMLInputElement | null> = ref(null)
-onMounted(() => {
-  firstNameInput.value?.focus()
-})
-
-// TODO - debounce looks like unworking here
-const modelFirstName = ref(props.firstName)
-watch(
-  modelFirstName,
-  debounce((newValue: string) => {
-    modelFirstName.value = newValue.trim()
-  }, 2000)
-)
-
-const modelSecondName = ref(props.secondName)
-watch(
-  modelSecondName,
-  debounce((newValue: string) => {
-    modelSecondName.value = newValue.trim()
-  }, 200)
-)
-
-const modelEMail = ref(props.eMail)
-watch(
-  modelEMail,
-  debounce((newValue: string) => {
-    modelEMail.value = newValue.trim()
-  }, 200)
-)
-
-const modelPassword = ref(props.password)
-watch(
-  modelPassword,
-  debounce((newValue: string) => {
-    modelPassword.value = newValue.trim()
-  }, 200)
-)
+const isValidEMail = computed(() => checkEMail(modelEMail.value))
 
 const handleSubmitForm = () => {
   emit('user-data', {
@@ -106,42 +72,45 @@ const handleSubmitForm = () => {
 
 <template>
   <form class="user-form" @submit.enter.prevent="handleSubmitForm">
-    <label class="user-form__label">
-      First name
-      <!-- TODO: apply UI input -->
-      <input
-        ref="firstNameInput"
-        class="user-form__input"
-        v-model="modelFirstName"
-      />
-    </label>
+    <Input
+      v-model="modelFirstName"
+      class="user-form__input"
+      label-text="First name"
+      is-focused
+      :debounce-delay="0"
+    />
 
-    <label class="user-form__label">
-      Second name
+    <Input
+      v-model="modelSecondName"
+      class="user-form__input"
+      label-text="Second name"
+      :debounce-delay="0"
+    />
 
-      <input class="user-form__input" v-model="modelSecondName" />
-    </label>
+    <Input
+      v-model="modelEMail"
+      class="user-form__input"
+      label-text="E-mail"
+      :warning-text="
+        modelEMail.length && !isValidEMail ? 'Please add valid e-mail here' : ''
+      "
+    />
 
-    <label class="user-form__label">
-      E-mail
-
-      <input class="user-form__input" v-model="modelEMail" />
-    </label>
-
-    <label v-if="showPassword" class="user-form__label">
-      Password
-
-      <input class="user-form__input" v-model="modelPassword" type="password" />
-
-      <span
-        v-if="modelPassword.length && modelPassword.length < 5"
-        class="user-form__input-hint"
-      >
-        it needs {{ 5 - modelPassword.length }} more
-        {{ modelPassword.length === 4 ? 'char' : 'chars' }}
-        here
-      </span>
-    </label>
+    <Input
+      v-if="showPassword"
+      v-model="modelPassword"
+      class="user-form__input"
+      label-text="Password"
+      :type="password"
+      :warning-text="
+        modelPassword.length && modelPassword.length < 5
+          ? `it needs ${5 - modelPassword.length} more ${
+              modelPassword.length === 4 ? 'char' : 'chars'
+            }   here`
+          : ''
+      "
+      :debounce-delay="0"
+    />
 
     <Button
       :text="$props.buttonText"

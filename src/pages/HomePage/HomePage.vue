@@ -108,6 +108,7 @@ const resetNotificationWithDelay = (
         <UserForm
           v-else
           button-text="Register"
+          show-password
           @user-data="handleRegistration"
         />
       </template>

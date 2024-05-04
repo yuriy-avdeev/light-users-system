@@ -13,6 +13,25 @@
     padding-bottom: 18px;
   }
 
+  &__input-icon-container {
+    position: absolute;
+    right: 10px;
+    top: 6px;
+  }
+
+  &__input-button-clear {
+    background-color: transparent;
+    border: none;
+    outline: none;
+    color: var(--color-dark-grey);
+    cursor: pointer;
+  }
+
+  &__input-search-icon {
+    color: var(--color-background-secondary);
+    opacity: 0.6;
+  }
+
   &__create-button {
     margin: 0 0 0 auto;
   }
@@ -110,6 +129,10 @@
     &__top-container {
       flex-direction: row;
       padding: 16px 0 28px;
+    }
+
+    &__input {
+      max-width: 50%;
     }
   }
 

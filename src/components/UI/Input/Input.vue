@@ -12,12 +12,6 @@ import { debounce } from '@/services/debounce'
 const emit = defineEmits(['update:modelValue'])
 const inputElement: Ref<HTMLInputElement | null> = ref(null)
 
-onMounted(() => {
-  if (props.isFocused) {
-    inputElement.value?.focus()
-  }
-})
-
 const props = defineProps({
   modelValue: {
     type: String,
@@ -26,7 +20,12 @@ const props = defineProps({
 
   placeholder: {
     type: String,
-    default: 'Type your text here',
+    default: '',
+  },
+
+  labelText: {
+    type: String,
+    default: '',
   },
 
   warningText: {
@@ -39,6 +38,11 @@ const props = defineProps({
     default: false,
   },
 
+  type: {
+    type: String,
+    default: 'text',
+  },
+
   isDisabled: {
     type: Boolean,
     default: false,
@@ -46,8 +50,14 @@ const props = defineProps({
 
   debounceDelay: {
     type: Number,
-    default: 0,
+    default: 200,
   },
+})
+
+onMounted(() => {
+  if (props.isFocused) {
+    inputElement.value?.focus()
+  }
 })
 
 const inputModel = computed({
@@ -65,44 +75,29 @@ const setValueByDebounce = debounce((value: string) => {
 </script>
 
 <template>
-  <div
+  <label
     class="input"
     :class="{
       input_disabled: props.isDisabled,
     }"
   >
+    {{ props.labelText && props.labelText }}
+
     <input
       ref="inputElement"
-      type="text"
-      class="input__input"
-      :placeholder="props.placeholder"
       v-model="inputModel"
+      class="input__input"
+      :class="{ input__input_labeled: labelText }"
+      :type="props.type"
+      :placeholder="props.placeholder && props.placeholder"
     />
 
-    <div class="input__icons-container">
-      <button
-        v-if="inputModel"
-        class="input__button-clear"
-        type="button"
-        @click.prevent="inputModel = ''"
-      >
-        &#10006;
-      </button>
+    <slot></slot>
 
-      <img
-        v-else
-        class="input__search-icon"
-        src="@/assets/icons/search.svg"
-        alt="search icon"
-        width="11"
-        height="11"
-      />
-    </div>
-
-    <span class="input__warning">
+    <span v-if="props.warningText" class="input__warning">
       {{ props.warningText }}
     </span>
-  </div>
+  </label>
 </template>
 
 <style scoped src="./input.scss"></style>

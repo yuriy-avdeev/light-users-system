@@ -15,7 +15,6 @@ export const useUserStore = defineStore('user', () => {
   const isAuthenticated = computed(() => auth.value)
 
   const initializeUsersStore = async () => {
-    console.log('initializeUsersStore: call')
     if (!usersStore.users.length) {
       await usersStore.initializeUsers()
     }

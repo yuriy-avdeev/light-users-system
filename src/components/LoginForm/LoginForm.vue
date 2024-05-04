@@ -1,9 +1,10 @@
 <script setup lang="ts">
-import { ref, type Ref, onMounted, computed, watch } from 'vue'
+import { ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { useUserStore } from '@/stores/user'
+import { checkEMail } from '@/services/helper.ts'
+import Input from '@/components/UI/Input/Input.vue'
 import Button from '@/components/UI/Button/Button.vue'
-import { debounce } from '@/services/debounce'
 
 const props = defineProps({
   nextPage: {
@@ -15,44 +16,24 @@ const emit = defineEmits(['is-login'])
 const userStore = useUserStore()
 const router = useRouter()
 const eMail = ref('')
-const trimmedEMail = ref('')
 const password = ref('')
-const trimmedPassword = ref('')
-const eMailInput: Ref<HTMLInputElement | null> = ref(null)
+
+const isValidEMail = computed(() => checkEMail(eMail.value))
 
 const isButtonDisabled = computed(
-  () => trimmedEMail.value.length < 4 || trimmedPassword.value.length < 5
+  () => !isValidEMail || password.value.length < 5
 )
+
 const eMailPlaceholder = computed(() =>
   import.meta.env.DEV ? 'my@mail.com or admin' : 'jim@mail.com or admin'
 )
+
 const passwordPlaceholder = computed(() =>
   import.meta.env.DEV ? 'qwerty or admin' : 'qwerty or 12345'
 )
 
-watch(
-  eMail,
-  debounce((newValue: string) => {
-    trimmedEMail.value = newValue.trim()
-  }, 200)
-)
-
-watch(
-  password,
-  debounce((newValue: string) => {
-    trimmedPassword.value = newValue.trim()
-  }, 200)
-)
-
-onMounted(() => {
-  eMailInput.value?.focus()
-})
-
 const performLogin = async () => {
-  const isAuth = await userStore.login(
-    trimmedEMail.value,
-    trimmedPassword.value
-  )
+  const isAuth = await userStore.login(eMail.value, password.value)
   if (isAuth) {
     const userName = userStore.isAdmin
       ? 'Admin'
@@ -70,44 +51,34 @@ const performLogin = async () => {
 
 <template>
   <form class="login-form" @submit.enter.prevent="performLogin">
-    <label class="login-form__label">
-      E-mail
+    <Input
+      v-model="eMail"
+      class="login-form__input"
+      label-text="E-mail"
+      is-focused
+      :placeholder="eMailPlaceholder"
+      :warning-text="
+        eMail.length && eMail !== 'admin' && !isValidEMail
+          ? 'Please add valid e-mail here'
+          : ''
+      "
+    />
 
-      <input
-        ref="eMailInput"
-        class="login-form__input"
-        v-model="eMail"
-        :placeholder="eMailPlaceholder"
-      />
-
-      <span
-        v-if="trimmedEMail.length && trimmedEMail.length < 4"
-        class="login-form__input-hint"
-      >
-        it needs {{ 4 - trimmedEMail.length }} more
-        {{ trimmedEMail.length === 3 ? 'char' : 'chars' }} here
-      </span>
-    </label>
-
-    <label class="login-form__label">
-      Password
-
-      <input
-        class="login-form__input"
-        v-model="password"
-        type="password"
-        :placeholder="passwordPlaceholder"
-      />
-
-      <span
-        v-if="trimmedPassword.length && trimmedPassword.length < 5"
-        class="login-form__input-hint"
-      >
-        it needs {{ 5 - trimmedPassword.length }} more
-        {{ trimmedPassword.length === 4 ? 'char' : 'chars' }}
-        here
-      </span>
-    </label>
+    <Input
+      v-model="password"
+      class="login-form__input"
+      label-text="Password"
+      :placeholder="passwordPlaceholder"
+      type="password"
+      :warning-text="
+        password.length && password.length < 5
+          ? `it needs ${5 - password.length} more ${
+              password.length === 4 ? 'char' : 'chars'
+            } here`
+          : ''
+      "
+      :debounce-delay="0"
+    />
 
     <Button
       text="Login"

@@ -1,6 +1,6 @@
 fetch('https://jsonplaceholder.typicode.com/users/7')
   .then((response) => response.json())
-  .then((json) => console.log(json))
+  .then((data) => console.log(data))
 
 fetch('https://jsonplaceholder.typicode.com/posts', {
   method: 'POST',
@@ -14,4 +14,4 @@ fetch('https://jsonplaceholder.typicode.com/posts', {
   },
 })
   .then((response) => response.json())
-  .then((json) => console.log(json))
+  .then((data) => console.log(data))
