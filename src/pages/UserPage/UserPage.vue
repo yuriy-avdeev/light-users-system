@@ -13,7 +13,7 @@ const isPopupActive = ref(false)
 
 const editUserData = (userData: User) => {
   // TODO: add loader
-  // if e_mail - send notification to confirm it
+  // if e_mail - send a notification to confirm it
   if (currentUser.value) {
     userStore.editUserData(userData, currentUser.value.id)
   }

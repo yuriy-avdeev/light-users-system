@@ -2,7 +2,7 @@
 import { ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { useUserStore } from '@/stores/user'
-import { checkEMail } from '@/services/helper.ts'
+import { checkEMail } from '@/services/helper'
 import Input from '@/components/UI/Input/Input.vue'
 import Button from '@/components/UI/Button/Button.vue'
 

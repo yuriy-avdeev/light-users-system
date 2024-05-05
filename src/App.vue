@@ -22,10 +22,10 @@ import AppFooter from '@/components/AppFooter/AppFooter.vue'
   flex-direction: column;
 
   &__body {
+    flex: 1;
     width: 100%;
     max-width: 1024px;
     margin: 0 auto;
-    flex: 1;
     display: flex;
     box-shadow: 0 5px 25px var(--color-dark-grey);
     padding: 16px 12px;
@@ -41,6 +41,12 @@ import AppFooter from '@/components/AppFooter/AppFooter.vue'
       background-color: var(--color-dark-grey);
       border-radius: 3px;
     }
+  }
+}
+
+@media screen and (min-width: 768px) {
+  .app__body {
+    padding: 16px 20px;
   }
 }
 </style>

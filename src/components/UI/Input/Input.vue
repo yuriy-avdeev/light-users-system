@@ -1,12 +1,5 @@
 <script setup lang="ts">
-import {
-  defineProps,
-  defineEmits,
-  computed,
-  type Ref,
-  ref,
-  onMounted,
-} from 'vue'
+import { computed, type Ref, ref, onMounted } from 'vue'
 import { debounce } from '@/services/debounce'
 
 const emit = defineEmits(['update:modelValue'])

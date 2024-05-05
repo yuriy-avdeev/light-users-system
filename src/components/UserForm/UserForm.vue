@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue'
-import { checkEMail } from '@/services/helper.ts'
+import { checkEMail } from '@/services/helper'
 import Input from '@/components/UI/Input/Input.vue'
 import Button from '@/components/UI/Button/Button.vue'
 

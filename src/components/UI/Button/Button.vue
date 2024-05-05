@@ -33,12 +33,12 @@ const props = defineProps({
   <button
     class="button"
     :class="{
-      'button_active': props.isActive,
-      'button_disabled': props.isDisabled,
-      'button_dark': !props.isDarkBase,
-      'button_light': props.isDarkBase,
+      button_active: props.isActive,
+      button_disabled: props.isDisabled,
+      button_dark: !props.isDarkBase,
+      button_light: props.isDarkBase,
     }"
-    :disabled="isDisabled"
+    :disabled="props.isDisabled"
     :type="props.type"
   >
     <slot></slot>

@@ -1,11 +1,12 @@
 import { ref } from 'vue'
 import { defineStore } from 'pinia'
+// 'bcrypt' is designed to work in Node.js environments, so it'll produce warnings in my case
+// but I use it here intentionally as I don't have a correspond server-side for this app
 import bcrypt from 'bcryptjs'
 import type { User, NewUser } from '@/types/store-types'
 import { mockUsers } from '@/services/mock-data'
 
 // TODO:
-// user page with logic to change e-mail, names etc...
 // filtering users list with highlighting result
 // rearrange components by functionality (not states then computed then watch and methods)
 // rethink here users list as an object - in order not to iterate list of users in real life
