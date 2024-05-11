@@ -1,13 +1,13 @@
 export const debounce = <T extends (...args: any[]) => any>(
   func: T,
-  delay: number
+  delay: number,
 ): ((...args: Parameters<T>) => void) => {
-  let timeoutId: number | undefined
+  let timeoutId: number | undefined;
 
   return (...args: Parameters<T>): void => {
     if (timeoutId) {
-      clearTimeout(timeoutId)
+      clearTimeout(timeoutId);
     }
-    timeoutId = window.setTimeout(() => func(...args), delay)
-  }
-}
+    timeoutId = window.setTimeout(() => func(...args), delay);
+  };
+};

@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import { computed } from 'vue'
-import Button from '@/components/UI/Button/Button.vue'
+import { computed } from "vue";
+import Button from "@/components/UI/Button/Button.vue";
 
 // TODO: add arrows right and left to toggle pages
-const emit = defineEmits(['click-page'])
+const emit = defineEmits(["click-page"]);
 
 const props = defineProps({
   quantityOfPages: {
@@ -15,29 +15,29 @@ const props = defineProps({
     type: Number,
     required: true,
   },
-})
+});
 
 const pages = computed(() => {
-  const { currentPage, quantityOfPages } = props
+  const { currentPage, quantityOfPages } = props;
   if (quantityOfPages <= 3) {
-    const pageArray = []
+    const pageArray = [];
     for (let i = 1; i <= quantityOfPages; i++) {
-      pageArray.push(i)
+      pageArray.push(i);
     }
-    return pageArray
+    return pageArray;
   }
   if (currentPage === 1) {
-    return [1, 2, 3]
+    return [1, 2, 3];
   }
   if (currentPage === quantityOfPages) {
-    return [quantityOfPages - 2, quantityOfPages - 1, quantityOfPages]
+    return [quantityOfPages - 2, quantityOfPages - 1, quantityOfPages];
   }
-  return [currentPage - 1, currentPage, currentPage + 1]
-})
+  return [currentPage - 1, currentPage, currentPage + 1];
+});
 
 const hasArrowButtons = computed(() => {
-  return props.quantityOfPages > 3
-})
+  return props.quantityOfPages > 3;
+});
 </script>
 
 <template>

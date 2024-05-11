@@ -1,166 +1,174 @@
 <script setup lang="ts">
-import { ref, computed, watch, onUpdated } from 'vue'
-import { storeToRefs } from 'pinia'
-import { useUsersStore } from '@/stores/users'
-import type { User, SortableUsersListFields } from '@/types/store-types'
-import Button from '@/components/UI/Button/Button.vue'
-import Arrow from '@/components/UI/Arrow/Arrow.vue'
-import Input from '@/components/UI/Input/Input.vue'
-import ConfirmationContainer from '@/components/ConfirmationContainer/ConfirmationContainer.vue'
-import PopupWrapper from '@/components/PopupWrapper/PopupWrapper.vue'
-import UserForm from '@/components/UserForm/UserForm.vue'
-import AppPagination from '@/components/AppPagination/AppPagination.vue'
+import { ref, computed, watch } from "vue";
+import { storeToRefs } from "pinia";
+import { useUsersStore } from "@/stores/users";
+import type { User, SortableUsersListFields } from "@/types/store-types";
+import Button from "@/components/UI/Button/Button.vue";
+import Arrow from "@/components/UI/Arrow/Arrow.vue";
+import Input from "@/components/UI/Input/Input.vue";
+import ConfirmationContainer from "@/components/ConfirmationContainer/ConfirmationContainer.vue";
+import PopupWrapper from "@/components/PopupWrapper/PopupWrapper.vue";
+import UserForm from "@/components/UserForm/UserForm.vue";
+import AppPagination from "@/components/AppPagination/AppPagination.vue";
 
-const usersStore = useUsersStore()
-const { users: usersStoredList } = storeToRefs(usersStore)
-const isCreateUserPopupOpen = ref(false)
-const confirmationContainerToDeleteId = ref<string | number | null>(null)
-const editUserPopupId = ref<string | number | null>(null)
-const popupWarning = ref('')
-const searchValue = ref('')
+const usersStore = useUsersStore();
+const { users: usersStoredList } = storeToRefs(usersStore);
+const isCreateUserPopupOpen = ref(false);
+const confirmationContainerToDeleteId = ref<string | number | null>(null);
+const editUserPopupId = ref<string | number | null>(null);
+const popupWarning = ref("");
+const searchValue = ref("");
 
 // filtering
 const getFilteredList = () => {
-  const query = searchValueModel.value.toLowerCase()
+  const query = searchValueModel.value.toLowerCase();
   return usersStoredList.value.filter((item) => {
-    const { first_name, second_name, e_mail } = item
+    const { first_name, second_name, e_mail } = item;
     return (
       first_name.toLowerCase().includes(query) ||
       second_name.toLowerCase().includes(query) ||
       e_mail.toLowerCase().includes(query)
-    )
-  })
-}
+    );
+  });
+};
 
 const searchValueModel = computed(() => {
   if (searchValue.value.length >= 3) {
-    return searchValue.value
+    return searchValue.value;
   }
-  return ''
-})
+  return "";
+});
 
 const usersStoredListFiltered = computed(() => {
   if (searchValueModel.value) {
-    return getFilteredList()
+    return getFilteredList();
   }
-  return usersStoredList.value
-})
+  return usersStoredList.value;
+});
 
 // sorting
-const sortByFirstName = ref('')
-const sortBySecondName = ref('')
-const sortByEMail = ref('')
+const sortByFirstName = ref("");
+const sortBySecondName = ref("");
+const sortByEMail = ref("");
 
 const getSortedList = (field: SortableUsersListFields, order: string) => {
-  if (order === 'up') {
+  if (order === "up") {
     return [...usersStoredListFiltered.value].sort((a, b) =>
-      a[field].localeCompare(b[field])
-    )
+      a[field].localeCompare(b[field]),
+    );
   }
   return [...usersStoredListFiltered.value].sort((a, b) =>
-    b[field].localeCompare(a[field])
-  )
-}
+    b[field].localeCompare(a[field]),
+  );
+};
 
 const usersModelList = computed(() => {
-  let sortField: SortableUsersListFields | null = null
-  let sortOrder = ''
+  let sortField: SortableUsersListFields | null = null;
+  let sortOrder = "";
   if (sortByFirstName.value) {
-    sortField = 'first_name'
-    sortOrder = sortByFirstName.value
+    sortField = "first_name";
+    sortOrder = sortByFirstName.value;
   } else if (sortBySecondName.value) {
-    sortField = 'second_name'
-    sortOrder = sortBySecondName.value
+    sortField = "second_name";
+    sortOrder = sortBySecondName.value;
   } else if (sortByEMail.value) {
-    sortField = 'e_mail'
-    sortOrder = sortByEMail.value
+    sortField = "e_mail";
+    sortOrder = sortByEMail.value;
   }
   if (sortField) {
-    return getSortedList(sortField, sortOrder)
+    return getSortedList(sortField, sortOrder);
   }
-  return usersStoredListFiltered.value
-})
+  return usersStoredListFiltered.value;
+});
 
 const resetSorting = () => {
-  sortByFirstName.value = ''
-  sortBySecondName.value = ''
-  sortByEMail.value = ''
-}
+  sortByFirstName.value = "";
+  sortBySecondName.value = "";
+  sortByEMail.value = "";
+};
 
 watch(sortByFirstName, (newValue) => {
   if (newValue) {
-    sortBySecondName.value = ''
-    sortByEMail.value = ''
+    sortBySecondName.value = "";
+    sortByEMail.value = "";
   }
-})
+});
 
 watch(sortBySecondName, (newValue) => {
   if (newValue) {
-    sortByFirstName.value = ''
-    sortByEMail.value = ''
+    sortByFirstName.value = "";
+    sortByEMail.value = "";
   }
-})
+});
 
 watch(sortByEMail, (newValue) => {
   if (newValue) {
-    sortByFirstName.value = ''
-    sortBySecondName.value = ''
+    sortByFirstName.value = "";
+    sortBySecondName.value = "";
   }
-})
+});
 
 // CRUD
 const createUser = async (user: User) => {
   // it's pointless to create new user manually but...
   try {
-    await usersStore.addUser(user)
-    isCreateUserPopupOpen.value = false
+    await usersStore.addUser(user);
+    isCreateUserPopupOpen.value = false;
   } catch (e) {
     if (e instanceof Error && e.message) {
-      popupWarning.value = e.message
+      popupWarning.value = e.message;
     } else {
-      popupWarning.value = 'Some problems with creating new user.'
+      popupWarning.value = "Some problems with creating new user.";
     }
     setTimeout(() => {
-      popupWarning.value = ''
-    }, 3000)
+      popupWarning.value = "";
+    }, 3000);
   }
-}
+};
 
-const editUserData = (user: User) => {
-  const userId = editUserPopupId.value
-  if (userId) {
-    usersStore.editUserData(user, userId)
+const editUserData = async (user: User) => {
+  try {
+    const userId = editUserPopupId.value;
+    if (userId) {
+      await usersStore.editUserData(user, userId);
+    }
+    editUserPopupId.value = null;
+  } catch (e) {
+    //
   }
-  editUserPopupId.value = null
-}
+};
 
-const deleteUser = (id: number | string) => {
-  usersStore.deleteUser(id)
-  confirmationContainerToDeleteId.value = null
-}
+const deleteUser = async (id: number | string) => {
+  try {
+    await usersStore.deleteUser(id);
+    confirmationContainerToDeleteId.value = null;
+  } catch (e) {
+    // TODO - add popup with info
+  }
+};
 
 // Pagination
-const currentPaginationPage = ref(1)
-const numberOfEntriesPerPage = 5
+const currentPaginationPage = ref(1);
+const numberOfEntriesPerPage = 5;
 
 const quantityOfPaginationPages = computed(() => {
-  return Math.ceil(usersModelList.value.length / numberOfEntriesPerPage)
-})
+  return Math.ceil(usersModelList.value.length / numberOfEntriesPerPage);
+});
 
 const usersListPaginated = computed(() => {
   if (usersModelList.value.length <= numberOfEntriesPerPage) {
-    return usersModelList.value
+    return usersModelList.value;
   }
-  const startIndex = (currentPaginationPage.value - 1) * numberOfEntriesPerPage
+  const startIndex = (currentPaginationPage.value - 1) * numberOfEntriesPerPage;
   return usersModelList.value.slice(
     startIndex,
-    startIndex + numberOfEntriesPerPage
-  )
-})
+    startIndex + numberOfEntriesPerPage,
+  );
+});
 
 const setCurrentPaginationPage = (payload: number) => {
-  currentPaginationPage.value = payload
-}
+  currentPaginationPage.value = payload;
+};
 </script>
 
 <template>

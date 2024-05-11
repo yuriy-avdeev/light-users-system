@@ -79,7 +79,7 @@
 @media (hover: hover) {
   .header-navigation {
     &__link_desktop::after {
-      content: '';
+      content: "";
       position: absolute;
       bottom: -2px;
       left: 0;

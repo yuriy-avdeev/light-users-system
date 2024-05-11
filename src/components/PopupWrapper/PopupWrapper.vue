@@ -1,21 +1,21 @@
 <script setup lang="ts">
-import { onMounted, onUnmounted } from 'vue'
+import { onMounted, onUnmounted } from "vue";
 
-const emit = defineEmits(['close-popup'])
+const emit = defineEmits(["close-popup"]);
 
 onMounted(() => {
-  document.addEventListener('keydown', handlePressEsc)
-})
+  document.addEventListener("keydown", handlePressEsc);
+});
 
 onUnmounted(() => {
-  document.removeEventListener('keydown', handlePressEsc)
-})
+  document.removeEventListener("keydown", handlePressEsc);
+});
 
 const handlePressEsc = (e: KeyboardEvent) => {
-  if (e.key === 'Escape') {
-    emit('close-popup')
+  if (e.key === "Escape") {
+    emit("close-popup");
   }
-}
+};
 </script>
 
 <template>

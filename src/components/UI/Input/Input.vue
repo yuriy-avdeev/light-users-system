@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import { computed, type Ref, ref, onMounted } from 'vue'
-import { debounce } from '@/services/debounce'
+import { computed, type Ref, ref, onMounted } from "vue";
+import { debounce } from "@/services/debounce";
 
-const emit = defineEmits(['update:modelValue'])
-const inputElement: Ref<HTMLInputElement | null> = ref(null)
+const emit = defineEmits(["update:modelValue"]);
+const inputElement: Ref<HTMLInputElement | null> = ref(null);
 
 const props = defineProps({
   modelValue: {
@@ -13,17 +13,17 @@ const props = defineProps({
 
   placeholder: {
     type: String,
-    default: '',
+    default: "",
   },
 
   labelText: {
     type: String,
-    default: '',
+    default: "",
   },
 
   warningText: {
     type: String,
-    default: '',
+    default: "",
   },
 
   isFocused: {
@@ -33,7 +33,7 @@ const props = defineProps({
 
   type: {
     type: String,
-    default: 'text',
+    default: "text",
   },
 
   isDisabled: {
@@ -45,26 +45,26 @@ const props = defineProps({
     type: Number,
     default: 200,
   },
-})
+});
 
 onMounted(() => {
   if (props.isFocused) {
-    inputElement.value?.focus()
+    inputElement.value?.focus();
   }
-})
+});
 
 const inputModel = computed({
   get() {
-    return props.modelValue
+    return props.modelValue;
   },
   set(newValue) {
-    setValueByDebounce(newValue.trim())
+    setValueByDebounce(newValue.trim());
   },
-})
+});
 
 const setValueByDebounce = debounce((value: string) => {
-  emit('update:modelValue', value)
-}, props.debounceDelay)
+  emit("update:modelValue", value);
+}, props.debounceDelay);
 </script>
 
 <template>

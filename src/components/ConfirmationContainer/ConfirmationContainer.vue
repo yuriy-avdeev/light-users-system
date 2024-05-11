@@ -1,15 +1,15 @@
 <script setup lang="ts">
-import Button from '@/components/UI/Button/Button.vue'
-import DropdownWrapper from '@/components/DropdownWrapper/DropdownWrapper.vue'
+import Button from "@/components/UI/Button/Button.vue";
+import DropdownWrapper from "@/components/DropdownWrapper/DropdownWrapper.vue";
 
-const emit = defineEmits(['click-no', 'click-yes'])
+const emit = defineEmits(["click-no", "click-yes"]);
 
 const props = defineProps({
   text: {
     type: String,
     required: true,
   },
-})
+});
 </script>
 
 <template>

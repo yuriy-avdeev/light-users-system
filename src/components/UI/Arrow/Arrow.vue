@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import type { PropType } from 'vue'
+import type { PropType } from "vue";
 
 const props = defineProps({
   direction: {
-    type: String as PropType<'up' | 'down'>,
+    type: String as PropType<"up" | "down">,
     required: true,
   },
 
@@ -16,7 +16,7 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
-})
+});
 </script>
 
 <template>
@@ -29,7 +29,7 @@ const props = defineProps({
     type="button"
     :disabled="isDisabled"
   >
-    {{ direction === 'up' ? '▲' : '▼' }}
+    {{ direction === "up" ? "▲" : "▼" }}
   </button>
 </template>
 

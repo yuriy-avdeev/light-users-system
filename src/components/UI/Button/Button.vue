@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import type { PropType } from 'vue'
+import type { PropType } from "vue";
 
 const props = defineProps({
   type: {
-    type: String as PropType<'submit' | 'button'>,
-    default: 'submit',
+    type: String as PropType<"submit" | "button">,
+    default: "submit",
   },
 
   text: {
@@ -26,7 +26,7 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
-})
+});
 </script>
 
 <template>

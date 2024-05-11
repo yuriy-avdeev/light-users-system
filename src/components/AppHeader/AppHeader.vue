@@ -1,42 +1,42 @@
 <script setup lang="ts">
-import { computed, ref, type Ref } from 'vue'
-import { useRouter } from 'vue-router'
-import { useUserStore } from '@/stores/user'
-import { useUserAccessFormStore } from '@/stores/userAccessForm'
-import Button from '@/components/UI/Button/Button.vue'
-import HeaderNavigation from '@/components/HeaderNavigation/HeaderNavigation.vue'
-import ConfirmationContainer from '@/components/ConfirmationContainer/ConfirmationContainer.vue'
+import { computed, ref, type Ref } from "vue";
+import { useRouter } from "vue-router";
+import { useUserStore } from "@/stores/user";
+import { useUserAccessFormStore } from "@/stores/userAccessForm";
+import Button from "@/components/UI/Button/Button.vue";
+import HeaderNavigation from "@/components/HeaderNavigation/HeaderNavigation.vue";
+import ConfirmationContainer from "@/components/ConfirmationContainer/ConfirmationContainer.vue";
 
 const props = defineProps({
   title: {
     type: String,
     required: true,
   },
-})
+});
 
-const router = useRouter()
-const userStore = useUserStore()
-const userAccessFormStore = useUserAccessFormStore()
-const isConfirmationContainerOpened = ref(false)
+const router = useRouter();
+const userStore = useUserStore();
+const userAccessFormStore = useUserAccessFormStore();
+const isConfirmationContainerOpened = ref(false);
 
 const loginButtonText = computed(() => {
-  return userStore.isAuthenticated ? 'Logout' : 'Login'
-})
+  return userStore.isAuthenticated ? "Logout" : "Login";
+});
 
 const handleLoginButton = () => {
   if (userStore.isAuthenticated) {
-    isConfirmationContainerOpened.value = !isConfirmationContainerOpened.value
+    isConfirmationContainerOpened.value = !isConfirmationContainerOpened.value;
   } else {
-    userAccessFormStore.openUserAccessForm()
-    router.push('/')
+    userAccessFormStore.openUserAccessForm();
+    router.push("/");
   }
-}
+};
 
 const logout = () => {
-  userStore.logout()
-  isConfirmationContainerOpened.value = false
-  router.push('/')
-}
+  userStore.logout();
+  isConfirmationContainerOpened.value = false;
+  router.push("/");
+};
 </script>
 
 <template>

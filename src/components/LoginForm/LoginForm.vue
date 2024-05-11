@@ -1,52 +1,52 @@
 <script setup lang="ts">
-import { ref, computed } from 'vue'
-import { useRouter } from 'vue-router'
-import { useUserStore } from '@/stores/user'
-import { checkEMail } from '@/services/helper'
-import Input from '@/components/UI/Input/Input.vue'
-import Button from '@/components/UI/Button/Button.vue'
+import { ref, computed } from "vue";
+import { useRouter } from "vue-router";
+import { useUserStore } from "@/stores/user";
+import { checkEMail } from "@/services/helper";
+import Input from "@/components/UI/Input/Input.vue";
+import Button from "@/components/UI/Button/Button.vue";
 
 const props = defineProps({
   nextPage: {
     type: String,
-    default: '/',
+    default: "/",
   },
-})
-const emit = defineEmits(['is-login'])
-const userStore = useUserStore()
-const router = useRouter()
-const eMail = ref('')
-const password = ref('')
+});
+const emit = defineEmits(["is-login"]);
+const userStore = useUserStore();
+const router = useRouter();
+const eMail = ref("");
+const password = ref("");
 
-const isValidEMail = computed(() => checkEMail(eMail.value))
+const isValidEMail = computed(() => checkEMail(eMail.value));
 
 const isButtonDisabled = computed(
-  () => !isValidEMail || password.value.length < 5
-)
+  () => !isValidEMail || password.value.length < 5,
+);
 
 const eMailPlaceholder = computed(() =>
-  import.meta.env.DEV ? 'my@mail.com or admin' : 'jim@mail.com or admin'
-)
+  import.meta.env.DEV ? "my@mail.com or admin" : "jim@mail.com or admin",
+);
 
 const passwordPlaceholder = computed(() =>
-  import.meta.env.DEV ? 'qwerty or admin' : 'qwerty or 12345'
-)
+  import.meta.env.DEV ? "qwerty or admin" : "qwerty or 12345",
+);
 
 const performLogin = async () => {
-  const isAuth = await userStore.login(eMail.value, password.value)
+  const isAuth = await userStore.login(eMail.value, password.value);
   if (isAuth) {
     const userName = userStore.isAdmin
-      ? 'Admin'
-      : userStore.currentUser?.first_name
-    emit('is-login', { is_successful: true, message: `Welcome, ${userName}!` })
-    router.push(props.nextPage)
+      ? "Admin"
+      : userStore.currentUser?.first_name;
+    emit("is-login", { is_successful: true, message: `Welcome, ${userName}!` });
+    router.push(props.nextPage);
   } else {
-    emit('is-login', {
+    emit("is-login", {
       is_successful: false,
       message: "Please, let's use correct e-mail and password.",
-    })
+    });
   }
-}
+};
 </script>
 
 <template>

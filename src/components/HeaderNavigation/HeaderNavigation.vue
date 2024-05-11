@@ -1,28 +1,28 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue'
-import { RouterLink } from 'vue-router'
-import { useUserStore } from '@/stores/user'
-import DropdownWrapper from '@/components/DropdownWrapper/DropdownWrapper.vue'
+import { computed, ref } from "vue";
+import { RouterLink } from "vue-router";
+import { useUserStore } from "@/stores/user";
+import DropdownWrapper from "@/components/DropdownWrapper/DropdownWrapper.vue";
 
-const userStore = useUserStore()
-const isNavigationContainerOpened = ref(false)
+const userStore = useUserStore();
+const isNavigationContainerOpened = ref(false);
 
 const listOfPages = computed(() => {
   const pages = [
-    { path: '/', name: 'Home' },
-    { path: '/about', name: 'About' },
-  ]
+    { path: "/", name: "Home" },
+    { path: "/about", name: "About" },
+  ];
   if (userStore.isAdmin) {
-    pages.push({ path: '/users', name: 'List of users' })
+    pages.push({ path: "/users", name: "List of users" });
   }
   if (userStore.currentUser) {
     pages.push({
       path: `/users/${userStore.currentUser.id}`,
-      name: 'Your page',
-    })
+      name: "Your page",
+    });
   }
-  return pages
-})
+  return pages;
+});
 </script>
 
 <template>

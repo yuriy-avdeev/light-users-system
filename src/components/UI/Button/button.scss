@@ -7,7 +7,10 @@
   background-color: transparent;
   padding: 6px 8px;
   font: 500 13px/1.2 var(--main-font);
-  transition: box-shadow 200ms, border-color, 200ms;
+  transition:
+    box-shadow 200ms,
+    border-color,
+    200ms;
 
   &_dark {
     color: var(--color-background-secondary);
