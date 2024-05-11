@@ -5,5 +5,5 @@
 </template>
 
 <style scoped>
-@import "./app-footer.scss";
+@import './app-footer.scss';
 </style>

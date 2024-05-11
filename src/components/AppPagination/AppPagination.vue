@@ -1,43 +1,43 @@
 <script setup lang="ts">
-import { computed } from "vue";
-import Button from "@/components/UI/Button/Button.vue";
+import { computed } from 'vue'
+import Button from '@/components/UI/Button/Button.vue'
 
 // TODO: add arrows right and left to toggle pages
-const emit = defineEmits(["click-page"]);
+const emit = defineEmits(['click-page'])
 
 const props = defineProps({
   quantityOfPages: {
     type: Number,
-    required: true,
+    required: true
   },
 
   currentPage: {
     type: Number,
-    required: true,
-  },
-});
+    required: true
+  }
+})
 
 const pages = computed(() => {
-  const { currentPage, quantityOfPages } = props;
+  const { currentPage, quantityOfPages } = props
   if (quantityOfPages <= 3) {
-    const pageArray = [];
+    const pageArray = []
     for (let i = 1; i <= quantityOfPages; i++) {
-      pageArray.push(i);
+      pageArray.push(i)
     }
-    return pageArray;
+    return pageArray
   }
   if (currentPage === 1) {
-    return [1, 2, 3];
+    return [1, 2, 3]
   }
   if (currentPage === quantityOfPages) {
-    return [quantityOfPages - 2, quantityOfPages - 1, quantityOfPages];
+    return [quantityOfPages - 2, quantityOfPages - 1, quantityOfPages]
   }
-  return [currentPage - 1, currentPage, currentPage + 1];
-});
+  return [currentPage - 1, currentPage, currentPage + 1]
+})
 
 const hasArrowButtons = computed(() => {
-  return props.quantityOfPages > 3;
-});
+  return props.quantityOfPages > 3
+})
 </script>
 
 <template>
@@ -47,8 +47,8 @@ const hasArrowButtons = computed(() => {
       :class="[
         'app-pagination__arrow-button',
         {
-          'app-pagination__arrow-button_disabled': props.currentPage === 1,
-        },
+          'app-pagination__arrow-button_disabled': props.currentPage === 1
+        }
       ]"
       @click.prevent="emit('click-page', props.currentPage - 1)"
     >
@@ -63,8 +63,8 @@ const hasArrowButtons = computed(() => {
           :class="[
             'app-pagination__list-button',
             {
-              'app-pagination__list-button_active': item === props.currentPage,
-            },
+              'app-pagination__list-button_active': item === props.currentPage
+            }
           ]"
           @click.prevent="emit('click-page', item)"
         />
@@ -76,9 +76,8 @@ const hasArrowButtons = computed(() => {
       :class="[
         'app-pagination__arrow-button',
         {
-          'app-pagination__arrow-button_disabled':
-            props.currentPage === props.quantityOfPages,
-        },
+          'app-pagination__arrow-button_disabled': props.currentPage === props.quantityOfPages
+        }
       ]"
       @click.prevent="emit('click-page', props.currentPage + 1)"
     >

@@ -1,30 +1,30 @@
 <script setup lang="ts">
-import { ref, type Ref, onMounted, onUnmounted } from "vue";
+import { ref, type Ref, onMounted, onUnmounted } from 'vue'
 
-const emit = defineEmits(["close-container"]);
-const containerRef: Ref<HTMLElement | null> = ref(null);
+const emit = defineEmits(['close-container'])
+const containerRef: Ref<HTMLElement | null> = ref(null)
 
 onMounted(() => {
-  document.addEventListener("keydown", handlePressEsc);
-  document.addEventListener("click", handleClickOutside);
-});
+  document.addEventListener('keydown', handlePressEsc)
+  document.addEventListener('click', handleClickOutside)
+})
 
 onUnmounted(() => {
-  document.removeEventListener("keydown", handlePressEsc);
-  document.removeEventListener("click", handleClickOutside);
-});
+  document.removeEventListener('keydown', handlePressEsc)
+  document.removeEventListener('click', handleClickOutside)
+})
 
 const handlePressEsc = (e: KeyboardEvent) => {
-  if (e.key === "Escape") {
-    emit("close-container");
+  if (e.key === 'Escape') {
+    emit('close-container')
   }
-};
+}
 
 const handleClickOutside = (e: MouseEvent) => {
   if (!containerRef.value?.contains(e.target as Node)) {
-    emit("close-container");
+    emit('close-container')
   }
-};
+}
 </script>
 
 <template>

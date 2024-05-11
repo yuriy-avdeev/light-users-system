@@ -1,52 +1,48 @@
 <script setup lang="ts">
-import { ref, computed } from "vue";
-import { useRouter } from "vue-router";
-import { useUserStore } from "@/stores/user";
-import { checkEMail } from "@/services/helper";
-import Input from "@/components/UI/Input/Input.vue";
-import Button from "@/components/UI/Button/Button.vue";
+import { ref, computed } from 'vue'
+import { useRouter } from 'vue-router'
+import { useUserStore } from '@/stores/user'
+import { checkEMail } from '@/services/helper'
+import Input from '@/components/UI/Input/Input.vue'
+import Button from '@/components/UI/Button/Button.vue'
 
 const props = defineProps({
   nextPage: {
     type: String,
-    default: "/",
-  },
-});
-const emit = defineEmits(["is-login"]);
-const userStore = useUserStore();
-const router = useRouter();
-const eMail = ref("");
-const password = ref("");
+    default: '/'
+  }
+})
+const emit = defineEmits(['is-login'])
+const userStore = useUserStore()
+const router = useRouter()
+const eMail = ref('')
+const password = ref('')
 
-const isValidEMail = computed(() => checkEMail(eMail.value));
+const isValidEMail = computed(() => checkEMail(eMail.value))
 
-const isButtonDisabled = computed(
-  () => !isValidEMail || password.value.length < 5,
-);
+const isButtonDisabled = computed(() => !isValidEMail || password.value.length < 5)
 
 const eMailPlaceholder = computed(() =>
-  import.meta.env.DEV ? "my@mail.com or admin" : "jim@mail.com or admin",
-);
+  import.meta.env.DEV ? 'my@mail.com or admin' : 'jim@mail.com or admin'
+)
 
 const passwordPlaceholder = computed(() =>
-  import.meta.env.DEV ? "qwerty or admin" : "qwerty or 12345",
-);
+  import.meta.env.DEV ? 'qwerty or admin' : 'qwerty or 12345'
+)
 
 const performLogin = async () => {
-  const isAuth = await userStore.login(eMail.value, password.value);
+  const isAuth = await userStore.login(eMail.value, password.value)
   if (isAuth) {
-    const userName = userStore.isAdmin
-      ? "Admin"
-      : userStore.currentUser?.first_name;
-    emit("is-login", { is_successful: true, message: `Welcome, ${userName}!` });
-    router.push(props.nextPage);
+    const userName = userStore.isAdmin ? 'Admin' : userStore.currentUser?.first_name
+    emit('is-login', { is_successful: true, message: `Welcome, ${userName}!` })
+    router.push(props.nextPage)
   } else {
-    emit("is-login", {
+    emit('is-login', {
       is_successful: false,
-      message: "Please, let's use correct e-mail and password.",
-    });
+      message: "Please, let's use correct e-mail and password."
+    })
   }
-};
+}
 </script>
 
 <template>
@@ -58,9 +54,7 @@ const performLogin = async () => {
       is-focused
       :placeholder="eMailPlaceholder"
       :warning-text="
-        eMail.length && eMail !== 'admin' && !isValidEMail
-          ? 'Please add valid e-mail here'
-          : ''
+        eMail.length && eMail !== 'admin' && !isValidEMail ? 'Please add valid e-mail here' : ''
       "
     />
 
@@ -72,19 +66,13 @@ const performLogin = async () => {
       type="password"
       :warning-text="
         password.length && password.length < 5
-          ? `it needs ${5 - password.length} more ${
-              password.length === 4 ? 'char' : 'chars'
-            } here`
+          ? `it needs ${5 - password.length} more ${password.length === 4 ? 'char' : 'chars'} here`
           : ''
       "
       :debounce-delay="0"
     />
 
-    <Button
-      text="Login"
-      :isDisabled="isButtonDisabled"
-      class="login-form__button"
-    />
+    <Button text="Login" :isDisabled="isButtonDisabled" class="login-form__button" />
   </form>
 </template>
 

@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { RouterLink } from "vue-router";
-import { useUserStore } from "@/stores/user";
+import { RouterLink } from 'vue-router'
+import { useUserStore } from '@/stores/user'
 
-const userStore = useUserStore();
+const userStore = useUserStore()
 </script>
 
 <template>
@@ -25,11 +25,7 @@ const userStore = useUserStore();
 
       pages and two additional routes -
 
-      <RouterLink
-        v-if="userStore.isAdmin"
-        class="main-introduction__link"
-        to="/users"
-      >
+      <RouterLink v-if="userStore.isAdmin" class="main-introduction__link" to="/users">
         List of users
       </RouterLink>
 
@@ -47,18 +43,16 @@ const userStore = useUserStore();
 
       <span v-else>Your page.</span>
 
-      Two latest ones are available for an admin and an ordinary user
-      accordingly and they provide the most various features like browsing users
-      list or page of a single user and their CRUD.
+      Two latest ones are available for an admin and an ordinary user accordingly and they provide
+      the most various features like browsing users list or page of a single user and their CRUD.
       <br />
 
-      I have also created a login form and a registration form. They are
-      available for all users.
+      I have also created a login form and a registration form. They are available for all users.
       <br />
 
-      At the moment it works with hardcoded list of users but my plan is to
-      create some mock interaction with real API to get list of users and to
-      process slightly their data to be digestible and reachable here.
+      At the moment it works with hardcoded list of users but my plan is to create some mock
+      interaction with real API to get list of users and to process slightly their data to be
+      digestible and reachable here.
       <br />
 
       <br />
@@ -75,9 +69,8 @@ const userStore = useUserStore();
 
       <br />
 
-      And yes - don't swear at me because of the design... It wasn't a my
-      purpose to create an attractive site but just to train myself with my
-      preferable technologies.
+      And yes - don't swear at me because of the design... It wasn't a my purpose to create an
+      attractive site but just to train myself with my preferable technologies.
     </strong>
   </main>
 </template>

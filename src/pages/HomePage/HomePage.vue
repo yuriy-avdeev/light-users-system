@@ -1,89 +1,79 @@
 <script setup lang="ts">
-import { ref } from "vue";
-import { useUsersStore } from "@/stores/users";
-import { onBeforeRouteLeave } from "vue-router";
-import { useUserAccessFormStore } from "@/stores/userAccessForm";
-import MainIntroduction from "@/components/MainIntroduction/MainIntroduction.vue";
-import PopupWrapper from "@/components/PopupWrapper/PopupWrapper.vue";
-import LoginForm from "@/components/LoginForm/LoginForm.vue";
-import UserForm from "@/components/UserForm/UserForm.vue";
-import Button from "@/components/UI/Button/Button.vue";
-import type { User } from "@/types/store-types";
+import { ref } from 'vue'
+import { useUsersStore } from '@/stores/users'
+import { onBeforeRouteLeave } from 'vue-router'
+import { useUserAccessFormStore } from '@/stores/userAccessForm'
+import MainIntroduction from '@/components/MainIntroduction/MainIntroduction.vue'
+import PopupWrapper from '@/components/PopupWrapper/PopupWrapper.vue'
+import LoginForm from '@/components/LoginForm/LoginForm.vue'
+import UserForm from '@/components/UserForm/UserForm.vue'
+import Button from '@/components/UI/Button/Button.vue'
+import type { User } from '@/types/store-types'
 
-const usersStore = useUsersStore();
-const userAccessFormStore = useUserAccessFormStore();
-const previousRoute = ref("");
-const showLoginForm = ref(true);
-const userNotification = ref("");
-const userNotificationClassModifier = ref("");
+const usersStore = useUsersStore()
+const userAccessFormStore = useUserAccessFormStore()
+const previousRoute = ref('')
+const showLoginForm = ref(true)
+const userNotification = ref('')
+const userNotificationClassModifier = ref('')
 
 onBeforeRouteLeave((to) => {
-  previousRoute.value = to.fullPath;
-});
+  previousRoute.value = to.fullPath
+})
 
 const closePopup = () => {
-  userAccessFormStore.closeUserAccessForm();
-  showLoginForm.value = true;
-  userNotification.value = "";
-};
+  userAccessFormStore.closeUserAccessForm()
+  showLoginForm.value = true
+  userNotification.value = ''
+}
 
 const handleLogin = (payload: { is_successful: boolean; message: string }) => {
-  showNotification(
-    payload.message,
-    payload.is_successful ? "success" : "failed",
-  );
-  resetNotificationWithDelay(2500, payload.is_successful);
-};
+  showNotification(payload.message, payload.is_successful ? 'success' : 'failed')
+  resetNotificationWithDelay(2500, payload.is_successful)
+}
 
 const handleRegistration = async (user: User) => {
   try {
-    await usersStore.addUser(user);
+    await usersStore.addUser(user)
     showNotification(
       `${user.first_name}, you were registered successfully. Now you just need to login.`,
-      "success",
-    );
-    showLoginForm.value = true;
+      'success'
+    )
+    showLoginForm.value = true
   } catch (e) {
-    let message: string;
+    let message: string
     if (e instanceof Error && e.message) {
-      message = e.message;
+      message = e.message
     } else {
-      message =
-        "Some problems with your registration. Please, try again later.";
+      message = 'Some problems with your registration. Please, try again later.'
     }
-    showNotification(message, "failed");
+    showNotification(message, 'failed')
   } finally {
-    resetNotificationWithDelay(3000);
+    resetNotificationWithDelay(3000)
   }
-};
+}
 
 const showNotification = (message: string, modifier: string) => {
-  userNotification.value = message;
-  userNotificationClassModifier.value = modifier;
-};
+  userNotification.value = message
+  userNotificationClassModifier.value = modifier
+}
 
-const resetNotificationWithDelay = (
-  delay: number,
-  shouldCosePopup: boolean = false,
-) => {
+const resetNotificationWithDelay = (delay: number, shouldCosePopup: boolean = false) => {
   setTimeout(() => {
-    userNotification.value = "";
-    userNotificationClassModifier.value = "";
+    userNotification.value = ''
+    userNotificationClassModifier.value = ''
     if (shouldCosePopup) {
-      closePopup();
+      closePopup()
     }
-  }, delay);
-};
+  }, delay)
+}
 </script>
 
 <template>
   <div class="home-page">
     <MainIntroduction />
 
-    <PopupWrapper
-      v-if="userAccessFormStore.showAccessForm"
-      @close-popup="closePopup"
-    >
+    <PopupWrapper v-if="userAccessFormStore.showAccessForm" @close-popup="closePopup">
       <h3
         v-if="userNotification"
         :class="`home-page__popup-notification ${userNotificationClassModifier}`"
@@ -97,21 +87,12 @@ const resetNotificationWithDelay = (
           type="button"
           @click.prevent="showLoginForm = !showLoginForm"
         >
-          click to {{ showLoginForm ? "register" : "login" }}
+          click to {{ showLoginForm ? 'register' : 'login' }}
         </Button>
 
-        <LoginForm
-          v-if="showLoginForm"
-          :next-page="previousRoute"
-          @is-login="handleLogin"
-        />
+        <LoginForm v-if="showLoginForm" :next-page="previousRoute" @is-login="handleLogin" />
 
-        <UserForm
-          v-else
-          button-text="Register"
-          show-password
-          @user-data="handleRegistration"
-        />
+        <UserForm v-else button-text="Register" show-password @user-data="handleRegistration" />
       </template>
     </PopupWrapper>
   </div>

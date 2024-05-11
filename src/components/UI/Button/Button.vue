@@ -1,32 +1,32 @@
 <script setup lang="ts">
-import type { PropType } from "vue";
+import type { PropType } from 'vue'
 
 const props = defineProps({
   type: {
-    type: String as PropType<"submit" | "button">,
-    default: "submit",
+    type: String as PropType<'submit' | 'button'>,
+    default: 'submit'
   },
 
   text: {
     type: String,
-    require: true,
+    require: true
   },
 
   isActive: {
     type: Boolean,
-    default: false,
+    default: false
   },
 
   isDisabled: {
     type: Boolean,
-    default: false,
+    default: false
   },
 
   isDarkBase: {
     type: Boolean,
-    default: false,
-  },
-});
+    default: false
+  }
+})
 </script>
 
 <template>
@@ -36,7 +36,7 @@ const props = defineProps({
       button_active: props.isActive,
       button_disabled: props.isDisabled,
       button_dark: !props.isDarkBase,
-      button_light: props.isDarkBase,
+      button_light: props.isDarkBase
     }"
     :disabled="props.isDisabled"
     :type="props.type"

@@ -1,178 +1,178 @@
 <script setup lang="ts">
-import { ref, computed, watch } from "vue";
-import { storeToRefs } from "pinia";
-import { useUsersStore } from "@/stores/users";
-import type { User, SortableUsersListFields } from "@/types/store-types";
-import Button from "@/components/UI/Button/Button.vue";
-import Arrow from "@/components/UI/Arrow/Arrow.vue";
-import Input from "@/components/UI/Input/Input.vue";
-import ConfirmationContainer from "@/components/ConfirmationContainer/ConfirmationContainer.vue";
-import PopupWrapper from "@/components/PopupWrapper/PopupWrapper.vue";
-import UserForm from "@/components/UserForm/UserForm.vue";
-import AppPagination from "@/components/AppPagination/AppPagination.vue";
+import { ref, computed, watch } from 'vue'
+import { storeToRefs } from 'pinia'
+import { useUsersStore } from '@/stores/users'
+import type { User, SortableUsersListFields } from '@/types/store-types'
+import Button from '@/components/UI/Button/Button.vue'
+import Arrow from '@/components/UI/Arrow/Arrow.vue'
+import Input from '@/components/UI/Input/Input.vue'
+import ConfirmationContainer from '@/components/ConfirmationContainer/ConfirmationContainer.vue'
+import PopupWrapper from '@/components/PopupWrapper/PopupWrapper.vue'
+import UserForm from '@/components/UserForm/UserForm.vue'
+import AppPagination from '@/components/AppPagination/AppPagination.vue'
+import Loader from '@/components/UI/Loader/Loader.vue'
 
-const usersStore = useUsersStore();
-const { users: usersStoredList } = storeToRefs(usersStore);
-const isCreateUserPopupOpen = ref(false);
-const confirmationContainerToDeleteId = ref<string | number | null>(null);
-const editUserPopupId = ref<string | number | null>(null);
-const popupWarning = ref("");
-const searchValue = ref("");
+const usersStore = useUsersStore()
+const { users: usersStoredList } = storeToRefs(usersStore)
+const isCreateUserPopupOpen = ref(false)
+const confirmationContainerToDeleteId = ref<string | number | null>(null)
+const editUserPopupId = ref<string | number | null>(null)
+const popupWarning = ref('')
+const searchValue = ref('')
+const isLoading = ref(false)
 
 // filtering
 const getFilteredList = () => {
-  const query = searchValueModel.value.toLowerCase();
+  const query = searchValueModel.value.toLowerCase()
   return usersStoredList.value.filter((item) => {
-    const { first_name, second_name, e_mail } = item;
+    const { first_name, second_name, e_mail } = item
     return (
       first_name.toLowerCase().includes(query) ||
       second_name.toLowerCase().includes(query) ||
       e_mail.toLowerCase().includes(query)
-    );
-  });
-};
+    )
+  })
+}
 
 const searchValueModel = computed(() => {
   if (searchValue.value.length >= 3) {
-    return searchValue.value;
+    return searchValue.value
   }
-  return "";
-});
+  return ''
+})
 
 const usersStoredListFiltered = computed(() => {
   if (searchValueModel.value) {
-    return getFilteredList();
+    return getFilteredList()
   }
-  return usersStoredList.value;
-});
+  return usersStoredList.value
+})
 
 // sorting
-const sortByFirstName = ref("");
-const sortBySecondName = ref("");
-const sortByEMail = ref("");
+const sortByFirstName = ref('')
+const sortBySecondName = ref('')
+const sortByEMail = ref('')
 
 const getSortedList = (field: SortableUsersListFields, order: string) => {
-  if (order === "up") {
-    return [...usersStoredListFiltered.value].sort((a, b) =>
-      a[field].localeCompare(b[field]),
-    );
+  if (order === 'up') {
+    return [...usersStoredListFiltered.value].sort((a, b) => a[field].localeCompare(b[field]))
   }
-  return [...usersStoredListFiltered.value].sort((a, b) =>
-    b[field].localeCompare(a[field]),
-  );
-};
+  return [...usersStoredListFiltered.value].sort((a, b) => b[field].localeCompare(a[field]))
+}
 
 const usersModelList = computed(() => {
-  let sortField: SortableUsersListFields | null = null;
-  let sortOrder = "";
+  let sortField: SortableUsersListFields | null = null
+  let sortOrder = ''
   if (sortByFirstName.value) {
-    sortField = "first_name";
-    sortOrder = sortByFirstName.value;
+    sortField = 'first_name'
+    sortOrder = sortByFirstName.value
   } else if (sortBySecondName.value) {
-    sortField = "second_name";
-    sortOrder = sortBySecondName.value;
+    sortField = 'second_name'
+    sortOrder = sortBySecondName.value
   } else if (sortByEMail.value) {
-    sortField = "e_mail";
-    sortOrder = sortByEMail.value;
+    sortField = 'e_mail'
+    sortOrder = sortByEMail.value
   }
   if (sortField) {
-    return getSortedList(sortField, sortOrder);
+    return getSortedList(sortField, sortOrder)
   }
-  return usersStoredListFiltered.value;
-});
+  return usersStoredListFiltered.value
+})
 
 const resetSorting = () => {
-  sortByFirstName.value = "";
-  sortBySecondName.value = "";
-  sortByEMail.value = "";
-};
+  sortByFirstName.value = ''
+  sortBySecondName.value = ''
+  sortByEMail.value = ''
+}
 
-watch(sortByFirstName, (newValue) => {
-  if (newValue) {
-    sortBySecondName.value = "";
-    sortByEMail.value = "";
-  }
-});
+watch(sortByFirstName, () => {
+  sortBySecondName.value = ''
+  sortByEMail.value = ''
+})
 
-watch(sortBySecondName, (newValue) => {
-  if (newValue) {
-    sortByFirstName.value = "";
-    sortByEMail.value = "";
-  }
-});
+watch(sortBySecondName, () => {
+  sortByFirstName.value = ''
+  sortByEMail.value = ''
+})
 
-watch(sortByEMail, (newValue) => {
-  if (newValue) {
-    sortByFirstName.value = "";
-    sortBySecondName.value = "";
-  }
-});
+watch(sortByEMail, () => {
+  sortByFirstName.value = ''
+  sortBySecondName.value = ''
+})
 
 // CRUD
 const createUser = async (user: User) => {
   // it's pointless to create new user manually but...
   try {
-    await usersStore.addUser(user);
-    isCreateUserPopupOpen.value = false;
+    isLoading.value = true
+    await usersStore.addUser(user)
+    isCreateUserPopupOpen.value = false
   } catch (e) {
     if (e instanceof Error && e.message) {
-      popupWarning.value = e.message;
+      popupWarning.value = e.message
     } else {
-      popupWarning.value = "Some problems with creating new user.";
+      popupWarning.value = 'Some problems with creating new user.'
     }
     setTimeout(() => {
-      popupWarning.value = "";
-    }, 3000);
+      popupWarning.value = ''
+    }, 3000)
+  } finally {
+    isLoading.value = false
   }
-};
+}
 
 const editUserData = async (user: User) => {
   try {
-    const userId = editUserPopupId.value;
+    isLoading.value = true
+    const userId = editUserPopupId.value
     if (userId) {
-      await usersStore.editUserData(user, userId);
+      await usersStore.editUserData(user, userId)
     }
-    editUserPopupId.value = null;
+    editUserPopupId.value = null
   } catch (e) {
     //
+  } finally {
+    isLoading.value = false
   }
-};
+}
 
 const deleteUser = async (id: number | string) => {
   try {
-    await usersStore.deleteUser(id);
-    confirmationContainerToDeleteId.value = null;
+    isLoading.value = true
+    await usersStore.deleteUser(id)
+    confirmationContainerToDeleteId.value = null
   } catch (e) {
     // TODO - add popup with info
+  } finally {
+    isLoading.value = false
   }
-};
+}
 
 // Pagination
-const currentPaginationPage = ref(1);
-const numberOfEntriesPerPage = 5;
+const currentPaginationPage = ref(1)
+const numberOfEntriesPerPage = 5
 
 const quantityOfPaginationPages = computed(() => {
-  return Math.ceil(usersModelList.value.length / numberOfEntriesPerPage);
-});
+  return Math.ceil(usersModelList.value.length / numberOfEntriesPerPage)
+})
 
 const usersListPaginated = computed(() => {
   if (usersModelList.value.length <= numberOfEntriesPerPage) {
-    return usersModelList.value;
+    return usersModelList.value
   }
-  const startIndex = (currentPaginationPage.value - 1) * numberOfEntriesPerPage;
-  return usersModelList.value.slice(
-    startIndex,
-    startIndex + numberOfEntriesPerPage,
-  );
-});
+  const startIndex = (currentPaginationPage.value - 1) * numberOfEntriesPerPage
+  return usersModelList.value.slice(startIndex, startIndex + numberOfEntriesPerPage)
+})
 
 const setCurrentPaginationPage = (payload: number) => {
-  currentPaginationPage.value = payload;
-};
+  currentPaginationPage.value = payload
+}
 </script>
 
 <template>
   <div class="users-list">
+    <Loader v-if="isLoading" />
+
     <div class="users-list__top-container">
       <Input
         v-model="searchValue"
@@ -213,20 +213,12 @@ const setCurrentPaginationPage = (payload: number) => {
       />
     </div>
 
-    <PopupWrapper
-      v-if="isCreateUserPopupOpen"
-      @close-popup="isCreateUserPopupOpen = false"
-    >
+    <PopupWrapper v-if="isCreateUserPopupOpen" @close-popup="isCreateUserPopupOpen = false">
       <h3 v-if="popupWarning" class="users-list__popup-warning">
         {{ popupWarning }}
       </h3>
 
-      <UserForm
-        v-else
-        button-text="Register"
-        show-password
-        @user-data="createUser"
-      />
+      <UserForm v-else button-text="Register" show-password @user-data="createUser" />
     </PopupWrapper>
 
     <!-- TODO: try to create a table component -->
@@ -234,10 +226,7 @@ const setCurrentPaginationPage = (payload: number) => {
       <thead>
         <tr class="users-table__header">
           <th class="users-table__column users-table__column_order">
-            <button
-              class="users-table__update-button"
-              @click.prevent="resetSorting"
-            >
+            <button class="users-table__update-button" @click.prevent="resetSorting">
               <img
                 src="@/assets/icons/update.svg"
                 alt="update button"
@@ -248,9 +237,7 @@ const setCurrentPaginationPage = (payload: number) => {
             </button>
           </th>
 
-          <th
-            class="users-table__column users-table__column_id users-table__column_mobile-hidden"
-          >
+          <th class="users-table__column users-table__column_id users-table__column_mobile-hidden">
             ID
           </th>
 
@@ -314,18 +301,12 @@ const setCurrentPaginationPage = (payload: number) => {
       </thead>
 
       <tbody>
-        <tr
-          v-for="user in usersListPaginated"
-          :key="user.id"
-          class="users-table__row"
-        >
+        <tr v-for="user in usersListPaginated" :key="user.id" class="users-table__row">
           <td class="users-table__column users-table__column_order">
             {{ user.order }}
           </td>
 
-          <td
-            class="users-table__column users-table__column_id users-table__column_mobile-hidden"
-          >
+          <td class="users-table__column users-table__column_id users-table__column_mobile-hidden">
             {{ user.id }}
           </td>
 
@@ -349,16 +330,11 @@ const setCurrentPaginationPage = (payload: number) => {
             <Button
               text="Edit"
               type="button"
-              @click.stop.prevent="
-                editUserPopupId = editUserPopupId ? null : user.id
-              "
+              @click.stop.prevent="editUserPopupId = editUserPopupId ? null : user.id"
               class="users-table__button"
             />
 
-            <PopupWrapper
-              v-if="editUserPopupId === user.id"
-              @close-popup="editUserPopupId = null"
-            >
+            <PopupWrapper v-if="editUserPopupId === user.id" @close-popup="editUserPopupId = null">
               <UserForm
                 button-text="Update"
                 :first-name="user.first_name"
@@ -376,8 +352,7 @@ const setCurrentPaginationPage = (payload: number) => {
               text="Delete"
               type="button"
               @click.stop.prevent="
-                confirmationContainerToDeleteId =
-                  confirmationContainerToDeleteId ? null : user.id
+                confirmationContainerToDeleteId = confirmationContainerToDeleteId ? null : user.id
               "
               class="users-table__button"
             />

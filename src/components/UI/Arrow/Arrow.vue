@@ -1,22 +1,22 @@
 <script setup lang="ts">
-import type { PropType } from "vue";
+import type { PropType } from 'vue'
 
 const props = defineProps({
   direction: {
-    type: String as PropType<"up" | "down">,
-    required: true,
+    type: String as PropType<'up' | 'down'>,
+    required: true
   },
 
   isActive: {
     type: Boolean,
-    default: false,
+    default: false
   },
 
   isDisabled: {
     type: Boolean,
-    default: false,
-  },
-});
+    default: false
+  }
+})
 </script>
 
 <template>
@@ -24,12 +24,12 @@ const props = defineProps({
     class="arrow"
     :class="{
       arrow_active: props.isActive,
-      arrow_disabled: props.isDisabled,
+      arrow_disabled: props.isDisabled
     }"
     type="button"
     :disabled="isDisabled"
   >
-    {{ direction === "up" ? "▲" : "▼" }}
+    {{ direction === 'up' ? '▲' : '▼' }}
   </button>
 </template>
 

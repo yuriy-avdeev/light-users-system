@@ -1,4 +1,4 @@
-@import "@/assets/fonts/font.css";
+@import '@/assets/fonts/font.css';
 
 :root {
   --color-white: #ffffff;
@@ -18,7 +18,7 @@
   --color-text: var(--color-black-soft);
   --color-text-hovered: #0000006e;
 
-  --main-font: "Roboto", sans-serif;
+  --main-font: 'Roboto', sans-serif;
 }
 
 @media (prefers-color-scheme: dark) {

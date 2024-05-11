@@ -1,46 +1,46 @@
 <script setup lang="ts">
-import { ref, computed } from "vue";
-import { checkEMail } from "@/services/helper";
-import Input from "@/components/UI/Input/Input.vue";
-import Button from "@/components/UI/Button/Button.vue";
+import { ref, computed } from 'vue'
+import { checkEMail } from '@/services/helper'
+import Input from '@/components/UI/Input/Input.vue'
+import Button from '@/components/UI/Button/Button.vue'
 
-const emit = defineEmits(["user-data"]);
+const emit = defineEmits(['user-data'])
 const props = defineProps({
   buttonText: {
     type: String,
-    require: true,
+    require: true
   },
 
   firstName: {
     type: String,
-    default: "",
+    default: ''
   },
 
   secondName: {
     type: String,
-    default: "",
+    default: ''
   },
 
   eMail: {
     type: String,
-    default: "",
+    default: ''
   },
 
   password: {
     type: String,
-    default: "",
+    default: ''
   },
 
   showPassword: {
     type: Boolean,
-    default: false,
-  },
-});
+    default: false
+  }
+})
 
-const modelFirstName = ref(props.firstName);
-const modelSecondName = ref(props.secondName);
-const modelEMail = ref(props.eMail);
-const modelPassword = ref(props.password);
+const modelFirstName = ref(props.firstName)
+const modelSecondName = ref(props.secondName)
+const modelEMail = ref(props.eMail)
+const modelPassword = ref(props.password)
 
 const isButtonAvailable = computed(() => {
   if (props.showPassword) {
@@ -49,25 +49,21 @@ const isButtonAvailable = computed(() => {
       modelFirstName.value.length &&
       modelSecondName.value.length &&
       modelPassword.value.length >= 5
-    );
+    )
   }
-  return (
-    isValidEMail.value &&
-    modelFirstName.value.length &&
-    modelSecondName.value.length
-  );
-});
+  return isValidEMail.value && modelFirstName.value.length && modelSecondName.value.length
+})
 
-const isValidEMail = computed(() => checkEMail(modelEMail.value));
+const isValidEMail = computed(() => checkEMail(modelEMail.value))
 
 const handleSubmitForm = () => {
-  emit("user-data", {
+  emit('user-data', {
     first_name: modelFirstName.value,
     second_name: modelSecondName.value,
     e_mail: modelEMail.value,
-    password: modelPassword.value,
-  });
-};
+    password: modelPassword.value
+  })
+}
 </script>
 
 <template>
@@ -91,9 +87,7 @@ const handleSubmitForm = () => {
       v-model="modelEMail"
       class="user-form__input"
       label-text="E-mail"
-      :warning-text="
-        modelEMail.length && !isValidEMail ? 'Please add valid e-mail here' : ''
-      "
+      :warning-text="modelEMail.length && !isValidEMail ? 'Please add valid e-mail here' : ''"
     />
 
     <Input
@@ -112,11 +106,7 @@ const handleSubmitForm = () => {
       :debounce-delay="0"
     />
 
-    <Button
-      :text="$props.buttonText"
-      :isDisabled="!isButtonAvailable"
-      class="user-form__button"
-    />
+    <Button :text="$props.buttonText" :isDisabled="!isButtonAvailable" class="user-form__button" />
   </form>
 </template>
 

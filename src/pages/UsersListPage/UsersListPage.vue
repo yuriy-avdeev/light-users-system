@@ -1,35 +1,34 @@
 <script setup lang="ts">
-import { onMounted, ref, type Ref } from "vue";
-import { storeToRefs } from "pinia";
-import { useUsersStore } from "@/stores/users";
-import UsersList from "@/components/UsersList/UsersList.vue";
-import Loader from "@/components/UI/Loader/Loader.vue";
-import PopupWrapper from "@/components/PopupWrapper/PopupWrapper.vue";
+import { onMounted, ref, type Ref } from 'vue'
+import { storeToRefs } from 'pinia'
+import { useUsersStore } from '@/stores/users'
+import UsersList from '@/components/UsersList/UsersList.vue'
+import Loader from '@/components/UI/Loader/Loader.vue'
+import PopupWrapper from '@/components/PopupWrapper/PopupWrapper.vue'
 
-const usersStore = useUsersStore();
-const { users } = storeToRefs(usersStore);
-const isLoading = ref(false);
-const error: Ref<null | string> = ref(null);
+const usersStore = useUsersStore()
+const { users } = storeToRefs(usersStore)
+const isLoading = ref(false)
+const error: Ref<null | string> = ref(null)
 
 onMounted(async () => {
   if (!users.value.length) {
     try {
-      isLoading.value = true;
-      // TODO - if delete all users and leave and turn back to page it will again initialize users...
-      // but maybe it's ok
-      await usersStore.initializeUsers();
-      error.value = null;
+      isLoading.value = true
+      // the side effect ot this logic is a re-initialization users after a while (but only after a deleting all of them)
+      await usersStore.initializeUsers()
+      error.value = null
     } catch (e) {
       if (e instanceof Error) {
-        error.value = e.message;
+        error.value = e.message
       } else {
-        error.value = "Error: loading users data";
+        error.value = 'Error: loading users data'
       }
     } finally {
-      isLoading.value = false;
+      isLoading.value = false
     }
   }
-});
+})
 </script>
 
 <template>
@@ -43,7 +42,7 @@ onMounted(async () => {
       </div>
     </PopupWrapper>
 
-    <UsersList v-if="!isLoading" />
+    <UsersList />
   </div>
 </template>
 

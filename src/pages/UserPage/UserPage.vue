@@ -1,24 +1,24 @@
 <script setup lang="ts">
-import { ref } from "vue";
-import { storeToRefs } from "pinia";
-import { useUserStore } from "@/stores/user";
-import Button from "@/components/UI/Button/Button.vue";
-import PopupWrapper from "@/components/PopupWrapper/PopupWrapper.vue";
-import UserForm from "@/components/UserForm/UserForm.vue";
-import type { User } from "@/types/store-types";
+import { ref } from 'vue'
+import { storeToRefs } from 'pinia'
+import { useUserStore } from '@/stores/user'
+import Button from '@/components/UI/Button/Button.vue'
+import PopupWrapper from '@/components/PopupWrapper/PopupWrapper.vue'
+import UserForm from '@/components/UserForm/UserForm.vue'
+import type { User } from '@/types/store-types'
 
-const userStore = useUserStore();
-const { currentUser } = storeToRefs(userStore);
-const isPopupActive = ref(false);
+const userStore = useUserStore()
+const { currentUser } = storeToRefs(userStore)
+const isPopupActive = ref(false)
 
-const editUserData = (userData: User) => {
+const editUserData = async (userData: User) => {
   // TODO: add loader
   // if e_mail - send a notification to confirm it
   if (currentUser.value) {
-    userStore.editUserData(userData, currentUser.value.id);
+    await userStore.editUserData(userData, currentUser.value.id)
   }
-  isPopupActive.value = false;
-};
+  isPopupActive.value = false
+}
 </script>
 
 <template>
@@ -53,15 +53,11 @@ const editUserData = (userData: User) => {
     </ul>
 
     <p class="user-page__message">
-      If you want to change your data, please click button below and when you
-      are ready don't forget to save updates.
+      If you want to change your data, please click button below and when you are ready don't forget
+      to save updates.
     </p>
 
-    <Button
-      text="Update"
-      class="user-page__button"
-      @click.prevent="isPopupActive = true"
-    />
+    <Button text="Update" class="user-page__button" @click.prevent="isPopupActive = true" />
 
     <PopupWrapper v-if="isPopupActive" @close-popup="isPopupActive = false">
       <UserForm
