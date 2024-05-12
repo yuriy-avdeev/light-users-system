@@ -40,7 +40,7 @@ const editUserData = async (userData: User) => {
 <template>
   <div v-if="currentUser" class="user-page">
     <Loader v-if="isLoading" />
-    
+
     <h2 class="user-page__title">
       Hey {{ currentUser.first_name }}!
       <br />

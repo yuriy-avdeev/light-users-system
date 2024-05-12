@@ -3,6 +3,7 @@ import { ref, computed } from 'vue'
 import bcrypt from 'bcryptjs'
 import { useUsersStore } from './users'
 import type { User } from '@/types/store-types'
+import { mockUsers } from '@/services/mock-data'
 
 export const useUserStore = defineStore('user', () => {
   // 'user' is a ref that can hold or User or null, initial value is null
@@ -13,34 +14,32 @@ export const useUserStore = defineStore('user', () => {
 
   const isAuthenticated = computed(() => auth.value)
 
-  const initializeUsersStore = async () => {
-    if (!usersStore.users.length) {
-      await usersStore.initializeUsers()
-    }
+  const initializeUsersStore = async (userData: User | null) => {
+    await usersStore.initializeUsers(userData)
   }
 
   const login = async (e_mail: string, password: string): Promise<boolean> => {
     // is admin credentials
-    if (
-      e_mail === import.meta.env.VITE_ADMIN_E_MAIL &&
-      password === import.meta.env.VITE_ADMIN_PASSWORD
-    ) {
+    if (e_mail === import.meta.env.VITE_ADMIN_E_MAIL) {
+      if (password !== import.meta.env.VITE_ADMIN_PASSWORD) {
+        return false
+      }
       isAdmin.value = true
       auth.value = true
+      initializeUsersStore(null)
       localStorage.removeItem('currentUser')
       sessionStorage.setItem('admin', 'true')
       return true
     }
 
     // normal user login process
-    // TODO - add loading in component
-    await initializeUsersStore()
-    const foundUser = usersStore.users.find((u) => u.e_mail === e_mail)
+    const foundUser = mockUsers[e_mail]
     if (!foundUser) {
       return false
     }
-    const passwordMatch = await bcrypt.compare(password, foundUser.password)
-    if (!passwordMatch || e_mail === 'admin') {
+    const savedPassword = await usersStore.hashPassword(foundUser.password)
+    const passwordMatch = await bcrypt.compare(password, savedPassword)
+    if (!passwordMatch) {
       return false
     }
 
@@ -50,10 +49,11 @@ export const useUserStore = defineStore('user', () => {
       second_name: foundUser.second_name,
       id: foundUser.id,
       e_mail: foundUser.e_mail,
-      password: '',
+      password: savedPassword,
       order: 0
     }
     auth.value = true
+    initializeUsersStore(currentUser.value)
     storeUserInLocalStorage(currentUser.value)
     return true
   }
@@ -111,10 +111,7 @@ export const useUserStore = defineStore('user', () => {
     currentUser.value = await usersStore.editUserData(userData, userId)
   }
 
-  // pointless to use initializeUsers() in real project (with server stored data)
-  // TODO - try to find a solution to request only current user data
   loadUserFromLocalStorages()
-  initializeUsersStore()
 
   return {
     auth,

@@ -6,7 +6,7 @@ export const mockUsers: MockUser = {
     second_name: 'Smith',
     id: 'c30k0e',
     e_mail: 'my@mail.com',
-    password: '',
+    password: 'qwerty',
     order: 0
   },
   'sam@mail.com': {

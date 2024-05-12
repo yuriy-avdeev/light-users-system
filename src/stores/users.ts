@@ -7,25 +7,33 @@ import type { User, NewUser } from '@/types/store-types'
 import { mockUsers } from '@/services/mock-data'
 
 // TODO:
-// filtering users list with highlighting result
 // rearrange components by functionality (not states then computed then watch and methods)
 // revive api.js
-// if it's not the admin - save in users only one entry with current user data
 
 export const useUsersStore = defineStore('users', () => {
   // in a real app with server-side part it wouldn't be like that with the reactive list of users here
   const users = ref<User[]>([])
 
-  const initializeUsers = async () => {
+  const hashPassword = async (barePassword: string) => {
+    return await bcrypt.hash(barePassword, 10)
+  }
+
+  const initializeUsers = async (singleUserData: User | null) => {
     if (users.value.length) {
       return
     }
+
+    if (singleUserData) {
+      users.value = [singleUserData]
+      return
+    }
+
     try {
       const list = []
       let order = 1
       for (const key in mockUsers) {
         const userData = mockUsers[key]
-        userData.password = await bcrypt.hash('qwerty', 10)
+        userData.password = await hashPassword('qwerty')
         userData.order = order
         list.push(userData)
         order++
@@ -94,5 +102,5 @@ export const useUsersStore = defineStore('users', () => {
     })
   }
 
-  return { users, initializeUsers, addUser, deleteUser, editUserData }
+  return { users, initializeUsers, addUser, deleteUser, editUserData, hashPassword }
 })
