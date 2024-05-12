@@ -1,0 +1,1 @@
+import{_ as o,o as s,c,p as _,a,b as t}from"./index-ab1ad913.js";const d={},n=e=>(_("data-v-997c1a58"),e=e(),a(),e),r={class:"loader"},p=n(()=>t("div",{class:"loader__spinner"},null,-1)),i=[p];function l(e,h){return s(),c("div",r,i)}const v=o(d,[["render",l],["__scopeId","data-v-997c1a58"]]);export{v as L};
