@@ -12,13 +12,11 @@ export const validateId = (to: RouteLocationNormalized) => {
 }
 
 export const validateAuth = (to: RouteLocationNormalized) => {
-  if (['/users', '/users/'].includes(to.fullPath)) {
+  if (to.meta.requiresAdminCredentials) {
     const userStore = useUserStore()
     return userStore.isAdmin ? true : { path: '/' }
   }
-
-  const isRequiresAuth = to.matched.some((record) => record.meta.requiresAuth)
-  if (isRequiresAuth) {
+  if (to.meta.requiresAuth) {
     const userStore = useUserStore()
     if (userStore.isAuthenticated) {
       return true

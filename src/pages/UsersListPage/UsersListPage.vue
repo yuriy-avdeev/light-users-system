@@ -16,7 +16,7 @@ onMounted(async () => {
     try {
       isLoading.value = true
       // the side effect ot this logic is a re-initialization users after a while (but only after a deleting all of them)
-      await usersStore.initializeUsers()
+      await usersStore.initializeUsers(null)
       error.value = null
     } catch (e) {
       if (e instanceof Error) {

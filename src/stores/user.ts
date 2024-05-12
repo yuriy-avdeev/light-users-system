@@ -26,7 +26,6 @@ export const useUserStore = defineStore('user', () => {
       }
       isAdmin.value = true
       auth.value = true
-      initializeUsersStore(null)
       localStorage.removeItem('currentUser')
       sessionStorage.setItem('admin', 'true')
       return true
