@@ -5,6 +5,7 @@ import { useUserStore } from '@/stores/user'
 import { checkEMail } from '@/services/helper'
 import Input from '@/components/UI/Input/Input.vue'
 import Button from '@/components/UI/Button/Button.vue'
+import Loader from '@/components/UI/Loader/Loader.vue'
 
 const props = defineProps({
   nextPage: {
@@ -17,6 +18,7 @@ const userStore = useUserStore()
 const router = useRouter()
 const eMail = ref('')
 const password = ref('')
+const isLoading = ref(false)
 
 const isValidEMail = computed(() => checkEMail(eMail.value))
 
@@ -31,16 +33,26 @@ const passwordPlaceholder = computed(() =>
 )
 
 const performLogin = async () => {
-  const isAuth = await userStore.login(eMail.value, password.value)
-  if (isAuth) {
-    const userName = userStore.isAdmin ? 'Admin' : userStore.currentUser?.first_name
-    emit('is-login', { is_successful: true, message: `Welcome, ${userName}!` })
-    router.push(props.nextPage)
-  } else {
+  try {
+    isLoading.value = true
+    const isAuth = await userStore.login(eMail.value, password.value)
+    if (isAuth) {
+      const userName = userStore.isAdmin ? 'Admin' : userStore.currentUser?.first_name
+      emit('is-login', { is_successful: true, message: `Welcome, ${userName}!` })
+      router.push(props.nextPage)
+    } else {
+      emit('is-login', {
+        is_successful: false,
+        message: "Please, let's use correct e-mail and password."
+      })
+    }
+  } catch (e) {
     emit('is-login', {
       is_successful: false,
-      message: "Please, let's use correct e-mail and password."
+      message: 'Some problems logging in.'
     })
+  } finally {
+    isLoading.value = false
   }
 }
 </script>
@@ -73,6 +85,8 @@ const performLogin = async () => {
     />
 
     <Button text="Login" :isDisabled="isButtonDisabled" class="login-form__button" />
+
+    <Loader v-if="isLoading" />
   </form>
 </template>
 

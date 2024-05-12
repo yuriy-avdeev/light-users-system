@@ -8,6 +8,7 @@ import PopupWrapper from '@/components/PopupWrapper/PopupWrapper.vue'
 import LoginForm from '@/components/LoginForm/LoginForm.vue'
 import UserForm from '@/components/UserForm/UserForm.vue'
 import Button from '@/components/UI/Button/Button.vue'
+import Loader from '@/components/UI/Loader/Loader.vue'
 import type { User } from '@/types/store-types'
 
 const usersStore = useUsersStore()
@@ -16,6 +17,7 @@ const previousRoute = ref('')
 const showLoginForm = ref(true)
 const userNotification = ref('')
 const userNotificationClassModifier = ref('')
+const isLoading = ref(false)
 
 onBeforeRouteLeave((to) => {
   previousRoute.value = to.fullPath
@@ -34,6 +36,7 @@ const handleLogin = (payload: { is_successful: boolean; message: string }) => {
 
 const handleRegistration = async (user: User) => {
   try {
+    isLoading.value = true
     await usersStore.addUser(user)
     showNotification(
       `${user.first_name}, you were registered successfully. Now you just need to login.`,
@@ -49,6 +52,7 @@ const handleRegistration = async (user: User) => {
     }
     showNotification(message, 'failed')
   } finally {
+    isLoading.value = false
     resetNotificationWithDelay(3000)
   }
 }
@@ -71,6 +75,8 @@ const resetNotificationWithDelay = (delay: number, shouldCosePopup: boolean = fa
 
 <template>
   <div class="home-page">
+    <Loader v-if="isLoading" />
+
     <MainIntroduction />
 
     <PopupWrapper v-if="userAccessFormStore.showAccessForm" @close-popup="closePopup">
