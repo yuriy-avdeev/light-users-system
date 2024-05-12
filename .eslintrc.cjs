@@ -16,7 +16,17 @@ module.exports = {
   overrides: [
     {
       rules: {
-        'vue/multi-word-component-names': 'off'
+        'vue/multi-word-component-names': 'off',
+        'vue/max-attributes-per-line': [
+          'error',
+          {
+            singleline: 1,
+            multiline: {
+              max: 1,
+              allowFirstLine: false
+            }
+          }
+        ]
       }
     }
   ]

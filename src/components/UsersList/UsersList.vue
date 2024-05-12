@@ -105,17 +105,10 @@ const createUser = async (user: User) => {
   // it's pointless to create new user manually but...
   try {
     isLoading.value = true
-    await usersStore.addUser(user)
     isCreateUserPopupOpen.value = false
+    await usersStore.addUser(user)
   } catch (e) {
-    if (e instanceof Error && e.message) {
-      popupWarning.value = e.message
-    } else {
-      popupWarning.value = 'Some problems with creating new user.'
-    }
-    setTimeout(() => {
-      popupWarning.value = ''
-    }, 3000)
+    showWarning(e, 'Some problems with the creating new user.')
   } finally {
     isLoading.value = false
   }
@@ -125,12 +118,12 @@ const editUserData = async (user: User) => {
   try {
     isLoading.value = true
     const userId = editUserPopupId.value
+    editUserPopupId.value = null
     if (userId) {
       await usersStore.editUserData(user, userId)
     }
-    editUserPopupId.value = null
   } catch (e) {
-    //
+    showWarning(e, 'Some problems with the editing user data.')
   } finally {
     isLoading.value = false
   }
@@ -139,13 +132,24 @@ const editUserData = async (user: User) => {
 const deleteUser = async (id: number | string) => {
   try {
     isLoading.value = true
-    await usersStore.deleteUser(id)
     confirmationContainerToDeleteId.value = null
+    await usersStore.deleteUser(id)
   } catch (e) {
-    // TODO - add popup with info
+    showWarning(e, 'Some problems with the deleting user.')
   } finally {
     isLoading.value = false
   }
+}
+
+const showWarning = (e: any, warning: string) => {
+  if (e.message) {
+    popupWarning.value = e.message
+  } else {
+    popupWarning.value = warning
+  }
+  setTimeout(() => {
+    popupWarning.value = ''
+  }, 3000)
 }
 
 // Pagination
@@ -213,12 +217,14 @@ const setCurrentPaginationPage = (payload: number) => {
       />
     </div>
 
-    <PopupWrapper v-if="isCreateUserPopupOpen" @close-popup="isCreateUserPopupOpen = false">
-      <h3 v-if="popupWarning" class="users-list__popup-warning">
+    <PopupWrapper v-if="popupWarning" @close-popup="popupWarning = ''">
+      <h3 class="users-list__popup-warning">
         {{ popupWarning }}
       </h3>
+    </PopupWrapper>
 
-      <UserForm v-else button-text="Register" show-password @user-data="createUser" />
+    <PopupWrapper v-if="isCreateUserPopupOpen" @close-popup="isCreateUserPopupOpen = false">
+      <UserForm button-text="Register" show-password @user-data="createUser" />
     </PopupWrapper>
 
     <!-- TODO: try to create a table component -->

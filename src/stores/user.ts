@@ -11,7 +11,6 @@ export const useUserStore = defineStore('user', () => {
   const auth = ref(false)
   const usersStore = useUsersStore()
 
-  // TODO - why don't use 'auth' directly?
   const isAuthenticated = computed(() => auth.value)
 
   const initializeUsersStore = async () => {
@@ -109,14 +108,7 @@ export const useUserStore = defineStore('user', () => {
   }
 
   const editUserData = async (userData: User, userId: number | string) => {
-    try {
-      const updatedUserData = await usersStore.editUserData(userData, userId)
-      if (updatedUserData) {
-        currentUser.value = updatedUserData
-      }
-    } catch (e) {
-      // TODO - return message to show to user
-    }
+    currentUser.value = await usersStore.editUserData(userData, userId)
   }
 
   // pointless to use initializeUsers() in real project (with server stored data)

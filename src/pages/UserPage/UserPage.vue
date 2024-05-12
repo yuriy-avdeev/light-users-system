@@ -5,24 +5,42 @@ import { useUserStore } from '@/stores/user'
 import Button from '@/components/UI/Button/Button.vue'
 import PopupWrapper from '@/components/PopupWrapper/PopupWrapper.vue'
 import UserForm from '@/components/UserForm/UserForm.vue'
+import Loader from '@/components/UI/Loader/Loader.vue'
 import type { User } from '@/types/store-types'
 
 const userStore = useUserStore()
 const { currentUser } = storeToRefs(userStore)
 const isPopupActive = ref(false)
+const popupWarning = ref('')
+const isLoading = ref(false)
 
 const editUserData = async (userData: User) => {
-  // TODO: add loader
   // if e_mail - send a notification to confirm it
-  if (currentUser.value) {
-    await userStore.editUserData(userData, currentUser.value.id)
+  try {
+    isLoading.value = true
+    isPopupActive.value = false
+    if (currentUser.value) {
+      await userStore.editUserData(userData, currentUser.value.id)
+    }
+  } catch (e) {
+    if (e instanceof Error && e.message) {
+      popupWarning.value = e.message
+    } else {
+      popupWarning.value = 'Some problems with the editing user data.'
+    }
+    setTimeout(() => {
+      popupWarning.value = ''
+    }, 2500)
+  } finally {
+    isLoading.value = false
   }
-  isPopupActive.value = false
 }
 </script>
 
 <template>
   <div v-if="currentUser" class="user-page">
+    <Loader v-if="isLoading" />
+    
     <h2 class="user-page__title">
       Hey {{ currentUser.first_name }}!
       <br />
@@ -67,6 +85,12 @@ const editUserData = async (userData: User) => {
         :e-mail="currentUser.e_mail"
         @user-data="editUserData"
       />
+    </PopupWrapper>
+
+    <PopupWrapper v-if="popupWarning" @close-popup="popupWarning = ''">
+      <h3 class="user-page__popup-warning">
+        {{ popupWarning }}
+      </h3>
     </PopupWrapper>
   </div>
 </template>
