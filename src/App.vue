@@ -6,7 +6,7 @@ import AppFooter from '@/components/AppFooter/AppFooter.vue'
 
 <template>
   <div class="app">
-    <AppHeader title="Light users system" />
+    <AppHeader title="Light users system_" />
 
     <RouterView class="app__body" />
 
