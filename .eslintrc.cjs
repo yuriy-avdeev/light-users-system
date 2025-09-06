@@ -1,7 +1,6 @@
 // eslint-disable-next-line no-undef
 require('@rushstack/eslint-patch/modern-module-resolution')
 
-// eslint-disable-next-line no-undef
 module.exports = {
   root: true,
   extends: [
@@ -17,6 +16,9 @@ module.exports = {
     {
       rules: {
         'vue/multi-word-component-names': 'off',
+        'no-multiple-empty-lines': ['error', { max: 1, maxBOF: 0, maxEOF: 1 }],
+        'no-trailing-spaces': 'error',
+        'padded-blocks': ['error', 'never'],
         'vue/max-attributes-per-line': [
           'error',
           {
@@ -31,3 +33,5 @@ module.exports = {
     }
   ]
 }
+
+
