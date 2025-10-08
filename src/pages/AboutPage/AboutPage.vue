@@ -16,7 +16,7 @@
       bar.
     </p>
 
-    <p>test 2nd</p>
+    <p>test</p>
   </div>
 </template>
 
