@@ -15,8 +15,6 @@
       So when a new user simply opens this site, he will not see only one link in the navigation
       bar.
     </p>
-
-    <p>test</p>
   </div>
 </template>
 
